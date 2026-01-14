@@ -4,9 +4,9 @@ import { Chorus, Effector, LowPassFilter, SoftClip } from "@fluex/fluexgl-dsp";
 
 import Window from "../components/window/Window";
 
-import SoftClipWindow from "../components/windows/SoftClipWindow";
-import ChorusWindow from "../components/windows/ChorusWindow";
-import LowPassFilterWindow from "../components/windows/LowPassFilterWindow";
+import SoftClipWindow from "../components/window/prebuilt/SoftClipWindow";
+import ChorusWindow from "../components/window/prebuilt/ChorusWindow";
+import LowPassFilterWindow from "../components/window/prebuilt/LowPassFilterWindow";
 
 export interface EffectWindowContextValue {
     currentEffect: Effector | null;

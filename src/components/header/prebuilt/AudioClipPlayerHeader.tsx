@@ -1,0 +1,81 @@
+import { useState, useRef, type RefObject, useCallback, useEffect } from "react";
+import { Play, Square, Repeat, Repeat1, X } from "lucide-react";
+
+import ProgressBar from "../../common/ProgressBar";
+import Button from "../../common/Button";
+import { type ProgressBarOnChangeEvent } from "../../common/ProgressBar";
+
+import { AudioClip, type AudioClipOnProgressEvent } from "@fluex/fluexgl-dsp";
+
+export interface AudioClipPlayerProperties {
+    audioClip: AudioClip;
+}
+
+export default function AudioClipPlayerHeader({ audioClip }: AudioClipPlayerProperties) {
+    const audioClipPlayerRef = useRef<HTMLDivElement>(null);
+
+    const [isLooping, setIsLooping] = useState<boolean>(audioClip.loop);
+    const [currentTime, setCurrentTime] = useState<number>(audioClip.currentPlaybackTime);
+    const [formattedCurrentTime, setFormattedCurrentTime] = useState<string>(audioClip.formattedDuration ?? "00:00");
+
+    const loopButtonCallback = useCallback(function () {
+        const nextLoop = !isLooping;
+        setIsLooping(nextLoop);
+        audioClip.loop = nextLoop;
+    }, [isLooping, audioClip]);
+
+    const progressBarOnChangeCallback = useCallback(function (event: ProgressBarOnChangeEvent) {
+        audioClip.Seek(event.time);
+    }, [audioClip]);
+
+    const stopButtonCallback = useCallback(function () {
+        audioClip.Stop();
+    }, [audioClip]);
+
+    const playButtonCallback = useCallback(function () {
+        if (!audioClip.context) return;
+        audioClip.Play();
+    }, [audioClip]);
+
+    useEffect(function () {
+        function onProgress(progress: AudioClipOnProgressEvent) {
+            setCurrentTime(progress.current);
+            setFormattedCurrentTime(progress.formatted);
+        }
+
+        audioClip.AddEventListener("progress", onProgress);
+
+        return function () {
+            audioClip.RemoveEventListener("progress", onProgress);
+        };
+    }, [audioClip]);
+
+    return (
+        <div className="relative h-auto flex flex-col gap-2.5" ref={audioClipPlayerRef}>
+            <ProgressBar
+                audioClipDuration={audioClip.duration}
+                parentialContainer={audioClipPlayerRef as RefObject<HTMLDivElement>}
+                audioBuffer={audioClip.data.audioBuffer}
+                currentTime={currentTime}
+                onChange={progressBarOnChangeCallback}
+            />
+
+            <div className="flex flex-row justify-between items-center gap-5">
+                <span>{formattedCurrentTime}</span>
+                <div className="h-px w-full bg-[var(--color-shadow-grey-500)]"></div>
+                <span>{audioClip.formattedDuration}</span>
+            </div>
+
+            <Button icon={<Play size={16} />} title="Play" text="Play" onClick={playButtonCallback} />
+            <Button icon={<Square size={16} />} title="Stop" text="Stop" onClick={stopButtonCallback} />
+
+            <Button
+                icon={isLooping ? <Repeat1 size={16} /> : <Repeat size={16} />}
+                text={isLooping ? "Loop (enabled)" : "Loop (disabled)"}
+                onClick={loopButtonCallback}
+            />
+
+            <Button icon={<X size={16} />} title="Destroy audio clip" text="Destroy audio clip" style="red" />
+        </div>
+    );
+}
