@@ -1,2 +1,182 @@
 @import "tailwindcss";
 
+@font-face {
+    font-family: 'Poppins Black';
+    src: url('/font-families/Poppins/Poppins-Black.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Poppins Black Italic';
+    src: url('font-families/Poppins/Poppins-BlackItalic.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Poppins Bold';
+    src: url('/font-families/Poppins/Poppins-bold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Poppins Bold Italic';
+    src: url('/font-families/Poppins/Poppins-BoldItalic.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Poppins Extra Bold';
+    src: url('/font-families/Poppins/Poppins-ExtraBold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Poppins Extra Bold Italic';
+    src: url('/font-families/Poppins/Poppins-ExtraBoldItalic.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Poppins Extra Light';
+    src: url('/font-families/Poppins/Poppins-ExtraLight.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Poppins Extra Light Italic';
+    src: url('/font-families/Poppins/Poppins-ExtraLightItalic.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Poppins Italic';
+    src: url('/font-families/Poppins/Poppins-Italic.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Poppins Light';
+    src: url('/font-families/Poppins/Poppins-Light.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Poppins Light Italic';
+    src: url('/font-families/Poppins/Poppins-LightItalic.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Poppins Medium';
+    src: url('/font-families/Poppins/Poppins-Medium.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Poppins Medium Italic';
+    src: url('/font-families/Poppins/Poppins-MediumItalic.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Poppins Regular';
+    src: url('/font-families/Poppins/Poppins-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Poppins Semi Bold';
+    src: url('/font-families/Poppins/Poppins-SemiBold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Poppins Semi Bold Italic';
+    src: url('/font-families/Poppins/Poppins-SemiBoldItalic.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Poppins Thin';
+    src: url('/font-families/Poppins/Poppins-Thin.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Poppins Thin Italic';
+    src: url('/font-families/Poppins/Poppins-ThinItalic.ttf') format('truetype');
+}
+
+:root {
+    --default-inner-padding: 20px;
+    --navigation-bar-initial-height: 80px;
+    --navigation-bar-inner-padding: var(--default-inner-padding);
+    --header-initial-width: 250px;
+    --header-inner-padding: var(--default-inner-padding);
+    --floating-menu-initial-width: 320px;
+    --floating-menu-inner-padding: var(--default-inner-padding);
+}
+
+:root {
+    --font-black: 'Poppins Black', sans-serif;
+    --font-black-italic: 'Poppins Black Italic', sans-serif;
+    --font-bold: 'Poppins Bold', sans-serif;
+    --font-bold-italic: 'Poppins Bold Italic', sans-serif;
+    --font-extra-bold: 'Poppins Extra Bold', sans-serif;
+    --font-extra-bold-italic: 'Poppins Extra Bold Italic', sans-serif;
+    --font-extra-light: 'Poppins Extra Light', sans-serif;
+    --font-extra-light-italic: 'Poppins Extra Light Italic', sans-serif;
+    --font-italic: 'Poppins Italic', sans-serif;
+    --font-light: 'Poppins Light', sans-serif;
+    --font-light-italic: 'Poppins Light Italic', sans-serif;
+    --font-medium: 'Poppins Medium', sans-serif;
+    --font-medium-italic: 'Poppins Medium Italic', sans-serif;
+    --font-regular: 'Poppins Regular', sans-serif;
+    --font-regular-italic: 'Poppins Regular Italic', sans-serif;
+    --font-semibold: 'Poppins Semi Bold', sans-serif;
+    --font-semibold-italic: 'Poppins Semi Bold Italic', sans-serif;
+    --font-thin: 'Poppins Thin', sans-serif;
+    --font-thin-italic: 'Poppins Thin Italic', sans-serif;
+    --default-font-family: var(--font-regular);
+    --primary-text-color: #000000;
+    --secondary-text-color: #ffffff;
+    --font-size-regular: 16px;
+    --font-size-small: 12px;
+    --font-size-medium: 20px;
+    --font-size-large: 28px;
+    --font-size-extra-large: 36px;
+}
+
+:root {
+    --color-black: #000000;
+    --color-white: #FFFFFF;
+
+    --color-text-active: #E6E7E8;
+    --color-text-muted: #A3A4A6;
+    --color-text-disabled: #707173;
+    --color-text-warning-red: #E84C3D;
+    --color-text-warning-yellow: #E3B341;
+    --color-text-success-green: #70C46F;
+
+    --color-surface: #2B2C2E;
+    --color-surface-light: #3A3B3D;
+    --color-surface-dark: #242526;
+
+    --color-panel: #3A3B3D;
+    --color-panel-hover: #434447;
+    --color-panel-active: #505255;
+    --color-panel-text-muted: #A3A4A6;
+    --color-panel-text-active: #E6E7E8;
+
+
+    --color-accent: #FFA646;
+    --color-accent-hover: #FFB766;
+    --color-accent-active: #E78F2F;
+    --color-accent-soft: rgba(255, 166, 70, 0.15);
+}
+
+a, abbr, acronym, address, applet, b, big, blockquote, body, button, caption, center, cite, code, dd, del, dfn, div, dl, dt, em, fieldset, font, footer, form, h1, h2, h3, h4, h5, h6, header, html, i, iframe, img, ins, kbd, label, legend, li, nav, object, ol, p, pre, q, s, samp, section, small, span, strike, strong, sub, sup, table, tbody, td, tfoot, th, thead, title, tr, tt, u, ul, var {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    vertical-align: baseline;
+    background: 0 0;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    outline: none;
+    font-family: var(--default-font-family);
+    color: var(--color-black);
+}
+
+div.container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    content: "";
+}

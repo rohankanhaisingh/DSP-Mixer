@@ -4,12 +4,20 @@ import { AudioDevice, DspPipeline, Channel, AudioClip } from "@fluex/fluexgl-dsp
 
 import Loader from "./components/common/Loader";
 import NavigationBar from "./components/common/NavigationBar";
+import Button from "./components/common/Button";
+import LoaderIndicator from "./components/common/LoaderIndicator";
 
 import Header from "./components/header/Header";
 import HeaderContent from "./components/header/HeaderContent";
 import HeaderCategory from "./components/header/HeaderCategory";
 import HeaderTitlebar from "./components/header/HeaderTitlebar";
 import HeaderDivider from "./components/header/HeaderDivider";
+
+import AudioSourceLibraryHeader from "./components/header/prebuilt/AudioSourceLibraryHeader";
+import AudioClipSettingsHeader from "./components/header/prebuilt/AudioClipSettingsHeader";
+import ChannelSettingsHeader from "./components/header/prebuilt/ChannelSettingsHeader";
+
+import Mixer from "./components/mixer/Mixer";
 
 import EffectWindowProvider from "./providers/EffectWindowProvider";
 
@@ -36,8 +44,8 @@ export default function App() {
         (async function () {
             try {
                 const pipeline = new DspPipeline({
-                    pathToWasm: "/data/FluexGL-DSP-WASM/fluexgl-dsp-wasm_bg.wasm",
-                    pathToWorklet: "/data/FluexGL-DSP-WASM/fluexgl-dsp-processor.worklet"
+                    pathToWasm: "/fluexgl-dsp-wasm-release-0.4.2/fluexgl-dsp-wasm_bg.wasm",
+                    pathToWorklet: "/fluexgl-dsp-wasm-release-0.4.2/fluexgl-dsp-processor.worklet"
                 });
 
                 await pipeline.InitializeDpsPipeline();
@@ -131,7 +139,7 @@ export default function App() {
                                 <HeaderContent>
                                     <HeaderTitlebar icon={<Folder size={20} />} title="Explorer" />
                                     <HeaderDivider />
-                                    <AudioSourceLibrary onFileClick={handleOnAudioLibraryFileClick} />
+                                    <AudioSourceLibraryHeader onFileClick={handleOnAudioLibraryFileClick} />
                                 </HeaderContent>
                             </Header>
 
@@ -141,8 +149,8 @@ export default function App() {
                             />
 
                             <Header position="right">
-                                {selectedChannel && <ChannelSettings channel={selectedChannel} onAudioClipSelect={onAudioClipSelectFromChannelSettingsCallback} />}
-                                {selectedAudioFile && <AudioClipSettings audioFile={selectedAudioFile} />}
+                                {selectedChannel && <ChannelSettingsHeader channel={selectedChannel} onAudioClipSelect={onAudioClipSelectFromChannelSettingsCallback} />}
+                                {selectedAudioFile && <AudioClipSettingsHeader audioFile={selectedAudioFile} />}
                                 {isLoadingRightHeader && (
                                     <div style={{
                                         width: "100%",
