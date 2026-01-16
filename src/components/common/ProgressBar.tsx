@@ -1,7 +1,10 @@
 import { type RefObject, useState, useRef, useEffect, useCallback } from "react";
 
 import { computeWaveformBars } from "../../utilities/scripts/audio-buffer-computings";
-import { drawWaveformBarsOnCanvas } from "../../utilities/scripts/waveform-renderer";
+import { drawWaveformBarsOnCanvas } from  "../../utilities/scripts/waveform-renderer";
+
+import "./ProgressBar.scss";
+
 
 export interface ProgressBarPosition {
     x: number;
@@ -23,6 +26,7 @@ export interface ProgressBarProperties {
 }
 
 export default function ProgressBar(props: ProgressBarProperties) {
+
     const { audioClipDuration, parentialContainer, currentTime, onDrag, onChange, audioBuffer } = props;
 
     const [progressBarWidth, setProgressBarWidth] = useState<number>(0);
@@ -39,16 +43,21 @@ export default function ProgressBar(props: ProgressBarProperties) {
 
         isDraggingRef.current = false;
 
-        const seekedTime: number = Number(((audioClipDuration / progressBarFullWidth) * draggedOffsetRef.current).toFixed(2));
+        const seekedTime: number = Number(
+            ((audioClipDuration / progressBarFullWidth) * draggedOffsetRef.current).toFixed(2)
+        );
 
         onChange?.({
             time: seekedTime,
             progressBarWidthInPixels: draggedOffsetRef.current
         });
+
     }, [audioClipDuration, progressBarFullWidth, onChange]);
 
     const handleThumbMouseDown = useCallback(function () {
+
         const body = progressBarBodyRef.current;
+
         if (!body) return;
 
         const rect = body.getBoundingClientRect();
@@ -58,6 +67,7 @@ export default function ProgressBar(props: ProgressBarProperties) {
     }, []);
 
     const handleThumbDragging = useCallback(function (event: MouseEvent) {
+
         if (!isDraggingRef.current || !progressBarPositionRef.current) return;
         if (progressBarFullWidth === 0) return;
 
@@ -72,10 +82,13 @@ export default function ProgressBar(props: ProgressBarProperties) {
 
         setProgressBarWidth(trackerWidthInPercentages);
         onDrag?.();
+
     }, [progressBarFullWidth, onDrag]);
 
     useEffect(function () {
+
         function updateWidth() {
+
             if (!progressBarBodyRef.current) return;
 
             const rect = progressBarBodyRef.current.getBoundingClientRect();
@@ -85,39 +98,36 @@ export default function ProgressBar(props: ProgressBarProperties) {
         updateWidth();
         window.addEventListener("resize", updateWidth);
 
-        return function () {
+        return () => {
             window.removeEventListener("resize", updateWidth);
         };
+
     }, []);
 
     useEffect(function () {
+
         const container = parentialContainer.current;
+
         if (!container) return;
 
-        function onMove(event: MouseEvent) {
-            handleThumbDragging(event);
-        }
-
-        function onUp() {
-            handleStopIsDragging();
-        }
-
-        function onLeave() {
-            handleStopIsDragging();
-        }
+        const onMove = function (event: MouseEvent) { handleThumbDragging(event); };
+        const onUp = function () { handleStopIsDragging(); };
+        const onLeave = function () { handleStopIsDragging(); };
 
         container.addEventListener("mousemove", onMove);
         container.addEventListener("mouseup", onUp);
         container.addEventListener("mouseleave", onLeave);
 
-        return function () {
+        return () => {
             container.removeEventListener("mousemove", onMove);
             container.removeEventListener("mouseup", onUp);
             container.removeEventListener("mouseleave", onLeave);
         };
+
     }, [parentialContainer, handleThumbDragging, handleStopIsDragging]);
 
     useEffect(function () {
+
         if (progressBarFullWidth === 0) return;
         if (audioClipDuration === 0) return;
         if (isDraggingRef.current) return;
@@ -129,10 +139,12 @@ export default function ProgressBar(props: ProgressBarProperties) {
 
         const trackerWidthInPercentages: number = (100 / progressBarFullWidth) * offset;
         setProgressBarWidth(trackerWidthInPercentages);
+
     }, [currentTime, audioClipDuration, progressBarFullWidth]);
 
-    useEffect(function () {
-        if (!waveFormCanvasRef.current || !audioBuffer) return;
+    useEffect(function() {
+
+        if(!waveFormCanvasRef.current || !audioBuffer) return;
 
         const canvas = waveFormCanvasRef.current;
 
@@ -140,27 +152,14 @@ export default function ProgressBar(props: ProgressBarProperties) {
         drawWaveformBarsOnCanvas(canvas, peaks, {
             color: "rgba(255, 255, 255, 0.10)"
         });
-    }, [audioBuffer]);
+    }, [waveFormCanvasRef]);
 
     return (
-        <div className="w-full h-[60px] flex items-center relative">
-            <canvas className="w-full h-[60px]" ref={waveFormCanvasRef}></canvas>
-
-            <div className="w-full h-[3px] rounded-md bg-[var(--color-shadow-grey-400)] absolute z-[2]" ref={progressBarBodyRef}>
-                <div className="h-[3px] bg-[var(--color-white)] relative" style={{ width: progressBarWidth + "%" }}>
-                    <div
-                        className="
-                            w-[15px] h-[15px]
-                            absolute right-[-6px] top-[-6px]
-                            z-[1]
-                            rounded-[10px]
-                            bg-[var(--color-white)]
-                            transition-transform duration-150 ease-in-out
-                            cursor-grab
-                            hover:scale-[1.2]
-                        "
-                        onMouseDown={handleThumbMouseDown}
-                    />
+        <div className="progress-bar">
+            <canvas className="progress-bar__wave-form" ref={waveFormCanvasRef}></canvas>
+            <div className="progress-bar__body" ref={progressBarBodyRef}>
+                <div className="progress-bar__body__current" style={{ width: `${progressBarWidth}%` }}>
+                    <div className="progress-bar__body__current__thumb" onMouseDown={handleThumbMouseDown} />
                 </div>
             </div>
         </div>

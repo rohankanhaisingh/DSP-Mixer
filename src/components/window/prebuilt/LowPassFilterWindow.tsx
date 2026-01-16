@@ -1,7 +1,7 @@
 import { LowPassFilter } from "@fluex/fluexgl-dsp";
 import { useState, useEffect } from "react";
 
-import Knob from "../../common/Knob";
+import Knob from "../../mixer/Knob";
 
 export interface LowPassFilterWindowProperties {
     lowPassFilter: LowPassFilter;

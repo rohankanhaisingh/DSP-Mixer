@@ -1,5 +1,6 @@
 import { useState, useRef, type MouseEvent } from "react";
 import { Ease } from "@babahgee/easings";
+import "./Fader.scss";
 
 export interface FaderProperties {
     initialValue?: number;
@@ -30,7 +31,7 @@ export default function Fader({ initialValue, maximumValue, onChange }: FaderPro
 
         const calculatedInternalValue: number = maxValue * ratio;
 
-        const fixedValue: number = Number(calculatedInternalValue.toFixed(1));
+        const fixedValue: number = Number(calculatedInternalValue.toFixed(1))
 
         setInternalValue(fixedValue);
         onChange?.(fixedValue);
@@ -40,10 +41,7 @@ export default function Fader({ initialValue, maximumValue, onChange }: FaderPro
 
         event.preventDefault();
 
-        if (event.button !== 1) {
-            setIsDragging(true);
-            return;
-        }
+        if (event.button !== 1) return setIsDragging(true);
 
         Ease(internalValue, 100, "easeOutExpo", 1000, function (value: number) {
 
@@ -56,53 +54,31 @@ export default function Fader({ initialValue, maximumValue, onChange }: FaderPro
         setIsDragging(false);
     }
 
-    function stopDragging(): void {
-        setIsDragging(false);
-    }
-
     const displayPercentage: number = Math.max(0, Math.min(100, (internalValue / maxValue) * 100));
 
     return (
         <div
-            className="flex h-[220px] items-center justify-center"
+            className={`channel-fader ${isDragging ? "is-dragging" : ""}`}
             onMouseMove={handleThumbMovement}
-            onMouseUp={stopDragging}
-            onMouseLeave={stopDragging}
+            onMouseUp={() => setIsDragging(false)}
+            onMouseLeave={() => setIsDragging(false)}
         >
-            <div
-                ref={bodyRef}
-                className="relative h-full w-[5px] rounded-[5px] bg-[var(--color-panel)] transition-[background] duration-[150ms]"
-            >
+            <div className="channel-fader__body" ref={bodyRef}>
                 <div
-                    className="absolute bottom-0 left-0 w-[5px] rounded-[5px] bg-[var(--color-accent)] transition-[background] duration-[150ms]"
+                    className="channel-fader__body__current"
                     style={{ height: displayPercentage + "%" }}
                 >
-                    <div className="absolute inset-0">
-                        {/* Value label */}
-                        <div
-                            className={[
-                                "pointer-events-none absolute left-[-21px] top-[-60px] z-[1]",
-                                "flex h-[20px] w-[40px] items-center justify-center",
-                                "rounded-[5px] p-[5px] text-[var(--color-white)]",
-                                "bg-[rgba(0,0,0,0.25)] transition-opacity duration-[150ms]",
-                                isDragging ? "opacity-100" : "opacity-0"
-                            ].join(" ")}
-                        >
-                            <span className="text-[12px]">{internalValue}%</span>
+                    <div className="channel-fader__body__current__container">
+                        <div className="channel-fader__body__current__label">
+                            <span>{internalValue}%</span>
                         </div>
-
-                        {/* Thumb */}
                         <div
-                            className={[
-                                "absolute left-[-7px] top-[-20px] z-[1]",
-                                "flex h-[40px] w-[20px] cursor-grab flex-col items-center justify-center gap-[5px]",
-                                "rounded-[5px] bg-[var(--color-surface-light)] transition-[background] duration-[150ms]"
-                            ].join(" ")}
+                            className="channel-fader__body__current__thumb"
                             onMouseDown={handleThumbMouseDown}
                         >
-                            <div className="h-[2px] w-[10px] bg-[var(--color-accent)] transition-[background] duration-[150ms]" />
-                            <div className="h-[2px] w-[10px] bg-[var(--color-accent)] transition-[background] duration-[150ms]" />
-                            <div className="h-[2px] w-[10px] bg-[var(--color-accent)] transition-[background] duration-[150ms]" />
+                            <div className="channel-fader__body__current__thumb__line"></div>
+                            <div className="channel-fader__body__current__thumb__line"></div>
+                            <div className="channel-fader__body__current__thumb__line"></div>
                         </div>
                     </div>
                 </div>

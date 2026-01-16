@@ -1,3 +1,5 @@
+import "./HeaderCategory.scss";
+
 import { type ReactNode } from "react";
 
 export interface HeaderCategoryProperties {
@@ -7,17 +9,11 @@ export interface HeaderCategoryProperties {
 
 export default function HeaderCategory({ label, children }: HeaderCategoryProperties) {
     return (
-        <div className="relative h-auto flex flex-col gap-2.5">
-            <p
-                className="uppercase text-[var(--color-text-muted)]"
-                style={{ fontFamily: "var(--font-semibold)" }}
-            >
-                {label ?? "Category"}
-            </p>
-
-            <div className="flex flex-col gap-2.5">
-                {children}
+        <div className="app-header__content__category">
+            <p className="app-header__content__category__label"> {label ?? "Category"}</p>
+            <div className="app-header__content__category__items">
+                { children }
             </div>
         </div>
-    );
+    )
 }

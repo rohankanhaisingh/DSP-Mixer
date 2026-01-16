@@ -1,31 +1,23 @@
 import LoaderIndicator from "./LoaderIndicator";
+import "./Loader.scss";
 
 export interface LoaderProperties {
     isFadingOut: boolean;
 }
 
-export default function Loader(props: LoaderProperties) {
-    const isFadingOut = props.isFadingOut;
-
-    const rootClassName =
-        "fixed inset-0 z-[9999] h-screen w-screen " +
-        "bg-[var(--color-surface)] text-[const(--color-white)] " +
-        "text-[const(--font-size-small)]" + (isFadingOut ? " animate-loader-fade-out opacity-0" : "");
-
+export default function Loader({ isFadingOut }: LoaderProperties) {
     return (
-        <div className={rootClassName}>
-            <div className="relative flex h-full w-full flex-col items-center justify-center gap-5">
-                <div className="flex h-[60px] flex-row items-center gap-2.5 text-[var(--font-size-extra-large)]">
-                    <div className="h-[60px] w-[60px]">
-                        <img src="/images/fluex-logo.png" alt="Fluex" className="h-full w-full scale-[1.5]" />
+        <div className={`app-loader ${isFadingOut ? "fade-out" : ""}`}>
+            <div className="app-loader__container">
+                <div className="app-loader__logo">
+                    <div className="app-loader__logo__icon">
+                        <img src="/images/fluex-logo.png" alt="Fluex" />
                     </div>
                     <span>fluex.org</span>
                 </div>
-
-                <p>Loading DSP playground</p>
-
-                <LoaderIndicator theme="fluexgl-dsp" />
+                <p className="app-loader__loading-text">Loading DSP playground</p>
+                <LoaderIndicator theme="fluexgl-dsp"/>
             </div>
         </div>
-    );
+    )
 }

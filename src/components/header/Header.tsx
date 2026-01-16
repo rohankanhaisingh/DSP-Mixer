@@ -1,4 +1,5 @@
 import { type ReactNode } from "react";
+import "./Header.scss";
 
 export type HeaderPosition = "left" | "right";
 
@@ -9,14 +10,8 @@ export interface HeaderProperties {
 
 export default function Header({ position, children }: HeaderProperties) {
     return (
-        <div
-            className={[
-                "p-5 flex overflow-y-auto",
-                position === "left" ? "[grid-area:left]" : "",
-                position === "right" ? "[grid-area:right]" : ""
-            ].filter(Boolean).join(" ")}
-        >
+        <div className={`app-header ${position ?? ""}`}>
             {children}
         </div>
-    );
+    )
 }

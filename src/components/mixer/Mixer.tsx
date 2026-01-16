@@ -6,12 +6,7 @@ import { Ease } from "@babahgee/easings";
 import MixerChannel from "./Channel";
 import CreateChannelButton from "./CreateChannelButton";
 
-// import {
-//     MIXER_CHANNEL_FFTSIZE,
-//     MIXER_CHANNEL_SMOOTHNING_TIME_CONSTANT,
-//     MIXER_CHANNEL_MAX_DEXIBELS,
-//     MIXER_CHANNEL_MIN_DECIBELS
-// } from "../../utilities/constants";
+import "./Mixer.scss";
 
 export interface MixerProperties {
     audioDevice: AudioDevice;
@@ -19,6 +14,7 @@ export interface MixerProperties {
 }
 
 export default function Mixer({ audioDevice, onChannelSettingsButtonClick }: MixerProperties) {
+
 
     const masterChannel = audioDevice.GetMasterChannel();
 
@@ -35,8 +31,8 @@ export default function Mixer({ audioDevice, onChannelSettingsButtonClick }: Mix
 
     useEffect(function () {
 
-        const previousCount = previousChannelCountRef.current;
-        const currentCount = channels.length;
+        const previousCount = previousChannelCountRef.current,
+            currentCount = channels.length;
 
         if (currentCount > previousCount) {
 
@@ -44,8 +40,8 @@ export default function Mixer({ audioDevice, onChannelSettingsButtonClick }: Mix
 
             if (mixerScroller) {
 
-                let start = mixerScroller.scrollLeft;
-                let end = mixerScroller.scrollWidth - mixerScroller.clientWidth;
+                let start = mixerScroller.scrollLeft,
+                    end = mixerScroller.scrollWidth - mixerScroller.clientWidth;
 
                 if (end < 0) end = 0;
 
@@ -58,16 +54,15 @@ export default function Mixer({ audioDevice, onChannelSettingsButtonClick }: Mix
         }
 
         previousChannelCountRef.current = currentCount;
-
     }, [channels.length]);
 
     useEffect(function () {
 
         const current = mixerScrollerRef.current;
+
         if (!current) return;
 
-        function onWheel(event: WheelEvent): void {
-            if (!current) return;
+        current.addEventListener("wheel", function (event: WheelEvent) {
 
             const direction: string = (event.deltaY < 0) ? "up" : "down";
 
@@ -79,30 +74,16 @@ export default function Mixer({ audioDevice, onChannelSettingsButtonClick }: Mix
                     current.scroll({ left: current.scrollLeft - 20 });
                     return;
             }
-        }
+        });
 
-        current.addEventListener("wheel", onWheel);
-
-        return function () {
-            current.removeEventListener("wheel", onWheel);
-        };
-
-    }, []);
+    }, [mixerScrollerRef]);
 
     const createChannelButtonOnClick = useCallback(function () {
 
         const newChannel = audioDevice.CreateChannel("Channel");
-
-        // newChannel.SetAnalyserOptions({
-        //     smoothingTimeConstant: MIXER_CHANNEL_SMOOTHNING_TIME_CONSTANT,
-        //     fftSize: MIXER_CHANNEL_FFTSIZE,
-        //     minDecibels: MIXER_CHANNEL_MIN_DECIBELS,
-        //     maxDecibels: MIXER_CHANNEL_MAX_DEXIBELS
-        // });
-
         masterChannel.AttachChannel(newChannel);
         setChannels(masterChannel.channels.slice());
-
+        
     }, [masterChannel]);
 
     const settingsButtonClickCallback = useCallback(function (channel: Channel) {
@@ -110,16 +91,8 @@ export default function Mixer({ audioDevice, onChannelSettingsButtonClick }: Mix
     }, [onChannelSettingsButtonClick]);
 
     return (
-        <div className="rounded-t-[5px] bg-[var(--color-surface-dark)] p-5">
-            <div
-                ref={mixerScrollerRef}
-                className="
-                    absolute inset-0
-                    flex flex-row gap-2.5
-                    overflow-x-scroll
-                    w-[calc(100vw-(var(--header-initial-width)*2)-40px)]
-                "
-            >
+        <div className="app-mixer">
+            <div className="app-mixer__container" ref={mixerScrollerRef}>
                 <MixerChannel
                     channelCount="M"
                     label="Master channel"

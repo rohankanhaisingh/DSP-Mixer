@@ -1,0 +1,19 @@
+@use "../../styles/mixins/RelativeContainerWrapper.scss" as *;
+
+$mixerContainerWidth: calc(100vw - (var(--header-initial-width) * 2) - 40px);
+
+.app-mixer {
+    background: var(--color-surface-dark);
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    padding: 20px;
+
+    &__container {
+        @include RelativeContainerWrapper;
+        width: $mixerContainerWidth;
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        overflow-x: scroll;
+    }
+}

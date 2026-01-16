@@ -1,3 +1,5 @@
+import "./HeaderTitlebar.scss";
+
 import { type ReactNode } from "react";
 
 export interface HeaderTitlebarProperties {
@@ -7,11 +9,9 @@ export interface HeaderTitlebarProperties {
 
 export default function HeaderTitlebar({ icon, title }: HeaderTitlebarProperties) {
     return (
-        <div className="w-full flex flex-row items-center gap-2.5">
+        <div className="app-header__content__titlebar">
             {icon}
-            <span className="text-[var(--font-size-regular)] whitespace-nowrap overflow-hidden">
-                {title}
-            </span>
+            <span>{title}</span>
         </div>
-    );
+    )
 }

@@ -1,7 +1,7 @@
 import { Chorus } from "@fluex/fluexgl-dsp";
 import { useState, useEffect } from "react";
 
-import Knob from "../../common/Knob";
+import Knob from "../../mixer/Knob";
 
 export interface ChorusWindowProperties {
     chorus: Chorus;

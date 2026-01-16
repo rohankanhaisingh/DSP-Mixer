@@ -1,0 +1,14 @@
+.app-header {
+    padding: 20px;
+    display: flex;
+    overflow-y: auto;
+
+    &.left {
+        grid-area: left;
+        overflow-y: auto;
+    }
+
+    &.right {
+        grid-area: right;
+    }
+}

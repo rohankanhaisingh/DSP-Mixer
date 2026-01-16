@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Ease } from "@babahgee/easings";
 
+import "./Knob.scss";
+
 export interface KnobProperties {
     min: number;
     max: number;
@@ -16,28 +18,29 @@ export default function Knob({ min, max, step, value, defaultValue, onChange }: 
     const isControlled = value !== undefined;
     const currentValue = isControlled ? (value as number) : internalValue;
 
-    const [isDragging, setIsDragging] = useState<boolean>(false);
+    const [isDragging, setIsDragging] = useState(false);
     const startYRef = useRef<number>(0);
     const startValueRef = useRef<number>(currentValue);
 
-    useEffect(function () {
-        if (!isControlled && defaultValue !== undefined) setInternalValue(defaultValue);
+    useEffect(() => {
+        if (!isControlled && defaultValue !== undefined)
+            setInternalValue(defaultValue);
     }, [defaultValue, isControlled]);
 
-    function updateValue(next: number): void {
+    function updateValue(next: number) {
 
-        let clamped = Math.min(Math.max(next, min), max);
-        const safeStep = step || 1;
+        let clamped = Math.min(Math.max(next, min), max),
+            safeStep = step || 1;
 
         clamped = Math.round(clamped / safeStep) * safeStep;
 
         if (!isControlled) setInternalValue(clamped);
-
+        
         onChange?.(clamped);
     }
 
-    function handleDragStart(clientY: number): void {
-
+    function handleDragStart(clientY: number) {
+        
         setIsDragging(true);
 
         startYRef.current = clientY;
@@ -49,47 +52,45 @@ export default function Knob({ min, max, step, value, defaultValue, onChange }: 
         window.addEventListener("touchend", handleTouchEnd);
     }
 
-    function handleMouseDown(e: React.MouseEvent<HTMLDivElement>): void {
+    function handleMouseDown(e: React.MouseEvent<HTMLDivElement>) {
         e.preventDefault();
 
-        if (e.button === 1) {
-            resetValuesOnMiddleMouseClick();
-            return;
-        }
+        if (e.button === 1)
+            return resetValuesOnMiddleMouseClick();
 
         handleDragStart(e.clientY);
     }
 
-    function handleTouchStart(e: React.TouchEvent<HTMLDivElement>): void {
+    function handleTouchStart(e: React.TouchEvent<HTMLDivElement>) {
         e.preventDefault();
         const touch = e.touches[0];
         handleDragStart(touch.clientY);
     }
 
-    function handleMouseMove(e: MouseEvent): void {
+    function handleMouseMove(e: MouseEvent) {
         e.preventDefault();
         handleDragMove(e.clientY);
     }
 
-    function handleTouchMove(e: TouchEvent): void {
+    function handleTouchMove(e: TouchEvent) {
         e.preventDefault();
         const touch = e.touches[0] ?? e.changedTouches[0];
         if (!touch) return;
         handleDragMove(touch.clientY);
     }
 
-    function handleDragMove(clientY: number): void {
+    function handleDragMove(clientY: number) {
 
-        const deltaY = startYRef.current - clientY;
-        const pixelsForFullRange = 150;
-        const range = max - min;
-        const deltaValue = (deltaY / pixelsForFullRange) * range;
-        const next = startValueRef.current + deltaValue;
+        const deltaY = startYRef.current - clientY,
+            pixelsForFullRange = 150,
+            range = max - min,
+            deltaValue = (deltaY / pixelsForFullRange) * range,
+            next = startValueRef.current + deltaValue;
 
         updateValue(next);
     }
 
-    function stopDragging(): void {
+    function stopDragging() {
 
         setIsDragging(false);
 
@@ -99,15 +100,15 @@ export default function Knob({ min, max, step, value, defaultValue, onChange }: 
         window.removeEventListener("touchend", handleTouchEnd);
     }
 
-    function handleMouseUp(): void {
+    function handleMouseUp() {
         stopDragging();
     }
 
-    function handleTouchEnd(): void {
+    function handleTouchEnd() {
         stopDragging();
     }
 
-    function resetValuesOnMiddleMouseClick(): void {
+    function resetValuesOnMiddleMouseClick() {
 
         Ease(internalValue, defaultValue ?? 0, "easeOutExpo", 350, function (easedValue: number) {
             setInternalValue(easedValue);
@@ -115,40 +116,16 @@ export default function Knob({ min, max, step, value, defaultValue, onChange }: 
         });
     }
 
-    const normalized: number = (currentValue - min) / (max - min || 1);
-    const minAngle: number = 130;
-    const maxAngle: number = 410;
-    const angle: number = minAngle + normalized * (maxAngle - minAngle);
+    const normalized: number = (currentValue - min) / (max - min || 1),
+        minAngle: number = 130,
+        maxAngle: number = 410,
+        angle: number = minAngle + normalized * (maxAngle - minAngle);
 
     return (
-        <div
-            className={[
-                "inline-flex h-[40px] w-[40px] select-none items-center justify-center touch-none cursor-pointer",
-                "group"
-            ].join(" ")}
-            onMouseDown={handleMouseDown}
-            onTouchStart={handleTouchStart}
-        >
-            <div
-                className={[
-                    "relative h-[calc(100%-2px)] w-[calc(100%-2px)] rounded-full",
-                    "bg-[var(--color-panel)] border border-[var(--color-accent-soft)]",
-                    "transition-[box-shadow,background] duration-[150ms]",
-                    isDragging ? "bg-[var(--color-panel-active)]" : "group-hover:bg-[var(--color-panel-hover)]"
-                ].join(" ")}
-            >
-                <div
-                    className={[
-                        "absolute left-1/2 top-[calc(50%-1px)] z-[2] h-[2px]",
-                        "bg-[var(--color-accent)] origin-[0%_50%] transition-[width] duration-[150ms]",
-                        isDragging ? "w-1/2" : "w-[calc(50%-5px)]"
-                    ].join(" ")}
-                    style={{ transform: "rotate(" + angle + "deg)" }}
-                />
-
-                <div
-                    className="absolute inset-0 m-auto h-[6px] w-[6px] rounded-[10px] bg-[var(--color-accent)] z-[1] transition-[width,height] duration-[150ms]"
-                />
+        <div className={`knob ${isDragging ? "is-dragging" : ""}`} onMouseDown={handleMouseDown} onTouchStart={handleTouchStart} >
+            <div className="knob__body">
+                <div className="knob__body__center"></div>
+                <div className="knob__body__handle" style={{ transform: `rotate(${angle}deg)` }}></div>
             </div>
         </div>
     );

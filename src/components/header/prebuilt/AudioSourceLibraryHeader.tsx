@@ -70,7 +70,6 @@ export default function AudioSourceLibraryHeader({ onFileClick }: AudioSourceLib
 	return (
 		<HeaderCategory label="Audio library">
 			{files.map(function (file: AudioLibraryFile, index: number) {
-
 				return (
 					<Button 
 						icon={<AudioLines size={16} />} 

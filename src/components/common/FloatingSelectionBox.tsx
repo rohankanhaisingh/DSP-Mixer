@@ -2,6 +2,7 @@ import { type ReactNode, useEffect, useState, useRef } from "react";
 import { Ease } from "@babahgee/easings";
 
 import Button from "./Button";
+import "./FloatingSelectionBox.scss";
 
 export interface FloatingSelectionBoxItem<T> {
     icon: ReactNode;
@@ -17,13 +18,7 @@ export interface FloatingSelectionBoxProperties<T> {
     onCancel?: () => void;
 }
 
-export default function FloatingSelectionBox<T>({
-    title,
-    items,
-    anchor,
-    onCancel,
-    onSelect
-}: FloatingSelectionBoxProperties<T>) {
+export default function FloatingSelectionBox<T>({ title, items, anchor, onCancel, onSelect }: FloatingSelectionBoxProperties<T>) {
 
     const [selectionBoxHorizontalPosition, setSelectionBoxHorizontalPosition] = useState<number>(20);
     const [selectionBoxVerticalPosition, setSelectionBoxVerticalPostition] = useState<number>(20);
@@ -48,69 +43,46 @@ export default function FloatingSelectionBox<T>({
         const maxTop = window.innerHeight - selectionBoxBoundary.height - padding;
         const maxLeft = window.innerWidth - selectionBoxBoundary.width - padding;
 
-        if (desiredTop < padding) desiredTop = padding;
-        if (desiredTop > maxTop) desiredTop = maxTop;
+        if (desiredTop < padding)
+            desiredTop = padding;
 
-        if (desiredLeft < padding) desiredLeft = padding;
-        if (desiredLeft > maxLeft) desiredLeft = padding;
+        if (desiredTop > maxTop)
+            desiredTop = maxTop;
+
+        if (desiredLeft < padding)
+            desiredLeft = padding;
+
+        if (desiredLeft > maxLeft)
+            desiredLeft = padding;
 
         setSelectionBoxVerticalPostition(desiredTop);
         setSelectionBoxHorizontalPosition(desiredLeft);
 
-        Ease(0, 1, "easeOutExpo", 350, function (_scale) {
-            setScale(_scale);
-        });
-
+        Ease(0, 1, "easeOutExpo", 350, _scale => setScale(_scale));
         setOpacity(1);
 
-    }, [anchor]);
+    }, [anchor, selectionBoxRef]);
 
     return (
-        <div className="fixed inset-0 z-10 w-screen h-screen text-[var(--font-size-small)]">
-            <div className="absolute inset-0" onClick={onCancel} />
-            <div
-                ref={selectionBoxRef}
-                className="
-                    absolute
-                    w-[208px]
-                    max-h-[45vh]
-                    overflow-y-auto
-                    rounded-[5px]
-                    border
-                    shadow-[0_0_10px_rgba(0,0,0,0.25)]
-                    bg-[var(--color-surface)]
-                    border-[var(--color-surface-light)]
-                    transition-[transform,opacity]
-                "
-                style={{
-                    left: selectionBoxHorizontalPosition + "px",
-                    top: selectionBoxVerticalPosition + "px",
-                    transform: `scale(${scale})`,
-                    opacity
-                }}
-            >
-                <div className="flex w-full flex-col gap-5 p-5">
-                    <p className="whitespace-nowrap uppercase font-[var(--font-semibold)]">
-                        {title}
-                    </p>
-
-                    <div className="flex flex-col gap-2.5">
-                        {items.map(function (item, index) {
+        <div className="app-floating-selection-box">
+            <div className="app-floating-selection-box__backdrop" onClick={onCancel}></div>
+            <div className="app-floating-selection-box__box" ref={selectionBoxRef} style={{
+                left: selectionBoxHorizontalPosition + "px",
+                top: selectionBoxVerticalPosition + "px",
+                transform: `scale(${scale})`,
+                opacity
+            }}>
+                <div className="app-floating-selection-box__box__container">
+                    <p className="app-floating-selection-box__box__container__title">{title}</p>
+                    <div className="app-floating-selection-box__box__container__buttons">
+                        {items.map(function (item: FloatingSelectionBoxItem<T>, index: number) {
                             return (
-                                <Button
-                                    key={index}
-                                    icon={item.icon}
-                                    title={item.label}
-                                    text={item.label}
-                                    onClick={function () {
-                                        onSelect?.(item.data);
-                                    }}
-                                />
-                            );
+                                <Button icon={item.icon} title={item.label} text={item.label} key={index} onClick={() => onSelect?.(item.data)} />
+                            )
                         })}
                     </div>
                 </div>
             </div>
         </div>
-    );
+    )
 }

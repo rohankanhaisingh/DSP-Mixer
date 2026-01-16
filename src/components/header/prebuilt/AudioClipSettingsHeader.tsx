@@ -37,7 +37,6 @@ export default function AudioClipSettingsHeader({ audioFile }: AudioFileDataProp
 
         handleChange();
         return unsubscribe;
-
     }, [audioFile.id]);
 
     useEffect(function () {
@@ -49,7 +48,7 @@ export default function AudioClipSettingsHeader({ audioFile }: AudioFileDataProp
 
         selectedAudioClipPlayer?.AttachAudioClip(associatedAudioClip);
 
-    }, [selectedAudioClipPlayer, associatedAudioClip]);
+    }, [selectedAudioClipPlayer, associatedAudioClip, selectedChannel]);
 
     const createAudioClipCallback = useCallback(function () {
 
@@ -60,8 +59,11 @@ export default function AudioClipSettingsHeader({ audioFile }: AudioFileDataProp
 
     const onSelectChannelCallback = useCallback(function (channel: Channel) {
 
+        if(!channel.audioClipPlayer) return alert("Cannot attach audio clip to channel, because the channel's AudioClipPlayer is undefined.");
+
         setIsShowingChannelSelection(false);
         setSelectedChannel(channel);
+        setSelectedAudioClipPlayer(channel.audioClipPlayer);
     }, []);
 
     return (
@@ -71,7 +73,7 @@ export default function AudioClipSettingsHeader({ audioFile }: AudioFileDataProp
                 <HeaderDivider />
                 <HeaderCategory label="Details">
                     <p>File name: {audioFile.fileName}</p>
-                    <p>File size: {format(audioFile.fileSize)}</p>
+                    <p>File size: {format(audioFile.fileSize)}</p> 
                     <p>Duration: {audioFile.audioSourceData.audioBuffer.duration.toFixed(2)} seconds</p>
                     <p>Sample rate: {audioFile.audioSourceData.audioBuffer.sampleRate}</p>
                     <p>Channels (mostly L+R): {audioFile.audioSourceData.audioBuffer.numberOfChannels}</p>
