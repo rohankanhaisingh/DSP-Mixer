@@ -1,6 +1,8 @@
 import { type ReactNode, useCallback, useState } from "react";
 import { X, Maximize2, Minimize2 } from "lucide-react";
 
+import "./WindowTitlebar.scss";
+
 export interface WindowTitlebarProperties {
     title?: string;
     icon?: ReactNode;
@@ -23,18 +25,18 @@ export default function WindowTitlebar({ title, icon, draggable, onMouseDown, on
 
     return (
         <div
-            className="flex flex-row justify-between items-center bg-[var(--color-surface-light)] rounded-t-[5px] px-[10px] py-[5px] text-[var(--color-shadow-grey-300)]"
+            className="app-window__container__titlebar"
             onMouseDown={draggable ? onMouseDown : undefined}
         >
-            <div className="flex flex-row gap-[10px]">
+            <div className="app-window__container__titlebar__content">
                 {icon}
                 <span>{title}</span>
             </div>
-            <div className="flex flex-row gap-[10px]">
-                <div className="w-[20px] h-[20px] rounded-[5px] flex items-center justify-center hover:bg-[var(--color-panel-hover)] cursor-pointer" onClick={onChangeWindowSizeButtonClickCallback}>
+            <div className="app-window__container__titlebar__controls">
+                <div className="app-window__container__titlebar__controls__button" onClick={onChangeWindowSizeButtonClickCallback}>
                     {isExpanded ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
                 </div>
-                <div className="w-[20px] h-[20px] rounded-[5px] flex items-center justify-center hover:bg-[var(--color-panel-hover)] cursor-pointer" onClick={onCloseButtonClick}>
+                <div className="app-window__container__titlebar__controls__button" onClick={onCloseButtonClick}>
                     <X size={16} />
                 </div>
             </div>

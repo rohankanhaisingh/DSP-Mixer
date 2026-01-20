@@ -4,6 +4,8 @@ import { Ease } from "@babahgee/easings";
 import WindowTitlebar from "./WindowTitlebar";
 import WindowContent from "./WindowContent";
 
+import "./Window.scss";
+
 export interface EffectWindowProps {
     title?: string;
     icon?: ReactNode;
@@ -110,7 +112,7 @@ export default function Window({ title, width, height, children, icon, onCloseBu
 
     return (
         <div
-            className="fixed w-[400px] h-[230px] min-w-[400px] min-h-[230px] z-[100] left-[calc(50%-200px)] top-[calc(50%-115px)] rounded-[5px] bg-[var(--color-surface)] shadow-[0_0_10px_rgba(0,0,0,0.25)] border border-[var(--color-surface-light)] text-[var(--font-size-small)] select-none"
+            className="app-window"
             style={{
                 width: windowWidth + "px",
                 height: windowHeight + "px",
@@ -120,7 +122,7 @@ export default function Window({ title, width, height, children, icon, onCloseBu
                 top: positionY + "px"
             }}
         >
-            <div className="relative w-full h-full grid grid-rows-[30px_auto] gap-0">
+            <div className="app-window__container">
                 <WindowTitlebar
                     icon={icon}
                     title={title}

@@ -1,4 +1,5 @@
-import { type ReactNode } from "react";
+import { type  ReactNode } from "react";
+import "./WindowContent.scss";
 
 export interface WindowContentProperties {
     children?: ReactNode;
@@ -6,7 +7,7 @@ export interface WindowContentProperties {
 
 export default function WindowContent({ children }: WindowContentProperties) {
     return (
-        <div className="w-[calc(100%-20px)] h-auto flex flex-col p-[10px] overflow-x-auto overflow-y-auto">
+        <div className="app-window__container__content">
             {children}
         </div>
     )
