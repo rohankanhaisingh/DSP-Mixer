@@ -5,7 +5,7 @@ import { AudioClip, AudioClipPlayer, Channel } from "@fluex/fluexgl-dsp";
 
 import { type AudioLibraryFile } from "../../../services/audioLibraryService";
 import { createAudioClipAssociatedToLibrary, getAudioClipById, subscribeToAudioClips } from "../../../services/audioClipService";
-import { getChannels } from "../../../services/mixerChannelService"
+import { getChannels } from "../../../services/mixerChannelService";
 
 import HeaderContent from "../HeaderContent";
 import HeaderTitlebar from "../HeaderTitlebar";
@@ -95,11 +95,11 @@ export default function AudioClipSettingsHeader({ audioFile }: AudioFileDataProp
                 <HeaderCategory label="DSP Channels">
                     {associatedAudioClip && (
                         <>
-                            {!selectedChannel && <p>This audio clip has not been attached to any channel yet. Attach this clip to a channel before controlling it.</p>}
+                            {!selectedAudioClipPlayer && <p>This audio clip has not been attached to any channel yet. Attach this clip to a channel before controlling it.</p>}
 
-                            {selectedChannel && (
+                            {selectedAudioClipPlayer && (
                                 <>
-                                    <p>Attached to {selectedChannel.label ?? "Channel"}</p>
+                                    <p>Attached to {(selectedAudioClipPlayer.channel as Channel)?.label ?? "Channel"}</p>
                                     <Button icon={<Unlink size={16} />} text="Detach from channel" style="red" />
                                 </>
                             )}

@@ -25,3 +25,21 @@
     --color-accent-active: #E78F2F;
     --color-accent-soft: rgba(255, 166, 70, 0.15);
 }
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: none;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-panel);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-panel-hover);
+}
