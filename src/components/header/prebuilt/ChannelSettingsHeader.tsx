@@ -9,11 +9,12 @@ import HeaderCategory from "../HeaderCategory";
 import FloatingSelectionBox from "../../common/FloatingSelectionBox";
 import Button from "../../common/Button";
 
-import useEffectWindow from "../../../hooks/useEffectWindow";
 
 import { listAvailableEffects, attachEffectOnChannel, detachEffectOnChannel } from "../../../services/effectorService";
 
 import { Channel, AudioClip, Effector } from "@fluex/fluexgl-dsp";
+import { showEffectWindow } from "../../../services/effectWindowService";
+import useWindow from "../../../hooks/useWindow";
 
 export interface ChannelSettingsProperties {
     channel: Channel;
@@ -28,7 +29,7 @@ export default function ChannelSettingsHeader({ channel, onAudioClipSelect }: Ch
     const selectEffectButtonRef = useRef<HTMLDivElement>(null);
     const removeEffectButtonRef = useRef<HTMLDivElement>(null);
 
-    const { showEffectWindow } = useEffectWindow();
+    const useWindowHookValues = useWindow();
 
     const onEffectSelectCallback = useCallback(function (effectName: string) {
         setIsShowingEffectSelection(false);
@@ -41,10 +42,10 @@ export default function ChannelSettingsHeader({ channel, onAudioClipSelect }: Ch
     }, []);
 
     const onShowEffectWindowCallback = useCallback(function (effect: Effector) {
-        showEffectWindow(effect);
+        showEffectWindow(effect, useWindowHookValues);
     }, []);
 
-    if(!channel.audioClipPlayer) {
+    if (!channel.audioClipPlayer) {
         return (
             <>
                 <HeaderContent>

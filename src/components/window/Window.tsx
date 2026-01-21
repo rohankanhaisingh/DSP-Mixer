@@ -5,17 +5,19 @@ import WindowTitlebar from "./WindowTitlebar";
 import WindowContent from "./WindowContent";
 
 import "./Window.scss";
+import type { WindowData } from "../../providers/WindowProvider";
 
-export interface EffectWindowProps {
+export interface WindowProperties {
     title?: string;
     icon?: ReactNode;
     width?: number;
     height?: number;
     children?: ReactNode;
     onCloseButtonClick?: () => void;
+    setInternalWindowData: (data: WindowData) => void;
 }
 
-export default function Window({ title, width, height, children, icon, onCloseButtonClick }: EffectWindowProps) {
+export default function Window({ title, width, height, children, icon, onCloseButtonClick, setInternalWindowData }: WindowProperties) {
 
     const [windowWidth, setWindowWidth] = useState<number>(width ?? 400);
     const [windowHeight, setWindowHeight] = useState<number>(height ?? 230);
@@ -78,6 +80,15 @@ export default function Window({ title, width, height, children, icon, onCloseBu
             window.removeEventListener("mouseup", handleMouseUp);
         };
     }, [isDragging, windowWidth, windowHeight]);
+
+    useEffect(function() {
+        setInternalWindowData({
+            width: windowWidth,
+            height: windowHeight,
+            x: positionX,
+            y: positionY
+        });
+    }, [windowWidth, windowHeight, positionX, positionY]);
 
     function handleTitlebarMouseDown(event: React.MouseEvent<HTMLDivElement>) {
 

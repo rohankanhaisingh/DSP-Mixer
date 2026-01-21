@@ -18,8 +18,6 @@ import ChannelSettingsHeader from "./components/header/prebuilt/ChannelSettingsH
 
 import Mixer from "./components/mixer/Mixer";
 
-import EffectWindowProvider from "./providers/EffectWindowProvider";
-
 import { type AudioLibraryFile, getAudioLibraryFileById } from "./services/audioLibraryService";
 import { startMixerPeakMeterService } from "./services/mixerPeakMeterService";
 import { initializeMixerChannelService } from "./services/mixerChannelService";
@@ -127,67 +125,63 @@ export default function App() {
     return (
         <div className="app-layout">
             <div className="app-layout__container">
-                <EffectWindowProvider>
-                    <>
-                        {(isLoaderVisible) && (
-                            <Loader isFadingOut={isLoaderFadingOut} />
+                {(isLoaderVisible) && (
+                    <Loader isFadingOut={isLoaderFadingOut} />
+                )}
+
+                <>
+                    <NavigationBar title="DSP Mixer - showcase voorbeeld in het Nederlands" />
+
+                    <Header position="left">
+                        <HeaderContent>
+                            <HeaderTitlebar icon={<Folder size={20} />} title="Explorer" />
+                            <HeaderDivider />
+                            <AudioSourceLibraryHeader onFileClick={handleOnAudioLibraryFileClick} />
+                        </HeaderContent>
+                    </Header>
+
+                    <Mixer
+                        audioDevice={audioDevice as AudioDevice}
+                        onChannelSettingsButtonClick={onMixerChannelSettingsButtonClick}
+                    />
+
+                    <Header position="right">
+                        {selectedChannel && <ChannelSettingsHeader channel={selectedChannel} onAudioClipSelect={onAudioClipSelectFromChannelSettingsCallback} />}
+                        {selectedAudioFile && <AudioClipSettingsHeader audioFile={selectedAudioFile} />}
+                        {isLoadingRightHeader && (
+                            <div style={{
+                                width: "100%",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center"
+                            }}>
+                                <LoaderIndicator theme="fluexgl-dsp" size="regular" />
+                            </div>
                         )}
-
-                        <>
-                            <NavigationBar title="DSP Mixer - showcase voorbeeld in het Nederlands" />
-
-                            <Header position="left">
-                                <HeaderContent>
-                                    <HeaderTitlebar icon={<Folder size={20} />} title="Explorer" />
-                                    <HeaderDivider />
-                                    <AudioSourceLibraryHeader onFileClick={handleOnAudioLibraryFileClick} />
-                                </HeaderContent>
-                            </Header>
-
-                            <Mixer
-                                audioDevice={audioDevice as AudioDevice}
-                                onChannelSettingsButtonClick={onMixerChannelSettingsButtonClick}
-                            />
-
-                            <Header position="right">
-                                {selectedChannel && <ChannelSettingsHeader channel={selectedChannel} onAudioClipSelect={onAudioClipSelectFromChannelSettingsCallback} />}
-                                {selectedAudioFile && <AudioClipSettingsHeader audioFile={selectedAudioFile} />}
-                                {isLoadingRightHeader && (
-                                    <div style={{
-                                        width: "100%",
-                                        display: "flex",
-                                        justifyContent: "center",
-                                        alignItems: "center"
-                                    }}>
-                                        <LoaderIndicator theme="fluexgl-dsp" size="regular" />
-                                    </div>
-                                )}
-                                {(!selectedChannel && !selectedAudioFile && !isLoadingRightHeader) && (
-                                    <HeaderContent>
-                                        <HeaderTitlebar title="FluexGL DSP" />
-                                        <HeaderDivider />
-                                        <HeaderCategory label="Over">
-                                            <p>
-                                                Een open-source, webgebaseerde DSP-bibliotheek die is ontwikkeld naast FluexGL, met als doel het creëren en manipuleren van geluid in uiteenlopende contexten.
-                                                Dit open-source project maakt deel uit van het Fluex-ecosysteem en wordt onderhouden door Rohan Kanhaisingh, de hoofdontwikkelaar van deze bibliotheek.
-                                                <br /><br />
-                                                Deze specifieke applicatie wordt gebruikt als showcase, en is <b>NIET</b> gemaakt door AI. De functionaliteit is hetzelfde als die van de originele applicatie, maar is vereenvoudigd om uitsluitend de 
-                                                kernfunctionaliteit te demonstreren.  De originele versie is beschikbaar op <a href="https://fluexgl.dev/dsp/mixer">https://fluexgl.dev/dsp/mixer</a>.
-                                                <br /><br />
-                                                Let op, mogelijk kunnen onderdelen van deze applicatie niet, of niet volledig werken, omdat dit project nog in ontwikkeling is.
-                                            </p>
-                                        </HeaderCategory>
-                                        <HeaderCategory label="Hoe te gebruiken">
-                                            <p>
-                                                FluexGL DSP is gebaseerd op een mixer en audio moet handmatig worden toegewezen. Upload een audiobestand in het linker paneel, selecteer de gemarkeerde audio en koppel deze aan een kanaal in de mixer.
-                                            </p>
-                                        </HeaderCategory>
-                                    </HeaderContent>
-                                )}
-                            </Header>
-                        </>
-                    </>
-                </EffectWindowProvider>
+                        {(!selectedChannel && !selectedAudioFile && !isLoadingRightHeader) && (
+                            <HeaderContent>
+                                <HeaderTitlebar title="FluexGL DSP" />
+                                <HeaderDivider />
+                                <HeaderCategory label="Over">
+                                    <p>
+                                        Een open-source, webgebaseerde DSP-bibliotheek die is ontwikkeld naast FluexGL, met als doel het creëren en manipuleren van geluid in uiteenlopende contexten.
+                                        Dit open-source project maakt deel uit van het Fluex-ecosysteem en wordt onderhouden door Rohan Kanhaisingh, de hoofdontwikkelaar van deze bibliotheek.
+                                        <br /><br />
+                                        Deze specifieke applicatie wordt gebruikt als showcase, en is <b>NIET</b> gemaakt door AI. De functionaliteit is hetzelfde als die van de originele applicatie, maar is vereenvoudigd om uitsluitend de
+                                        kernfunctionaliteit te demonstreren.  De originele versie is beschikbaar op <a href="https://fluexgl.dev/dsp/mixer">https://fluexgl.dev/dsp/mixer</a>.
+                                        <br /><br />
+                                        Let op, mogelijk kunnen onderdelen van deze applicatie niet, of niet volledig werken, omdat dit project nog in ontwikkeling is.
+                                    </p>
+                                </HeaderCategory>
+                                <HeaderCategory label="Hoe te gebruiken">
+                                    <p>
+                                        FluexGL DSP is gebaseerd op een mixer en audio moet handmatig worden toegewezen. Upload een audiobestand in het linker paneel, selecteer de gemarkeerde audio en koppel deze aan een kanaal in de mixer.
+                                    </p>
+                                </HeaderCategory>
+                            </HeaderContent>
+                        )}
+                    </Header>
+                </>
             </div>
         </div>
     )

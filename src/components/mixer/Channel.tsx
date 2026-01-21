@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Settings } from "lucide-react";
 import { v4 } from "uuid";
-import { Channel as DspChannel } from "@fluex/fluexgl-dsp";
+import { Analyser, Channel as DspChannel, Effector } from "@fluex/fluexgl-dsp";
 
 import Fader from "./Fader";
 import Knob from "./Knob";
@@ -71,12 +71,18 @@ export default function Channel({ label, channelCount, internalChannelId, onSett
             channel = getChannelById(internalChannelId);
 
         if (!canvas || !context || !channel) return;
-        
+
+        const analyser: Effector | null = channel.GetFirstEffectByLabel("ChannelPostAnalyser");    
+    
+        if(!analyser) 
+            throw new Error("Could not add channel to peak meter registry, because the channel has no ChannelPostAnalyser effector.");
+
         const dataId: string = v4();
 
         addPeakMeterDataToRegistry({
             canvas, context, channel,
-            id: dataId
+            id: dataId,
+            analyser: analyser as Analyser
         });
 
         return function() {

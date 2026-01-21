@@ -13,7 +13,6 @@ export default function LowPassFilterWindow({ lowPassFilter }: LowPassFilterWind
     const [q, setQ] = useState<number>(lowPassFilter.q ?? 0.7);
 
     useEffect(function () {
-
         lowPassFilter.SetCutoff(cutoff);
         lowPassFilter.SetQ(q);
     }, [cutoff, q]);

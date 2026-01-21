@@ -1,7 +1,7 @@
 // TODO: Channels hebben geen analyser meer, maar kan handmatig worden toegepast als een effect.
 // Haal de analyser effect op om de waveform gegevens op te halen.
 
-import { Channel } from "@fluex/fluexgl-dsp";
+import { Channel, Analyser } from "@fluex/fluexgl-dsp";
 
 export interface ChannelPeakMeterData {
     channel: Channel;
@@ -9,6 +9,7 @@ export interface ChannelPeakMeterData {
     canvas: HTMLCanvasElement;
     id: string;
     smoothedPeak?: number;
+    analyser: Analyser;
 }
 
 const channelPeakMeterDataRegistry: ChannelPeakMeterData[] = [];
@@ -32,7 +33,7 @@ function internalRenderLoop() {
     for (let i = 0; i < channelPeakMeterDataRegistry.length; i++) {
 
         const peakMeterData = channelPeakMeterDataRegistry[i],
-            channel = peakMeterData.channel,
+            analyser = peakMeterData.analyser,
             canvas = peakMeterData.canvas,
             context = peakMeterData.context;
 
@@ -51,8 +52,8 @@ function internalRenderLoop() {
 
         if (width === 0 || height === 0) continue;
 
-        // const waveformData = channel.GetWaveformFloatData();
-        const waveformData: number[] = [];
+        const waveformData = analyser.GetWaveformFloatData();
+        // const waveformData: number[] = [];
 
         if (!waveformData) continue;
 
