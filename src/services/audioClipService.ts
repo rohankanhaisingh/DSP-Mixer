@@ -8,7 +8,6 @@ type Listener = () => void;
 const listeners: Listener[] = [];
 
 function notify() {
-
     for (let listener of listeners)
         listener();
 }
@@ -58,3 +57,12 @@ export function getAudioClipById(id: string): null | AudioClip {
 
     return null;
 }
+
+export function playAllAudioClips() {
+    audioClips.forEach(function(clip: AudioClip) {
+        clip.Play();
+    });
+}
+
+// @ts-ignore
+window["playAllAudioClips"] = playAllAudioClips;
