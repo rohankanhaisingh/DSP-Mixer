@@ -1,17 +1,20 @@
 import { useState, useRef, type RefObject, useCallback, useEffect } from "react";
 import { Play, Square, Repeat, Repeat1, X } from "lucide-react";
+import { AudioClip, type AudioClipOnProgressEvent } from "@fluex/fluexgl-dsp";
 
 import ProgressBar from "../../common/ProgressBar";
 import Button from "../../common/Button";
 import { type ProgressBarOnChangeEvent } from "../../common/ProgressBar";
-
-import { AudioClip, type AudioClipOnProgressEvent } from "@fluex/fluexgl-dsp";
+import useTranslation from "../../../hooks/useTranslations";
 
 export interface AudioClipPlayerProperties {
     audioClip: AudioClip;
 }
 
 export default function AudioClipPlayerHeader({ audioClip }: AudioClipPlayerProperties) {
+
+    const translate = useTranslation();
+
     const audioClipPlayerRef = useRef<HTMLDivElement>(null);
 
     const [isLooping, setIsLooping] = useState<boolean>(audioClip.loop);
@@ -66,16 +69,19 @@ export default function AudioClipPlayerHeader({ audioClip }: AudioClipPlayerProp
                 <span>{audioClip.formattedDuration}</span>
             </div>
 
-            <Button icon={<Play size={16} />} title="Play" text="Play" onClick={playButtonCallback} />
-            <Button icon={<Square size={16} />} title="Stop" text="Stop" onClick={stopButtonCallback} />
+            <Button icon={<Play size={16} />} title={translate("audio_clip_settings.play_audio_clip")} text={translate("audio_clip_settings.play_audio_clip")} onClick={playButtonCallback} />
+            <Button icon={<Square size={16} />} title={translate("audio_clip_settings.stop_audio_clip")} text={translate("audio_clip_settings.stop_audio_clip")} onClick={stopButtonCallback} />
 
             <Button
                 icon={isLooping ? <Repeat1 size={16} /> : <Repeat size={16} />}
-                text={isLooping ? "Loop (enabled)" : "Loop (disabled)"}
+                text={isLooping
+                    ? translate("audio_clip_settings.loop_audio_clip", [translate("audio_clip_settings.loop_audio_clip_enabled")])
+                    : translate("audio_clip_settings.loop_audio_clip", [translate("audio_clip_settings.loop_audio_clip_disabled")])
+                }
                 onClick={loopButtonCallback}
             />
 
-            <Button icon={<X size={16} />} title="Destroy audio clip" text="Destroy audio clip" style="red" />
+            <Button icon={<X size={16} />} title={translate("audio_clip_settings.destroy_audio_clip")} text={translate("audio_clip_settings.destroy_audio_clip")} style="red" />
         </div>
     );
 }

@@ -7,6 +7,7 @@ import MixerChannel from "./Channel";
 import CreateChannelButton from "./CreateChannelButton";
 
 import "./Mixer.scss";
+import { createNewChannel } from "../../services/mixerChannelService";
 
 export interface MixerProperties {
     audioDevice: AudioDevice;
@@ -80,10 +81,8 @@ export default function Mixer({ audioDevice, onChannelSettingsButtonClick }: Mix
 
     const createChannelButtonOnClick = useCallback(function () {
 
-        const newChannel = audioDevice.CreateChannel("Channel");
-        masterChannel.AttachChannel(newChannel);
+        createNewChannel();
         setChannels(masterChannel.channels.slice());
-        
     }, [masterChannel]);
 
     const settingsButtonClickCallback = useCallback(function (channel: Channel) {

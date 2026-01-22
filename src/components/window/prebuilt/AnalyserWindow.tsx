@@ -60,7 +60,7 @@ export default function AnalyserWindow({ analyser }: AnalyserWindowProperties) {
 
             ctx.clearRect(0, 0, width, height);
             ctx.save();
-            ctx.lineWidth = 2;
+            ctx.lineWidth = 1;
             ctx.strokeStyle = "#FFFFFF";
             ctx.beginPath();
 

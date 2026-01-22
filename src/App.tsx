@@ -8,13 +8,13 @@ import LoaderIndicator from "./components/common/LoaderIndicator";
 
 import Header from "./components/header/Header";
 import HeaderContent from "./components/header/HeaderContent";
-import HeaderCategory from "./components/header/HeaderCategory";
 import HeaderTitlebar from "./components/header/HeaderTitlebar";
 import HeaderDivider from "./components/header/HeaderDivider";
 
 import AudioSourceLibraryHeader from "./components/header/prebuilt/AudioSourceLibraryHeader";
 import AudioClipSettingsHeader from "./components/header/prebuilt/AudioClipSettingsHeader";
 import ChannelSettingsHeader from "./components/header/prebuilt/ChannelSettingsHeader";
+import ApplicationInfoHeader from "./components/header/prebuilt/ApplicationInfoHeader";
 
 import Mixer from "./components/mixer/Mixer";
 
@@ -34,7 +34,6 @@ export default function App() {
 
     const [isLoaderVisible, setIsLoaderVisible] = useState<boolean>(true);
     const [isLoaderFadingOut, setIsLoaderFadingOut] = useState<boolean>(false);
-
 
     useEffect(function () {
 
@@ -130,7 +129,7 @@ export default function App() {
                 )}
 
                 <>
-                    <NavigationBar title="DSP Mixer - showcase voorbeeld in het Nederlands" />
+                    <NavigationBar title="DSP Mixer - Showcase" />
 
                     <Header position="left">
                         <HeaderContent>
@@ -159,26 +158,7 @@ export default function App() {
                             </div>
                         )}
                         {(!selectedChannel && !selectedAudioFile && !isLoadingRightHeader) && (
-                            <HeaderContent>
-                                <HeaderTitlebar title="FluexGL DSP" />
-                                <HeaderDivider />
-                                <HeaderCategory label="Over">
-                                    <p>
-                                        Een open-source, webgebaseerde DSP-bibliotheek die is ontwikkeld naast FluexGL, met als doel het creëren en manipuleren van geluid in uiteenlopende contexten.
-                                        Dit open-source project maakt deel uit van het Fluex-ecosysteem en wordt onderhouden door Rohan Kanhaisingh, de hoofdontwikkelaar van deze bibliotheek.
-                                        <br /><br />
-                                        Deze specifieke applicatie wordt gebruikt als showcase, en is <b>NIET</b> gemaakt door AI. De functionaliteit is hetzelfde als die van de originele applicatie, maar is vereenvoudigd om uitsluitend de
-                                        kernfunctionaliteit te demonstreren.  De originele versie is beschikbaar op <a href="https://fluexgl.dev/dsp/mixer">https://fluexgl.dev/dsp/mixer</a>.
-                                        <br /><br />
-                                        Let op, mogelijk kunnen onderdelen van deze applicatie niet, of niet volledig werken, omdat dit project nog in ontwikkeling is.
-                                    </p>
-                                </HeaderCategory>
-                                <HeaderCategory label="Hoe te gebruiken">
-                                    <p>
-                                        FluexGL DSP is gebaseerd op een mixer en audio moet handmatig worden toegewezen. Upload een audiobestand in het linker paneel, selecteer de gemarkeerde audio en koppel deze aan een kanaal in de mixer.
-                                    </p>
-                                </HeaderCategory>
-                            </HeaderContent>
+                            <ApplicationInfoHeader />
                         )}
                     </Header>
                 </>

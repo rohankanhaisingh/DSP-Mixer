@@ -1,6 +1,20 @@
 @use "../../styles/mixins/RelativeContainerWrapper.scss" as *;
 
-$menuBaseWidth: 350p;
+$menuBaseWidth: 320px;
+
+@keyframes MenuFadeIn {
+	0% {
+		opacity: 0;
+		transform: scale(0.95) translate(8px, -8px);
+		transform-origin: top right;
+	}
+
+	100% {
+		opacity: 1;
+		transform: scale(1) translate(0, 0);
+		transform-origin: top right;
+	}
+}
 
 .app-menu-backdrop {
 	width: 100vw;
@@ -15,7 +29,7 @@ $menuBaseWidth: 350p;
 }
 
 .app-menu {
-	width: 0;
+	width: $menuBaseWidth;
 	height: 100vh;
 	position: fixed;
 	top: 0;
@@ -25,10 +39,10 @@ $menuBaseWidth: 350p;
 	box-shadow: 0 0 10px rgb(0, 0, 0, 25%);
 	font-size: var(--font-size-regular);
 	overflow: hidden;
+	animation: MenuFadeIn 150ms ease;
 
 	&__container {
-		width: calc($menuBaseWidth - 40px);
-		height: calc($menuBaseWidth - 40px);
+		width: calc($menuBaseWidth);
 		padding: 20px;
 		display: flex;
 		flex-direction: column;
@@ -111,7 +125,9 @@ $menuBaseWidth: 350p;
 
 			&:hover {
 				color: var(--color-accent);
-			};
+			}
+
+			;
 		}
 	}
 }

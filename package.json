@@ -1,7 +1,6 @@
 {
-  "name": "keuzedeel-mixer",
-  "private": true,
-  "version": "0.0.0",
+  "name": "dsp-mixer",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -12,6 +11,7 @@
   "dependencies": {
     "@babahgee/easings": "^1.0.0",
     "@fluex/fluexgl-dsp": "^0.4.2",
+    "@modyfi/vite-plugin-yaml": "^1.1.1",
     "@types/bytes": "^3.1.5",
     "bytes": "^3.1.2",
     "lucide-react": "^0.562.0",
