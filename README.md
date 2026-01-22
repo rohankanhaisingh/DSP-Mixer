@@ -1,6 +1,9 @@
 # 🚀 DSP Mixer
 DSP Mixer is an open-source application that showcases the power and flexibility of FluexGL DSP.
 
+<img width="1334" height="906" alt="image" src="https://github.com/user-attachments/assets/e7ebb2bb-c228-4ef1-b189-aa3697b8d153" />
+
+
 ## 💡 About
 FluexGL DSP is fully channel-based, and this application provides a clear, hands-on look at how it works in practice.  
 The interface is inspired by FL Studio, with some of its recognizable color choices reflected in the design.
