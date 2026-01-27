@@ -131,7 +131,7 @@ export default function App() {
                 )}
 
                 <>
-                    <NavigationBar title="DSP Mixer - Showcase" />
+                    <NavigationBar title="DSP Mixer" />
 
                     <Header position="left">
                         <HeaderContent>
