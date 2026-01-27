@@ -6,4 +6,5 @@ import yaml from "@modyfi/vite-plugin-yaml";
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss(), yaml()],
+  base: "/examples/dsp-mixer/"
 })

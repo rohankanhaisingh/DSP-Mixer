@@ -24,6 +24,8 @@ import { initializeMixerChannelService } from "./services/mixerChannelService";
 
 import "./styles/App.scss";
 
+const baseUrl = import.meta.env.BASE_URL;
+
 export default function App() {
 
     const [audioDevice, setAudioDevice] = useState<AudioDevice | null>(null);
@@ -42,8 +44,8 @@ export default function App() {
         (async function () {
             try {
                 const pipeline = new DspPipeline({
-                    pathToWasm: "/fluexgl-dsp-wasm-release-0.4.2/fluexgl-dsp-wasm_bg.wasm",
-                    pathToWorklet: "/fluexgl-dsp-wasm-release-0.4.2/fluexgl-dsp-processor.worklet"
+                    pathToWasm: baseUrl + "fluexgl-dsp-wasm-release-0.4.2/fluexgl-dsp-wasm_bg.wasm",
+                    pathToWorklet: baseUrl + "fluexgl-dsp-wasm-release-0.4.2/fluexgl-dsp-processor.worklet"
                 });
 
                 await pipeline.InitializeDpsPipeline();

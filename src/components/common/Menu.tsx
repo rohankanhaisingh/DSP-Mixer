@@ -1,6 +1,6 @@
-import { X, ChevronRight } from "lucide-react";
-
 import "./Menu.scss";
+import { X, ChevronRight } from "lucide-react";
+import fluexLogo from "../../../public/images/fluex-logo.png";
 
 export interface MenuProperties {
     onClose?: () => void;
@@ -21,7 +21,7 @@ export default function Menu({ onClose }: MenuProperties) {
                             flexGrow: 1
                         }}>
                             <div className="app-menu__titlebar__logo">
-                                <img src="/images/fluex-logo.png" alt="Fluex" />
+                                <img src={fluexLogo} alt="Fluex" />
                                 <span>fluex.org</span>
                             </div>
                         </a>

@@ -1,7 +1,10 @@
+import "./NavigationBar.scss";
+
 import { Grip } from "lucide-react";
 import { useState } from "react";
-import "./NavigationBar.scss";
+
 import Menu from "./Menu";
+import fluexLogo from "../../../public/images/fluex-logo.png";
 
 export interface NavigationBarProperties {
     title?: string;
@@ -17,7 +20,7 @@ export default function NavigationBar({ title }: NavigationBarProperties) {
                 <div className="app-navbar__container">
                     <a href="https://www.fluex.org?from=https://www.fluexgl.dev" className="link-wrapper">
                         <div className="app-navbar__logo">
-                            <img src="/images/fluex-logo.png" alt="Fluex" />
+                            <img src={fluexLogo} alt="Fluex" />
                             <span>fluex.org</span>
                         </div>
                     </a>

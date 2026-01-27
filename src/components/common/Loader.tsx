@@ -1,6 +1,8 @@
 import LoaderIndicator from "./LoaderIndicator";
 import "./Loader.scss";
 
+import fluexLogo from "../../../public/images/fluex-logo.png";
+
 export interface LoaderProperties {
     isFadingOut: boolean;
 }
@@ -11,7 +13,7 @@ export default function Loader({ isFadingOut }: LoaderProperties) {
             <div className="app-loader__container">
                 <div className="app-loader__logo">
                     <div className="app-loader__logo__icon">
-                        <img src="/images/fluex-logo.png" alt="Fluex" />
+                        <img src={fluexLogo} alt="Fluex" />
                     </div>
                     <span>fluex.org</span>
                 </div>

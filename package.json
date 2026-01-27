@@ -6,7 +6,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview --port 3002 --host"
   },
   "dependencies": {
     "@babahgee/easings": "^1.0.0",

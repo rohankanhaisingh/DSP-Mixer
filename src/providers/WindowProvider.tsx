@@ -1,5 +1,5 @@
 import { createContext, useState, type ReactNode } from "react";
-import { AppWindow, UserStar } from "lucide-react";
+import { AppWindow } from "lucide-react";
 
 import Window from "../components/window/Window";
 
