@@ -3,8 +3,12 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from "@tailwindcss/vite";
 import yaml from "@modyfi/vite-plugin-yaml";
 
-// https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss(), yaml()],
-  base: "/examples/dsp-mixer/"
+    plugins: [react(), tailwindcss(), yaml()],
+    base: "/examples/dsp-mixer/",
+    preview: {
+        allowedHosts: ["fluexgl.dev", "www.fluexgl.dev"],
+        port: 3002,
+        host: true
+    }
 })
