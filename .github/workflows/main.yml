@@ -1,0 +1,26 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SHH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            set -e
+            cd /var/www/DSP-Mixer
+            git fetch --all
+            git reset --hard origin/main
+            npm ci
+            npm run build
+            pm2 reload fluexgl-dsp-mixer || pm2 restart fluexgl-dsp-mixer
+            pm2 save
+            pm2 status
