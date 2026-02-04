@@ -5,6 +5,8 @@ common:
 audio_library_header:
     header_title: "Explorer"
     update_file: "Upload file"
+    audio_files_from_database: "Files from database"
+    uploaded_audio_files: "Uploaded audio files"
 
 audio_clip_settings:
     file_name: "File name: {}"

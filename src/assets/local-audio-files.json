@@ -1,0 +1,14 @@
+{
+    "sound-01": "sound-01.ogg",
+    "sound-02": "sound-02.ogg",
+    "kicks": {
+        "kick-01": "kick-01.wav",
+        "kick-02": "kick-02.wav",
+        "kick-03": "kick-03.wav"
+    },
+    "snares": {
+        "snare-01": "snare-01.wav",
+        "snare-02": "snare-02.wav",
+        "snare-03": "snare-03.wav"
+    }
+}

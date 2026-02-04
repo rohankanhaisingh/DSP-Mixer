@@ -1,7 +1,12 @@
-import { AudioLines, Upload } from "lucide-react";
+import "./AudioSourceLibraryHeader.scss";
+import localAudioFilesStructure from "../../../assets/local-audio-files.json";
+
+import { AudioLines, Upload, Folder, FileMusic } from "lucide-react";
 import { useState, useCallback } from "react";
 
 import Button from "../../common/Button";
+import FileExplorer from "../../common/FileExplorer";
+
 import HeaderCategory from "../HeaderCategory";
 
 import { addAudioLibraryFileToMemory, type AudioLibraryFile } from "../../../services/audioLibraryService";
@@ -37,16 +42,11 @@ export default function AudioSourceLibraryHeader({ onFileClick }: AudioSourceLib
 
 				const file = target.files[0];
 
-				const fileName: string = file.name;
-				const fileSize: number = file.size;
-				const fileType: string = file.type;
+				const fileName: string = file.name,
+					fileSize: number = file.size,
+					fileType: string = file.type;
 
-				addAudioLibraryFileToMemory({
-					fileName,
-					fileSize,
-					fileType,
-					file,
-				}).then(function (item: AudioLibraryFile | null) {
+				addAudioLibraryFileToMemory({ fileName, fileSize, fileType, file }).then(function (item: AudioLibraryFile | null) {
 					if (item) {
 						setFiles(function (prev: AudioLibraryFile[]) {
 							return prev.concat(item);
@@ -67,28 +67,34 @@ export default function AudioSourceLibraryHeader({ onFileClick }: AudioSourceLib
 	}, [onFileClick]);
 
 	return (
-		<HeaderCategory label={translate("audio_library_header.header_title")}>
-			{files.map(function (file: AudioLibraryFile, index: number) {
-				return (
-					<Button
-						icon={<AudioLines size={16} />}
-						title={file.fileName}
-						text={file.fileName}
-						key={index}
-						onClick={function () {
-							uploadedAudioFileOnClickHandler(file);
-						}}
-					/>
-				);
-			})}
+		<>
+			<HeaderCategory label={translate("audio_library_header.audio_files_from_database")}>
+				<FileExplorer fileStructure={localAudioFilesStructure}/>
+			</HeaderCategory>
 
-			<Button
-				icon={<Upload size={16} />}
-				text={translate("audio_library_header.update_file")}
-				title={translate("audio_library_header.update_file")}
-				disabled={isUploading}
-				onClick={uploadButtonOnClick}
-			/>
-		</HeaderCategory>
+			<HeaderCategory label={translate("audio_library_header.uploaded_audio_files")}>
+				{files.map(function (file: AudioLibraryFile, index: number) {
+					return (
+						<Button
+							icon={<AudioLines size={16} />}
+							title={file.fileName}
+							text={file.fileName}
+							key={index}
+							onClick={function () {
+								uploadedAudioFileOnClickHandler(file);
+							}}
+						/>
+					);
+				})}
+
+				<Button
+					icon={<Upload size={16} />}
+					text={translate("audio_library_header.update_file")}
+					title={translate("audio_library_header.update_file")}
+					disabled={isUploading}
+					onClick={uploadButtonOnClick}
+				/>
+			</HeaderCategory>
+		</>
 	);
 }
