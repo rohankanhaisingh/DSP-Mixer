@@ -8,20 +8,22 @@ import CreateChannelButton from "./CreateChannelButton";
 
 import "./Mixer.scss";
 import { createNewChannel } from "../../services/mixerChannelService";
+import ChannelSettingsHeader from "../header/prebuilt/ChannelSettingsHeader";
+import Header from "../header/Header";
 
 export interface MixerProperties {
     audioDevice: AudioDevice;
-    onChannelSettingsButtonClick(channel: Channel): void;
 }
 
-export default function Mixer({ audioDevice, onChannelSettingsButtonClick }: MixerProperties) {
-
+export default function Mixer({ audioDevice }: MixerProperties) {
 
     const masterChannel = audioDevice.GetMasterChannel();
 
     const [channels, setChannels] = useState<Channel[]>(function () {
         return masterChannel.channels.slice();
     });
+
+    const [selectedChannel, setSelectedChannel] = useState<Channel | null>(null);
 
     const mixerScrollerRef = useRef<HTMLDivElement | null>(null);
     const previousChannelCountRef = useRef<number>(channels.length);
@@ -86,32 +88,37 @@ export default function Mixer({ audioDevice, onChannelSettingsButtonClick }: Mix
     }, [masterChannel]);
 
     const settingsButtonClickCallback = useCallback(function (channel: Channel) {
-        onChannelSettingsButtonClick(channel);
-    }, [onChannelSettingsButtonClick]);
+        setSelectedChannel(channel);
+    }, []);
 
     return (
         <div className="app-mixer">
-            <div className="app-mixer__container" ref={mixerScrollerRef}>
-                <MixerChannel
-                    channelCount="M"
-                    label="Master channel"
-                    internalChannelId={masterChannel.id}
-                    isMaster
-                />
+            <div className="app-mixer__container">
+                <div className="app-mixer__container__channels" ref={mixerScrollerRef}>
+                    <MixerChannel
+                        channelCount="M"
+                        label="Master channel"
+                        internalChannelId={masterChannel.id}
+                        isMaster
+                    />
 
-                {channels.map(function (channel: Channel, index: number) {
-                    return (
-                        <MixerChannel
-                            key={index}
-                            label={channel.label ?? "Channel"}
-                            channelCount={(index + 1).toString() ?? "0"}
-                            internalChannelId={channel.id}
-                            onSettingsButtonClick={settingsButtonClickCallback}
-                        />
-                    );
-                })}
+                    {channels.map(function (channel: Channel, index: number) {
+                        return (
+                            <MixerChannel
+                                key={index}
+                                label={channel.label ?? "Channel"}
+                                channelCount={(index + 1).toString() ?? "0"}
+                                internalChannelId={channel.id}
+                                onSettingsButtonClick={settingsButtonClickCallback}
+                            />
+                        );
+                    })}
 
-                <CreateChannelButton onClick={createChannelButtonOnClick} />
+                    <CreateChannelButton onClick={createChannelButtonOnClick} />
+                </div>
+                <Header>
+                    {selectedChannel && <ChannelSettingsHeader channel={selectedChannel} onAudioClipSelect={() => null} />}
+                </Header>
             </div>
         </div>
     );

@@ -10,10 +10,15 @@ $mixerContainerWidth: calc(100vw - (var(--header-initial-width) * 2) - 40px);
 
     &__container {
         @include RelativeContainerWrapper;
-        width: $mixerContainerWidth;
-        display: flex;
-        flex-direction: row;
-        gap: 10px;
-        overflow-x: scroll;
+        display: grid;
+        grid-template-columns: auto var(--header-initial-width);
+        gap: 20px;
+
+        &__channels {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            overflow-x: scroll;
+        }
     }
 }

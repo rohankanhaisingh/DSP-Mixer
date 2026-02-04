@@ -28,11 +28,7 @@ export default function ApplicationInfoHeader() {
                 <p>
                     {translate(
                         "application_info.disclaimer_text",
-                        ["https://www.fluexgl.dev/dsp/mixer"]
-                    )}{" "}
-                    <a href="https://www.fluexgl.dev/dsp/mixer">
-                        https://www.fluexgl.dev/dsp/mixer
-                    </a>
+                    )}
                 </p>
             </HeaderCategory>
 

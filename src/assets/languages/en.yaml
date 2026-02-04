@@ -58,8 +58,7 @@ application_info:
         Rohan Kanhaisingh, the lead developer of this entire project.
     disclaimer_category_title: "Disclaimer"
     disclaimer_text: >
-        This application, DSP Mixer, is no longer maintained because the live version is being used.
-        You can visit the live version via {}
+        This application is continued and will be maintained over time.
     how_to_use_category_title: "How to use"
     how_to_use_text: >
         Upload an audio file, create a DSP audio clip, attach it to a channel, and play it.

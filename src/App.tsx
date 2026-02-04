@@ -143,10 +143,9 @@ export default function App() {
 
                     <Mixer
                         audioDevice={audioDevice as AudioDevice}
-                        onChannelSettingsButtonClick={onMixerChannelSettingsButtonClick}
                     />
 
-                    <Header position="right">
+                    {/* <Header position="right">
                         {selectedChannel && <ChannelSettingsHeader channel={selectedChannel} onAudioClipSelect={onAudioClipSelectFromChannelSettingsCallback} />}
                         {selectedAudioFile && <AudioClipSettingsHeader audioFile={selectedAudioFile} />}
                         {isLoadingRightHeader && (
@@ -162,7 +161,7 @@ export default function App() {
                         {(!selectedChannel && !selectedAudioFile && !isLoadingRightHeader) && (
                             <ApplicationInfoHeader />
                         )}
-                    </Header>
+                    </Header> */}
                 </>
             </div>
         </div>

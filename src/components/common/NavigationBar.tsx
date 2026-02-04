@@ -1,6 +1,6 @@
 import "./NavigationBar.scss";
 
-import { Grip } from "lucide-react";
+import { Grip, SlidersVertical, Folder, CircleQuestionMark, Play, Square, Pause } from "lucide-react";
 import { useState } from "react";
 
 import Menu from "./Menu";
@@ -10,7 +10,7 @@ export interface NavigationBarProperties {
     title?: string;
 }
 
-export default function NavigationBar({ title }: NavigationBarProperties) {
+export default function NavigationBar({ }: NavigationBarProperties) {
 
     const [isShowingMenu, setIsShowingMenu] = useState<boolean>(false);
 
@@ -21,24 +21,37 @@ export default function NavigationBar({ title }: NavigationBarProperties) {
                     <a href="https://www.fluex.org?from=https://www.fluexgl.dev" className="link-wrapper">
                         <div className="app-navbar__logo">
                             <img src={fluexLogo} alt="Fluex" />
-                            <span>fluex.org</span>
+                            <span>fluexgl.dev</span>
                         </div>
                     </a>
-                    <a href="/" className="link-wrapper">
-                        <div className="app-navbar__project-name">
-                            <span>fluexgl</span>
+                    <div className="app-navbar__controls">
+                        <div className="app-navbar__controls__button">
+                            <SlidersVertical size={20} />
                         </div>
-                    </a>
-                    <div className="app-navbar__title">
-                        <span>{title}</span>
+                        <div className="app-navbar__controls__button">
+                            <Folder size={20} />
+                        </div>
+                        <div className="app-navbar__controls__button">
+                            <CircleQuestionMark size={20} />
+                        </div>
+                        <div className="app-navbar__controls__vl"></div>
+                        <div className="app-navbar__controls__button">
+                            <Play size={20} />
+                        </div>
+                        <div className="app-navbar__controls__button">
+                            <Square size={20} />
+                        </div>
+                        <div className="app-navbar__controls__button">
+                            <Pause size={20} />
+                        </div>
                     </div>
                     <div className="app-navbar__menu-button" onClick={() => setIsShowingMenu(true)} >
-                        <Grip size={20}/>
+                        <Grip size={20} />
                     </div>
                 </div>
             </div>
 
-            {isShowingMenu && <Menu onClose={() => setIsShowingMenu(false)}/> }
+            {isShowingMenu && <Menu onClose={() => setIsShowingMenu(false)} />}
         </>
     )
 }

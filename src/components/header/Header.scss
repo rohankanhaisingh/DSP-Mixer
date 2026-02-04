@@ -2,13 +2,12 @@
     padding: 20px;
     display: flex;
     overflow-y: auto;
+    border: 1px solid var(--color-surface-light);
+    border-radius: 5px;
 
     &.left {
         grid-area: left;
         overflow-y: auto;
-    }
-
-    &.right {
-        grid-area: right;
+        border: none;
     }
 }

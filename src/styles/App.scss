@@ -9,8 +9,8 @@
         height: 100%;
         display: grid;
         grid-template-rows: var(--navigation-bar-initial-height) 1fr;
-        grid-template-columns: var(--header-initial-width) 1fr var(--header-initial-width);
+        grid-template-columns: var(--header-initial-width) 1fr;
         grid-template-areas:
-            "nav nav nav" "left main right";
+            "nav nav" "left main";
     }
 }
