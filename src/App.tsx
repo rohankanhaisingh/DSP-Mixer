@@ -44,8 +44,8 @@ export default function App() {
         (async function () {
             try {
                 const pipeline = new DspPipeline({
-                    pathToWasm: baseUrl + "fluexgl-dsp-wasm-release-0.4.2/fluexgl-dsp-wasm_bg.wasm",
-                    pathToWorklet: baseUrl + "fluexgl-dsp-wasm-release-0.4.2/fluexgl-dsp-processor.worklet"
+                    pathToWasm: baseUrl + "fluexgl-dsp-wasm-release-0.4.7/fluexgl-dsp-wasm_bg.wasm",
+                    pathToWorklet: baseUrl + "fluexgl-dsp-wasm-release-0.4.7/fluexgl-dsp-processor.worklet"
                 });
 
                 await pipeline.InitializeDpsPipeline();

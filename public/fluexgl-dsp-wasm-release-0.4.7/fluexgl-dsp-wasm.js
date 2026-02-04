@@ -1,6 +1,4 @@
-
-    import{TextDecoder}from"text-decoding";void 0===globalThis.crypto&&(globalThis.crypto={}),"function"!=typeof globalThis.crypto.getRandomValues&&(globalThis.crypto.getRandomValues=function(o){for(let t=0;t<o.length;t++)o[t]=Math.floor(256*Math.random());return o});
-        let wasm_bindgen;
+import {TextDecoder} from "text-decoding";void 0===globalThis.crypto&&(globalThis.crypto={}),"function"!=typeof globalThis.crypto.getRandomValues&&(globalThis.crypto.getRandomValues=function(o){for(let t=0;t<o.length;t++)o[t]=Math.floor(256*Math.random());return o}); let wasm_bindgen;
 (function() {
     const __exports = {};
     let script_src;
@@ -124,6 +122,12 @@
             wasm.chorus_set_feedback(this.__wbg_ptr, feedback);
         }
         /**
+         * @param {number} phase
+         */
+        set_phase_offset(phase) {
+            wasm.chorus_set_phase_offset(this.__wbg_ptr, phase);
+        }
+        /**
          * @returns {number}
          */
         get_rate_hz() {
@@ -236,6 +240,74 @@
 
     __exports.HardClip = HardClip;
 
+    const HighPassFilterFinalization = (typeof FinalizationRegistry === 'undefined')
+        ? { register: () => {}, unregister: () => {} }
+        : new FinalizationRegistry(ptr => wasm.__wbg_highpassfilter_free(ptr >>> 0, 1));
+
+    class HighPassFilter {
+
+        __destroy_into_raw() {
+            const ptr = this.__wbg_ptr;
+            this.__wbg_ptr = 0;
+            HighPassFilterFinalization.unregister(this);
+            return ptr;
+        }
+
+        free() {
+            const ptr = this.__destroy_into_raw();
+            wasm.__wbg_highpassfilter_free(ptr, 0);
+        }
+        /**
+         * @param {number} sample_rate
+         * @param {number} cutoff
+         * @param {number} q
+         */
+        constructor(sample_rate, cutoff, q) {
+            const ret = wasm.highpassfilter_new(sample_rate, cutoff, q);
+            this.__wbg_ptr = ret >>> 0;
+            HighPassFilterFinalization.register(this, this.__wbg_ptr, this);
+            return this;
+        }
+        /**
+         * @param {number} cutoff
+         */
+        set_cutoff(cutoff) {
+            wasm.highpassfilter_set_cutoff(this.__wbg_ptr, cutoff);
+        }
+        /**
+         * @param {number} q
+         */
+        set_q(q) {
+            wasm.highpassfilter_set_q(this.__wbg_ptr, q);
+        }
+        /**
+         * @param {number} sample_rate
+         */
+        set_sample_rate(sample_rate) {
+            wasm.highpassfilter_set_sample_rate(this.__wbg_ptr, sample_rate);
+        }
+        /**
+         * @param {number} max_freq
+         */
+        set_max_freq(max_freq) {
+            wasm.highpassfilter_set_max_freq(this.__wbg_ptr, max_freq);
+        }
+        reset() {
+            wasm.highpassfilter_reset(this.__wbg_ptr);
+        }
+        /**
+         * @param {Float32Array} buffer
+         */
+        process(buffer) {
+            var ptr0 = passArrayF32ToWasm0(buffer, wasm.__wbindgen_malloc);
+            var len0 = WASM_VECTOR_LEN;
+            wasm.highpassfilter_process(this.__wbg_ptr, ptr0, len0, buffer);
+        }
+    }
+    if (Symbol.dispose) HighPassFilter.prototype[Symbol.dispose] = HighPassFilter.prototype.free;
+
+    __exports.HighPassFilter = HighPassFilter;
+
     const LowPassFilterFinalization = (typeof FinalizationRegistry === 'undefined')
         ? { register: () => {}, unregister: () => {} }
         : new FinalizationRegistry(ptr => wasm.__wbg_lowpassfilter_free(ptr >>> 0, 1));
@@ -289,7 +361,7 @@
             wasm.lowpassfilter_set_min_freq(this.__wbg_ptr, min_freq);
         }
         reset() {
-            wasm.lowpassfilter_reset(this.__wbg_ptr);
+            wasm.highpassfilter_reset(this.__wbg_ptr);
         }
         /**
          * @param {Float32Array} buffer
@@ -303,6 +375,74 @@
     if (Symbol.dispose) LowPassFilter.prototype[Symbol.dispose] = LowPassFilter.prototype.free;
 
     __exports.LowPassFilter = LowPassFilter;
+
+    const NotchFilterFinalization = (typeof FinalizationRegistry === 'undefined')
+        ? { register: () => {}, unregister: () => {} }
+        : new FinalizationRegistry(ptr => wasm.__wbg_notchfilter_free(ptr >>> 0, 1));
+
+    class NotchFilter {
+
+        __destroy_into_raw() {
+            const ptr = this.__wbg_ptr;
+            this.__wbg_ptr = 0;
+            NotchFilterFinalization.unregister(this);
+            return ptr;
+        }
+
+        free() {
+            const ptr = this.__destroy_into_raw();
+            wasm.__wbg_notchfilter_free(ptr, 0);
+        }
+        /**
+         * @param {number} sample_rate
+         * @param {number} cutoff
+         * @param {number} q
+         */
+        constructor(sample_rate, cutoff, q) {
+            const ret = wasm.notchfilter_new(sample_rate, cutoff, q);
+            this.__wbg_ptr = ret >>> 0;
+            NotchFilterFinalization.register(this, this.__wbg_ptr, this);
+            return this;
+        }
+        /**
+         * @param {number} cutoff
+         */
+        set_cutoff(cutoff) {
+            wasm.notchfilter_set_cutoff(this.__wbg_ptr, cutoff);
+        }
+        /**
+         * @param {number} q
+         */
+        set_q(q) {
+            wasm.notchfilter_set_q(this.__wbg_ptr, q);
+        }
+        /**
+         * @param {number} sample_rate
+         */
+        set_sample_rate(sample_rate) {
+            wasm.notchfilter_set_sample_rate(this.__wbg_ptr, sample_rate);
+        }
+        /**
+         * @param {number} min_freq
+         */
+        set_min_freq(min_freq) {
+            wasm.notchfilter_set_min_freq(this.__wbg_ptr, min_freq);
+        }
+        reset() {
+            wasm.highpassfilter_reset(this.__wbg_ptr);
+        }
+        /**
+         * @param {Float32Array} buffer
+         */
+        process(buffer) {
+            var ptr0 = passArrayF32ToWasm0(buffer, wasm.__wbindgen_malloc);
+            var len0 = WASM_VECTOR_LEN;
+            wasm.notchfilter_process(this.__wbg_ptr, ptr0, len0, buffer);
+        }
+    }
+    if (Symbol.dispose) NotchFilter.prototype[Symbol.dispose] = NotchFilter.prototype.free;
+
+    __exports.NotchFilter = NotchFilter;
 
     const SoftClipFinalization = (typeof FinalizationRegistry === 'undefined')
         ? { register: () => {}, unregister: () => {} }
@@ -492,6 +632,4 @@
 
 })();
  
-
-        if(typeof AudioWorkletProcessor !== "undefined") { AudioWorkletProcessor.wasm = wasm_bindgen; }
-    
+ if(typeof AudioWorkletProcessor !== "undefined") { AudioWorkletProcessor.wasm = wasm_bindgen; }
