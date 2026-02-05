@@ -28,31 +28,40 @@ export default function App() {
     const [isLoaderVisible, setIsLoaderVisible] = useState<boolean>(true);
     const [isLoaderFadingOut, setIsLoaderFadingOut] = useState<boolean>(false);
     const [hasInitializedPipeline, setHasInitializedPipeline] = useState<boolean>(false);
+    const [loadingText, setLoadingText] = useState<string>("");
 
     useEffect(function () {
 
         let cancelled = false;
 
         (async function () {
-            const pipeline = new DspPipeline({
-                pathToWasm: baseUrl + "fluexgl-dsp-wasm-release-0.4.7/fluexgl-dsp-wasm_bg.wasm",
-                pathToWorklet: baseUrl + "fluexgl-dsp-wasm-release-0.4.7/fluexgl-dsp-processor.worklet"
-            });
+            try {
+                const pipeline = new DspPipeline({
+                    pathToWasm: baseUrl + "fluexgl-dsp-wasm-release-0.4.7/fluexgl-dsp-wasm_bg.wasm",
+                    pathToWorklet: baseUrl + "fluexgl-dsp-wasm-release-0.4.7/fluexgl-dsp-processor.worklet"
+                });
 
-            await pipeline.InitializeDpsPipeline();
+                setLoadingText("Initializing DSP pipeline...");
+                await pipeline.InitializeDpsPipeline();
 
-            const resolvedAudioDevice = await pipeline.ResolveDefaultAudioOutputDevice();
+                setLoadingText("Resolving default audio output device...");
+                const resolvedAudioDevice = await pipeline.ResolveDefaultAudioOutputDevice();
 
-            if (!resolvedAudioDevice || cancelled) {
-                return;
+                if (!resolvedAudioDevice || cancelled) return setLoadingText("Failed to load: no default audio output device found.");
+
+                setAudioDevice(resolvedAudioDevice);
+                initializeMixerChannelService(resolvedAudioDevice);
+                startMixerPeakMeterService();
+
+                setLoadingText("Loading local audio files...");
+                await loadLocalAudioFiles();
+
+                setHasInitializedPipeline(true);
+            } catch (err) {
+                setHasInitializedPipeline(false);
+                setLoadingText("Something went wrong while loading the application. " + err);
+                throw err;
             }
-
-            setAudioDevice(resolvedAudioDevice);
-            initializeMixerChannelService(resolvedAudioDevice);
-            startMixerPeakMeterService();
-
-            await loadLocalAudioFiles();
-            setHasInitializedPipeline(true);
         })();
 
         return function () { cancelled = true; };
@@ -89,18 +98,17 @@ export default function App() {
         // handleOnAudioLibraryFileClick(associatedLibraryFile);
     }, []);
 
-    if (!audioDevice) return <Loader isFadingOut={isLoaderFadingOut} />;
+    if (!audioDevice) return <Loader isFadingOut={isLoaderFadingOut} loadingText={loadingText} />;
 
     return (
         <div className="app-layout">
             <div className="app-layout__container">
                 {(isLoaderVisible) && (
-                    <Loader isFadingOut={isLoaderFadingOut} />
+                    <Loader isFadingOut={isLoaderFadingOut} loadingText={loadingText} />
                 )}
 
                 <>
                     <NavigationBar title="DSP Mixer" />
-
                     <Header position="left">
                         <HeaderContent>
                             <HeaderTitlebar icon={<Folder size={20} />} title="Explorer" />

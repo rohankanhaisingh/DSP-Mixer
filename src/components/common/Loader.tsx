@@ -5,9 +5,10 @@ import fluexLogo from "../../../public/images/fluex-logo.png";
 
 export interface LoaderProperties {
     isFadingOut: boolean;
+    loadingText: string;
 }
 
-export default function Loader({ isFadingOut }: LoaderProperties) {
+export default function Loader({ isFadingOut, loadingText }: LoaderProperties) {
     return (
         <div className={`app-loader ${isFadingOut ? "fade-out" : ""}`}>
             <div className="app-loader__container">
@@ -15,10 +16,10 @@ export default function Loader({ isFadingOut }: LoaderProperties) {
                     <div className="app-loader__logo__icon">
                         <img src={fluexLogo} alt="Fluex" />
                     </div>
-                    <span>fluex.org</span>
+                    <span>fluexgl.org</span>
                 </div>
-                <p className="app-loader__loading-text">Loading DSP playground</p>
-                <LoaderIndicator theme="fluexgl-dsp"/>
+                <p className="app-loader__loading-text">{loadingText}</p>
+                <LoaderIndicator />
             </div>
         </div>
     )
