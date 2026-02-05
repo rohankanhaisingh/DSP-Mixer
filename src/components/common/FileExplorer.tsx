@@ -1,7 +1,7 @@
 import "./FileExplorer.scss";
 
 import { FileMusic, Folder, FolderOpen } from "lucide-react";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 
 interface FileComponentProperties {
     name: string;
@@ -14,8 +14,13 @@ interface DirectoryComponentProperties {
 }
 
 function FileComponent({ name, path }: FileComponentProperties) {
+
+    const onClickCallback = useCallback(function() {
+
+    }, []);
+
     return (
-        <div className="file-explorer__file" title={path}>
+        <div className="file-explorer__file" title={path} onClick={onClickCallback}>
             <FileMusic size={14} />
             <span>{name}</span>
         </div>
@@ -38,8 +43,8 @@ function DirectoryComponent({ name, files }: DirectoryComponentProperties) {
             </div>
             {isShowingFiles && (
                 <div className="file-explorer__directory__files">
-                    {Object.keys(files).map(function (name: string) {
-                        return <FileComponent name={name} path={files[name]} />
+                    {Object.keys(files).map(function (name: string, index: number) {
+                        return <FileComponent name={name} path={files[name]} key={index}/>
                     })}
                 </div>
             )}
@@ -59,19 +64,17 @@ export interface FileExplorerProperties {
 
 
 export default function FileExplorer({ fileStructure }: FileExplorerProperties) {
-
-    console.log(fileStructure);
-
+    
     return (
         <div className="file-explorer">
-            {Object.keys(fileStructure).map(function (name: string) {
+            {Object.keys(fileStructure).map(function (name: string, index: number) {
 
                 const isFile: boolean = typeof fileStructure[name] === "string",
                     directoryItems = fileStructure[name] as { [key: string]: string };
 
                 return isFile
-                    ? <FileComponent name={name} path={fileStructure[name] as string} />
-                    : <DirectoryComponent name={name} files={directoryItems} />;
+                    ? <FileComponent name={name} path={fileStructure[name] as string} key={index} />
+                    : <DirectoryComponent name={name} files={directoryItems} key={index} />;
             })}
         </div>
     );

@@ -4,7 +4,6 @@ import { AudioDevice, DspPipeline, Channel, AudioClip } from "@fluex/fluexgl-dsp
 
 import Loader from "./components/common/Loader";
 import NavigationBar from "./components/common/NavigationBar";
-import LoaderIndicator from "./components/common/LoaderIndicator";
 
 import Header from "./components/header/Header";
 import HeaderContent from "./components/header/HeaderContent";
@@ -12,13 +11,10 @@ import HeaderTitlebar from "./components/header/HeaderTitlebar";
 import HeaderDivider from "./components/header/HeaderDivider";
 
 import AudioSourceLibraryHeader from "./components/header/prebuilt/AudioSourceLibraryHeader";
-import AudioClipSettingsHeader from "./components/header/prebuilt/AudioClipSettingsHeader";
-import ChannelSettingsHeader from "./components/header/prebuilt/ChannelSettingsHeader";
-import ApplicationInfoHeader from "./components/header/prebuilt/ApplicationInfoHeader";
 
 import Mixer from "./components/mixer/Mixer";
 
-import { type AudioLibraryFile, getAudioLibraryFileById } from "./services/audioLibraryService";
+import { type AudioLibraryFile, getAudioLibraryFileById, loadLocalAudioFiles } from "./services/audioLibraryService";
 import { startMixerPeakMeterService } from "./services/mixerPeakMeterService";
 import { initializeMixerChannelService } from "./services/mixerChannelService";
 
@@ -29,40 +25,34 @@ const baseUrl = import.meta.env.BASE_URL;
 export default function App() {
 
     const [audioDevice, setAudioDevice] = useState<AudioDevice | null>(null);
-    const [selectedChannel, setSelectedChannel] = useState<Channel | null>(null);
-    const [selectedAudioFile, setSelectedAudioFile] = useState<AudioLibraryFile | null>(null);
-
-    const [isLoadingRightHeader, setIsLoadingRightHeader] = useState<boolean>(false);
-
     const [isLoaderVisible, setIsLoaderVisible] = useState<boolean>(true);
     const [isLoaderFadingOut, setIsLoaderFadingOut] = useState<boolean>(false);
+    const [hasInitializedPipeline, setHasInitializedPipeline] = useState<boolean>(false);
 
     useEffect(function () {
 
         let cancelled = false;
 
         (async function () {
-            try {
-                const pipeline = new DspPipeline({
-                    pathToWasm: baseUrl + "fluexgl-dsp-wasm-release-0.4.7/fluexgl-dsp-wasm_bg.wasm",
-                    pathToWorklet: baseUrl + "fluexgl-dsp-wasm-release-0.4.7/fluexgl-dsp-processor.worklet"
-                });
+            const pipeline = new DspPipeline({
+                pathToWasm: baseUrl + "fluexgl-dsp-wasm-release-0.4.7/fluexgl-dsp-wasm_bg.wasm",
+                pathToWorklet: baseUrl + "fluexgl-dsp-wasm-release-0.4.7/fluexgl-dsp-processor.worklet"
+            });
 
-                await pipeline.InitializeDpsPipeline();
+            await pipeline.InitializeDpsPipeline();
 
-                const resolvedAudioDevice = await pipeline.ResolveDefaultAudioOutputDevice();
+            const resolvedAudioDevice = await pipeline.ResolveDefaultAudioOutputDevice();
 
-                if (!resolvedAudioDevice || cancelled) {
-                    return;
-                }
-
-                setAudioDevice(resolvedAudioDevice);
-                initializeMixerChannelService(resolvedAudioDevice);
-                startMixerPeakMeterService();
-
-            } catch (error) {
-                console.error("Failed to initialize DSP pipeline:", error);
+            if (!resolvedAudioDevice || cancelled) {
+                return;
             }
+
+            setAudioDevice(resolvedAudioDevice);
+            initializeMixerChannelService(resolvedAudioDevice);
+            startMixerPeakMeterService();
+
+            await loadLocalAudioFiles();
+            setHasInitializedPipeline(true);
         })();
 
         return function () { cancelled = true; };
@@ -70,7 +60,7 @@ export default function App() {
 
     useEffect(function () {
 
-        if (!audioDevice) return;
+        if (!audioDevice || !hasInitializedPipeline) return;
 
         let timeOut: number;
 
@@ -86,31 +76,9 @@ export default function App() {
         return function () {
             clearTimeout(timeOut);
         }
-    }, [audioDevice]);
+    }, [audioDevice, hasInitializedPipeline]);
 
-    const onMixerChannelSettingsButtonClick = useCallback(function (channel: Channel) {
 
-        setSelectedAudioFile(null);
-        setSelectedChannel(null);
-        setIsLoadingRightHeader(true);
-
-        setTimeout(function () {
-            setIsLoadingRightHeader(false);
-            setSelectedChannel(channel);
-        }, 100)
-    }, []);
-
-    const handleOnAudioLibraryFileClick = useCallback(function (file: AudioLibraryFile) {
-
-        setSelectedChannel(null);
-        setSelectedAudioFile(null);
-        setIsLoadingRightHeader(true);
-
-        setTimeout(function () {
-            setIsLoadingRightHeader(false);
-            setSelectedAudioFile(file);
-        }, 100);
-    }, []);
 
     const onAudioClipSelectFromChannelSettingsCallback = useCallback(function (clip: AudioClip) {
 
@@ -118,7 +86,7 @@ export default function App() {
 
         if (!associatedLibraryFile) return;
 
-        handleOnAudioLibraryFileClick(associatedLibraryFile);
+        // handleOnAudioLibraryFileClick(associatedLibraryFile);
     }, []);
 
     if (!audioDevice) return <Loader isFadingOut={isLoaderFadingOut} />;
@@ -137,7 +105,7 @@ export default function App() {
                         <HeaderContent>
                             <HeaderTitlebar icon={<Folder size={20} />} title="Explorer" />
                             <HeaderDivider />
-                            <AudioSourceLibraryHeader onFileClick={handleOnAudioLibraryFileClick} />
+                            <AudioSourceLibraryHeader onFileClick={() => null} />
                         </HeaderContent>
                     </Header>
 

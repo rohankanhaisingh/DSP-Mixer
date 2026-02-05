@@ -1,5 +1,13 @@
 import { v4 } from "uuid";
-import { type AudioSourceData, LoadAudioSourceFromBlob } from "@fluex/fluexgl-dsp";
+import { type AudioSourceData, LoadAudioSourceFromBlob, LoadAudioSource } from "@fluex/fluexgl-dsp";
+
+import localAudioFilesStructure from "../assets/local-audio-files.json";
+
+interface FileStructure {
+    [key: string]: string | {
+        [key: string]: string;
+    };
+}
 
 export const audioLibraryFiles: AudioLibraryFile[] = [];
 
@@ -17,6 +25,13 @@ export interface AudioLibraryFileData {
     file: Blob;
 }
 
+export interface AudioLibraryFileDataRelativePath {
+    fileName: string;
+    fileSize: number;
+    fileType: string;
+    filePath: string;
+}
+
 export async function addAudioLibraryFileToMemory(data: AudioLibraryFileData): Promise<AudioLibraryFile | null> {
 
     const audioSourceData = await LoadAudioSourceFromBlob(data.file);
@@ -32,7 +47,25 @@ export async function addAudioLibraryFileToMemory(data: AudioLibraryFileData): P
     };
 
     audioLibraryFiles.push(item);
+    return item;
+}
 
+export async function addAudioLibraryFileToMemoryUsingRelativePath(data: AudioLibraryFileDataRelativePath): Promise<AudioLibraryFile | null> {
+
+    console.log(`Loading ${data.filePath}`);
+    const audioSourceData = await LoadAudioSource(data.filePath);
+    if(!audioSourceData) return null;
+
+    const { fileName, fileSize } = data;
+
+    const item: AudioLibraryFile = {
+        fileName,
+        fileSize,
+        audioSourceData,
+        id: v4()
+    }
+
+    audioLibraryFiles.push(item);
     return item;
 }
 
@@ -43,4 +76,30 @@ export function getAudioLibraryFileById(id: string): AudioLibraryFile | null {
     });
 
     return foundItem ?? null;
+}
+
+export async function loadLocalAudioFiles() {
+
+    const basePath: string = "examples/sounds/database/";
+
+    for (const name in localAudioFilesStructure as FileStructure) {
+
+        const item = (localAudioFilesStructure as FileStructure)[name],
+            isFile: boolean = typeof item === "string";
+
+        if (isFile) {
+            const audioLibraryFile: AudioLibraryFile | null = await addAudioLibraryFileToMemoryUsingRelativePath({
+                fileName: name,
+                filePath: basePath + item,
+                fileType: "unknown",
+                fileSize: 0
+            });
+
+            console.log(audioLibraryFile);
+        } else {
+            for (const inDirectoryItem in item as { [key: string]: string }) {
+
+            }
+        }
+    }
 }
