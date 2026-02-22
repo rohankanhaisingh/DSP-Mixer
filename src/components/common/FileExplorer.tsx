@@ -3,6 +3,10 @@ import "./FileExplorer.scss";
 import { FileMusic, Folder, FolderOpen } from "lucide-react";
 import { useState, useCallback } from "react";
 
+import { getAudioLibraryFileByName, type AudioLibraryFile } from "../../services/audioLibraryService";
+
+import useWindow from "../../hooks/useWindow";
+
 interface FileComponentProperties {
     name: string;
     path: string;
@@ -15,8 +19,18 @@ interface DirectoryComponentProperties {
 
 function FileComponent({ name, path }: FileComponentProperties) {
 
+    const useWindowHookValues = useWindow();
+
     const onClickCallback = useCallback(function() {
 
+        const associatedAudioLibraryFile: AudioLibraryFile | null = getAudioLibraryFileByName(name);
+        if(!associatedAudioLibraryFile) return;
+
+        console.log(associatedAudioLibraryFile);
+        useWindowHookValues.setContent(null);
+        useWindowHookValues.setTitle(name);
+        useWindowHookValues.setIcon(<FileMusic size={14} />);
+        useWindowHookValues.showWindow();
     }, []);
 
     return (
@@ -64,7 +78,7 @@ export interface FileExplorerProperties {
 
 
 export default function FileExplorer({ fileStructure }: FileExplorerProperties) {
-    
+
     return (
         <div className="file-explorer">
             {Object.keys(fileStructure).map(function (name: string, index: number) {
