@@ -3,6 +3,8 @@ import { type AudioSourceData, LoadAudioSourceFromBlob, LoadAudioSource } from "
 
 import localAudioFilesStructure from "../assets/local-audio-files.json";
 
+const baseUrl = import.meta.env.BASE_URL;
+
 interface FileStructure {
     [key: string]: string | {
         [key: string]: string;
@@ -52,9 +54,8 @@ export async function addAudioLibraryFileToMemory(data: AudioLibraryFileData): P
 
 export async function addAudioLibraryFileToMemoryUsingRelativePath(data: AudioLibraryFileDataRelativePath): Promise<AudioLibraryFile | null> {
 
-    console.log(`Loading ${data.filePath}`);
-    const audioSourceData = await LoadAudioSource(data.filePath);
-    if(!audioSourceData) return null;
+    const audioSourceData = await LoadAudioSource(baseUrl + data.filePath);
+    if (!audioSourceData) return null;
 
     const { fileName, fileSize } = data;
 
@@ -80,26 +81,30 @@ export function getAudioLibraryFileById(id: string): AudioLibraryFile | null {
 
 export async function loadLocalAudioFiles() {
 
-    const basePath: string = "examples/sounds/database/";
+    const basePath: string = "sounds/database/";
 
     for (const name in localAudioFilesStructure as FileStructure) {
 
         const item = (localAudioFilesStructure as FileStructure)[name],
             isFile: boolean = typeof item === "string";
 
-        if (isFile) {
-            const audioLibraryFile: AudioLibraryFile | null = await addAudioLibraryFileToMemoryUsingRelativePath({
-                fileName: name,
-                filePath: basePath + item,
+        if (isFile) await addAudioLibraryFileToMemoryUsingRelativePath({
+            fileName: name,
+            filePath: basePath + item,
+            fileType: "unknown",
+            fileSize: 0
+        });
+
+        if (!isFile) for (const inDirectoryItem in item as { [key: string]: string }) {
+
+            const itemPath: string = name + "/" + (item as { [key: string]: string })[inDirectoryItem];
+
+            await addAudioLibraryFileToMemoryUsingRelativePath({
+                fileName: (item as { [key: string]: string })[inDirectoryItem],
+                filePath: basePath + itemPath,
                 fileType: "unknown",
                 fileSize: 0
             });
-
-            console.log(audioLibraryFile);
-        } else {
-            for (const inDirectoryItem in item as { [key: string]: string }) {
-
-            }
         }
     }
 }
