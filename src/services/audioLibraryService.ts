@@ -79,6 +79,15 @@ export function getAudioLibraryFileById(id: string): AudioLibraryFile | null {
     return foundItem ?? null;
 }
 
+export function getAudioLibraryFileByName(name: string): AudioLibraryFile | null {
+    
+    const foundItem = audioLibraryFiles.find(function(item: AudioLibraryFile) {
+        return item.fileName.trim() === name.trim();
+    });
+
+    return foundItem ?? null;
+}
+
 export async function loadLocalAudioFiles() {
 
     const basePath: string = "sounds/database/";
