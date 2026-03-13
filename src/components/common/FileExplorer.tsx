@@ -6,6 +6,7 @@ import { useState, useCallback } from "react";
 import { getAudioLibraryFileByName, type AudioLibraryFile } from "../../services/audioLibraryService";
 
 import useWindow from "../../hooks/useWindow";
+import AudioClipWindow from "../window/prebuilt/AudioClipWindow";
 
 interface FileComponentProperties {
     name: string;
@@ -26,8 +27,7 @@ function FileComponent({ name, path }: FileComponentProperties) {
         const associatedAudioLibraryFile: AudioLibraryFile | null = getAudioLibraryFileByName(name);
         if(!associatedAudioLibraryFile) return;
 
-        console.log(associatedAudioLibraryFile);
-        useWindowHookValues.setContent(null);
+        useWindowHookValues.setContent(<AudioClipWindow audioLibraryFile={associatedAudioLibraryFile} />);
         useWindowHookValues.setTitle(name);
         useWindowHookValues.setIcon(<FileMusic size={14} />);
         useWindowHookValues.showWindow();
@@ -58,7 +58,7 @@ function DirectoryComponent({ name, files }: DirectoryComponentProperties) {
             {isShowingFiles && (
                 <div className="file-explorer__directory__files">
                     {Object.keys(files).map(function (name: string, index: number) {
-                        return <FileComponent name={name} path={files[name]} key={index}/>
+                        return <FileComponent name={name} path={files[name]} key={index} />;
                     })}
                 </div>
             )}
