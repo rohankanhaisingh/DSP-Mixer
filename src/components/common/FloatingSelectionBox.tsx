@@ -1,8 +1,9 @@
+import "./FloatingSelectionBox.scss";
+
 import { type ReactNode, useEffect, useState, useRef } from "react";
 import { Ease } from "@babahgee/easings";
 
 import Button from "./Button";
-import "./FloatingSelectionBox.scss";
 
 export interface FloatingSelectionBoxItem<T> {
     icon: ReactNode;
