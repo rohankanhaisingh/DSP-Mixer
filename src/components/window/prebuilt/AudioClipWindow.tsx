@@ -79,8 +79,19 @@ function AudioClipControls({ audioClip }: AudioClipControlsProperties) {
     }, []);
 
     const selectAvailableChannelCallback = useCallback(function(channel: Channel) {
-
+        
         channel.AttachAudioClip(audioClip);
+
+        if(audioClip.isPlaying) {
+
+            const currentAudioClipTime: number = audioClip.startTime;
+
+            console.log(audioClip);
+
+            audioClip.Stop();
+            audioClip.Play(currentAudioClipTime);
+        }
+
         setIsShowingAttachToChannelSelectionBox(false);
     }, []);
 
@@ -104,7 +115,7 @@ function AudioClipControls({ audioClip }: AudioClipControlsProperties) {
                     <div className="audio-clip-controls__buttons__button" onClick={playButtonCallback}>
                         <Play size={20} />
                     </div>
-                    <div className="audio-clip-controls__buttons__button">
+                    <div className="audio-clip-controls__buttons__button" onClick={stopButtonCallback}>
                         <Square size={20} />
                     </div>
                     <div className="audio-clip-controls__buttons__button" onClick={loopButtonCallback}>
@@ -118,7 +129,7 @@ function AudioClipControls({ audioClip }: AudioClipControlsProperties) {
                     </div>
                 </div>
                 <div className="audio-clip-controls__progress-bar" ref={progressBarContainerRef}>
-                    <span>00:00</span>
+                    <span>{formattedCurrentTime}</span>
                     <ProgressBar
                         audioClipDuration={audioClip.duration}
                         parentialContainer={progressBarContainerRef as RefObject<HTMLDivElement>}
@@ -126,7 +137,7 @@ function AudioClipControls({ audioClip }: AudioClipControlsProperties) {
                         currentTime={currentTime}
                         onChange={progressBarOnChangeCallback}
                     />
-                    <span>00:00</span>
+                    <span>{audioClip.duration.toFixed()}</span>
                 </div>
             </div>
 
