@@ -160,10 +160,10 @@ export interface AudioClipWindowProperties {
 
 export default function AudioClipWindow({ audioLibraryFile }: AudioClipWindowProperties) {
 
-    const translate = useTranslation();
-    const progressBarContainerRef = useRef<HTMLDivElement>(null);
+    // const translate = useTranslation();
+    // const progressBarContainerRef = useRef<HTMLDivElement>(null);
 
-    const [associatedAudioClip, setAssociatedAudioClip] = useState<AudioClip | null>(getAudioClipById(audioLibraryFile.id));
+    const [associatedAudioClip] = useState<AudioClip | null>(getAudioClipById(audioLibraryFile.id));
 
     if (!associatedAudioClip)
         return <p>Error: No associated audio clip has been found.</p>

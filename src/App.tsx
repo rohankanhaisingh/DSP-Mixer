@@ -1,6 +1,6 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { Folder } from "lucide-react";
-import { AudioDevice, DspPipeline, Channel, AudioClip } from "@fluex/fluexgl-dsp";
+import { AudioDevice, DspPipeline } from "@fluex/fluexgl-dsp";
 
 import Loader from "./components/common/Loader";
 import NavigationBar from "./components/common/NavigationBar";
@@ -14,7 +14,7 @@ import AudioSourceLibraryHeader from "./components/header/prebuilt/AudioSourceLi
 
 import Mixer from "./components/mixer/Mixer";
 
-import { type AudioLibraryFile, getAudioLibraryFileById, loadLocalAudioFiles } from "./services/audioLibraryService";
+import { loadLocalAudioFiles } from "./services/audioLibraryService";
 import { startMixerPeakMeterService } from "./services/mixerPeakMeterService";
 import { initializeMixerChannelService } from "./services/mixerChannelService";
 
@@ -89,14 +89,14 @@ export default function App() {
 
 
 
-    const onAudioClipSelectFromChannelSettingsCallback = useCallback(function (clip: AudioClip) {
+    // const onAudioClipSelectFromChannelSettingsCallback = useCallback(function (clip: AudioClip) {
 
-        const associatedLibraryFile: AudioLibraryFile | null = getAudioLibraryFileById(clip.id);
+    //     const associatedLibraryFile: AudioLibraryFile | null = getAudioLibraryFileById(clip.id);
 
-        if (!associatedLibraryFile) return;
+    //     if (!associatedLibraryFile) return;
 
-        // handleOnAudioLibraryFileClick(associatedLibraryFile);
-    }, []);
+    //     // handleOnAudioLibraryFileClick(associatedLibraryFile);
+    // }, []);
 
     if (!audioDevice) return <Loader isFadingOut={isLoaderFadingOut} loadingText={loadingText} />;
 

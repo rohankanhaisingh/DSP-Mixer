@@ -1,7 +1,7 @@
 import "./AudioSourceLibraryHeader.scss";
 import localAudioFilesStructure from "../../../assets/local-audio-files.json";
 
-import { AudioLines, Upload, Folder, FileMusic } from "lucide-react";
+import { AudioLines, Upload } from "lucide-react";
 import { useState, useCallback } from "react";
 
 import Button from "../../common/Button";
