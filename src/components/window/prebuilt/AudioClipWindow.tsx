@@ -27,28 +27,29 @@ function AudioClipControls({ audioClip }: AudioClipControlsProperties) {
 
     const [isLooping, setIsLooping] = useState<boolean>(audioClip.loop);
     const [currentTime, setCurrentTime] = useState<number>(audioClip.currentPlaybackTime);
-    const [formattedCurrentTime, setFormattedCurrentTime] = useState<string>(audioClip.formattedDuration ?? "00:00");
+    const [formattedCurrentTime, setFormattedCurrentTime] = useState<string>("00:00");
     const [isShowingAttachToChannelSelectionBox, setIsShowingAttachToChannelSelectionBox] = useState<boolean>(false);
+    const [attachToChannelAnchor, setAttachToChannelAnchor] = useState<HTMLElement | undefined>(undefined);
 
     const [availableChannelItems, setAvailableChannelItems] = useState<FloatingSelectionBoxItem<Channel>[]>([]);
 
     const loopButtonCallback = useCallback(function () {
         const nextLoop = !isLooping;
         setIsLooping(nextLoop);
-        audioClip.loop = nextLoop;
+        audioClip.setLoop(nextLoop);
     }, [isLooping, audioClip]);
 
     const progressBarOnChangeCallback = useCallback(function (event: ProgressBarOnChangeEvent) {
-        audioClip.Seek(event.time);
+        audioClip.seek(event.time);
     }, [audioClip]);
 
     const stopButtonCallback = useCallback(function () {
-        audioClip.Stop();
+        audioClip.stop();
     }, [audioClip]);
 
     const playButtonCallback = useCallback(function () {
         if (!audioClip.context) return;
-        audioClip.Play();
+        audioClip.play();
     }, [audioClip]);
 
     const attachToChannelButtonCallback = useCallback(function () {
@@ -68,6 +69,7 @@ function AudioClipControls({ audioClip }: AudioClipControlsProperties) {
             return !hasAudioClip ? channel : null;
         });
 
+        setAttachToChannelAnchor(attachToChannelButtonRef.current ?? undefined);
         setIsShowingAttachToChannelSelectionBox(true);
         setAvailableChannelItems(availableChannels.map(function (channel: Channel) {
             return {
@@ -76,11 +78,11 @@ function AudioClipControls({ audioClip }: AudioClipControlsProperties) {
                 data: channel,
             }
         }));
-    }, []);
+    }, [audioClip, translate]);
 
     const selectAvailableChannelCallback = useCallback(function(channel: Channel) {
         
-        channel.AttachAudioClip(audioClip);
+        channel.attachAudioClip(audioClip);
 
         if(audioClip.isPlaying) {
 
@@ -88,12 +90,12 @@ function AudioClipControls({ audioClip }: AudioClipControlsProperties) {
 
             console.log(audioClip);
 
-            audioClip.Stop();
-            audioClip.Play(currentAudioClipTime);
+            audioClip.stop();
+            audioClip.play(currentAudioClipTime);
         }
 
         setIsShowingAttachToChannelSelectionBox(false);
-    }, []);
+    }, [audioClip]);
 
     useEffect(function () {
         function onProgress(progress: AudioClipOnProgressEvent) {
@@ -101,10 +103,10 @@ function AudioClipControls({ audioClip }: AudioClipControlsProperties) {
             setFormattedCurrentTime(progress.formatted);
         }
 
-        audioClip.AddEventListener("progress", onProgress);
+        audioClip.addEventListener("progress", onProgress);
 
         return function () {
-            audioClip.RemoveEventListener("progress", onProgress);
+            audioClip.removeEventListener("progress", onProgress);
         };
     }, [audioClip]);
 
@@ -137,14 +139,14 @@ function AudioClipControls({ audioClip }: AudioClipControlsProperties) {
                         currentTime={currentTime}
                         onChange={progressBarOnChangeCallback}
                     />
-                    <span>{audioClip.duration.toFixed()}</span>
+                    <span>{audioClip.formattedDuration}</span>
                 </div>
             </div>
 
             {isShowingAttachToChannelSelectionBox && (
                 <FloatingSelectionBox<Channel>
                     title={translate("audio_clip_settings.channels_selection_title")}
-                    anchor={attachToChannelButtonRef.current ?? undefined}
+                    anchor={attachToChannelAnchor}
                     onSelect={selectAvailableChannelCallback}
                     onCancel={() => {setIsShowingAttachToChannelSelectionBox(false)}}
                     items={availableChannelItems}
@@ -160,10 +162,7 @@ export interface AudioClipWindowProperties {
 
 export default function AudioClipWindow({ audioLibraryFile }: AudioClipWindowProperties) {
 
-    const translate = useTranslation();
-    const progressBarContainerRef = useRef<HTMLDivElement>(null);
-
-    const [associatedAudioClip, setAssociatedAudioClip] = useState<AudioClip | null>(getAudioClipById(audioLibraryFile.id));
+    const [associatedAudioClip] = useState<AudioClip | null>(getAudioClipById(audioLibraryFile.id));
 
     if (!associatedAudioClip)
         return <p>Error: No associated audio clip has been found.</p>

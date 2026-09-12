@@ -2,6 +2,18 @@ common:
     application_loading_text: "Loading DSP mixer environment..."
     navigation_bar_title: "DSP Mixer - Showcase"
 
+menu:
+    language_category_title: "Language"
+    theme_category_title: "Theme"
+    theme_dark: "Dark"
+    theme_light: "Light"
+    accent_category_title: "Accent color"
+    accent_orange: "Orange"
+    accent_blue: "Blue"
+    accent_purple: "Purple"
+    accent_green: "Green"
+    accent_pink: "Pink"
+
 audio_library_header:
     header_title: "Explorer"
     update_file: "Upload file"
@@ -37,6 +49,7 @@ audio_clip_settings:
 channel_settings:
     label: "Label {}"
     id: "Id: {}"
+    master_channel_label: "Master channel"
     audio_clips_category_title: "Audio clips"
     attached_effects_category_title: "Attached effects"
     effect_controls_category_title: "Effect controls"
@@ -48,6 +61,14 @@ channel_settings:
     effect_fallback: "Effect"
     no_effects_applied: "No effects applied."
     select_effect_title: "Select effect"
+    channel_fallback: "Channel"
+    channel_sends_category_title: "Sends"
+    send_controls_category_title: "Send controls"
+    no_sends: "This channel is not sent to any other channel."
+    add_send: "Add send"
+    remove_send: "Remove send"
+    select_send_target_title: "Send to channel"
+    select_send_removal_title: "Remove send"
 
 application_info:
     title: "DSP Mixer"
@@ -66,3 +87,9 @@ application_info:
         Upload an audio file, create a DSP audio clip, attach it to a channel, and play it.
         You can attach effects to each channel, but the 'ChannelPostAnalyser' effect cannot be modified
         because it is an essential part of this mixer.
+
+mixer:
+    meter_view_title: "Meter view"
+    meter_view_peak: "Peak"
+    meter_view_waveform: "Waveform"
+    meter_view_spectrum: "Spectrum"

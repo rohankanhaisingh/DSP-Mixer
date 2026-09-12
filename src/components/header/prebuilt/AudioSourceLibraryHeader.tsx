@@ -1,7 +1,8 @@
 import "./AudioSourceLibraryHeader.scss";
+import "../../common/FileExplorer.scss";
 import localAudioFilesStructure from "../../../assets/local-audio-files.json";
 
-import { AudioLines, Upload, Folder, FileMusic } from "lucide-react";
+import { FileMusic, Upload } from "lucide-react";
 import { useState, useCallback } from "react";
 
 import Button from "../../common/Button";
@@ -31,6 +32,14 @@ export default function AudioSourceLibraryHeader({ onFileClick }: AudioSourceLib
 			const tempInput = document.createElement("input");
 			tempInput.type = "file";
 			tempInput.accept = "audio/*";
+
+			// Fires when the file picker dialog is closed without selecting a file
+			// (e.g. the user clicks "Cancel"). "change" never fires in that case,
+			// so without this the spinner would stay visible indefinitely.
+			tempInput.addEventListener("cancel", function () {
+				setIsUploading(false);
+				tempInput.remove();
+			});
 
 			tempInput.addEventListener("change", function (event: Event) {
 				const target = event.target as HTMLInputElement;
@@ -75,15 +84,17 @@ export default function AudioSourceLibraryHeader({ onFileClick }: AudioSourceLib
 			<HeaderCategory label={translate("audio_library_header.uploaded_audio_files")}>
 				{files.map(function (file: AudioLibraryFile, index: number) {
 					return (
-						<Button
-							icon={<AudioLines size={16} />}
+						<div
+							className="file-explorer__file"
 							title={file.fileName}
-							text={file.fileName}
 							key={index}
 							onClick={function () {
 								uploadedAudioFileOnClickHandler(file);
 							}}
-						/>
+						>
+							<FileMusic size={14} />
+							<span>{file.fileName}</span>
+						</div>
 					);
 				})}
 

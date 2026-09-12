@@ -30,6 +30,7 @@ export default function AudioClipSettingsHeader({ audioFile }: AudioFileDataProp
 
     const [associatedAudioClip, setAssociatedAudioClip] = useState<AudioClip | null>(getAudioClipById(audioFile.id));
     const [isShowingChannelSelection, setIsShowingChannelSelection] = useState<boolean>(false);
+    const [channelSelectionAnchor, setChannelSelectionAnchor] = useState<HTMLElement | undefined>(undefined);
     const [selectedAudioClipPlayer, setSelectedAudioClipPlayer] = useState<AudioClipPlayer | null>(associatedAudioClip?.audioClipPlayer ?? null);
     const [selectedChannel, setSelectedChannel] = useState<Channel | null>(null);
 
@@ -131,6 +132,7 @@ export default function AudioClipSettingsHeader({ audioFile }: AudioFileDataProp
                                 icon={<Link size={16} />}
                                 text={translate("audio_clip_settings.attach_to_channel")}
                                 onClick={function () {
+                                    setChannelSelectionAnchor(selectChannelButtonRef.current ?? undefined);
                                     setIsShowingChannelSelection(true);
                                 }}
                                 ref={selectChannelButtonRef}
@@ -151,7 +153,7 @@ export default function AudioClipSettingsHeader({ audioFile }: AudioFileDataProp
                         setIsShowingChannelSelection(false);
                     }}
                     onSelect={onSelectChannelCallback}
-                    anchor={selectChannelButtonRef.current ?? undefined}
+                    anchor={channelSelectionAnchor}
                     items={getChannels().map(function (channel: Channel) {
                         return {
                             icon: <Bolt size={16} />,

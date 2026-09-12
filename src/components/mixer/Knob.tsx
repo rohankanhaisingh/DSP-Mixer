@@ -24,13 +24,14 @@ export default function Knob({ min, max, step, value, defaultValue, onChange }: 
 
     useEffect(() => {
         if (!isControlled && defaultValue !== undefined)
+            // eslint-disable-next-line react-hooks/set-state-in-effect -- resyncs internal state when the uncontrolled defaultValue prop changes
             setInternalValue(defaultValue);
     }, [defaultValue, isControlled]);
 
     function updateValue(next: number) {
 
-        let clamped = Math.min(Math.max(next, min), max),
-            safeStep = step || 1;
+        let clamped = Math.min(Math.max(next, min), max);
+        const safeStep = step || 1;
 
         clamped = Math.round(clamped / safeStep) * safeStep;
 

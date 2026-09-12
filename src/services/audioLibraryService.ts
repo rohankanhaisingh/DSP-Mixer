@@ -1,5 +1,5 @@
 import { v4 } from "uuid";
-import { type AudioSourceData, LoadAudioSourceFromBlob, LoadAudioSource } from "@fluex/fluexgl-dsp";
+import { type AudioSourceData, loadAudioSourceFromBlob, loadAudioSource } from "@fluex/fluexgl-dsp";
 
 import localAudioFilesStructure from "../assets/local-audio-files.json";
 import { createAudioClipAssociatedToLibrary, getAudioClipById } from "./audioClipService";
@@ -37,7 +37,7 @@ export interface AudioLibraryFileDataRelativePath {
 
 export async function addAudioLibraryFileToMemory(data: AudioLibraryFileData): Promise<AudioLibraryFile | null> {
 
-    const audioSourceData = await LoadAudioSourceFromBlob(data.file);
+    const audioSourceData = await loadAudioSourceFromBlob(data.file);
     if (!audioSourceData) return null;
 
     const { fileName, fileSize } = data;
@@ -49,13 +49,18 @@ export async function addAudioLibraryFileToMemory(data: AudioLibraryFileData): P
         id: v4()
     };
 
+    const associatedAudioClip = getAudioClipById(item.id);
+
+    if (!associatedAudioClip)
+        createAudioClipAssociatedToLibrary(item);
+
     audioLibraryFiles.push(item);
     return item;
 }
 
 export async function addAudioLibraryFileToMemoryUsingRelativePath(data: AudioLibraryFileDataRelativePath): Promise<AudioLibraryFile | null> {
 
-    const audioSourceData = await LoadAudioSource(baseUrl + data.filePath);
+    const audioSourceData = await loadAudioSource(baseUrl + data.filePath);
     if (!audioSourceData) return null;
 
     const { fileName, fileSize } = data;

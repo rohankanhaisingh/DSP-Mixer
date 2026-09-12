@@ -1,29 +1,15 @@
-import { createContext, useState, type ReactNode } from "react";
+import { useCallback, useState, type ReactNode } from "react";
 import { AppWindow } from "lucide-react";
 
 import Window from "../components/window/Window";
-
-export interface WindowContextValue {
-    showWindow(): void;
-    closeWindow(): void;
-    setTitle(title: string): void;
-    setIcon(icon: ReactNode): void;
-    setContent(content: ReactNode): void;
-    windowData: WindowData;
-}
-
-export interface WindowData {
-    width: number;
-    height: number;
-    x: number;
-    y: number;
-}
-
-export const WindowContext = createContext<WindowContextValue | null>(null);
+import { WindowContext, type WindowContextValue, type WindowData } from "./WindowContext";
 
 export interface WindowProviderProperties {
     children?: React.ReactNode;
 }
+
+const DEFAULT_WINDOW_WIDTH: number = 400;
+const DEFAULT_WINDOW_HEIGHT: number = 230;
 
 export default function WindowProvider({ children }: WindowProviderProperties) {
 
@@ -32,8 +18,12 @@ export default function WindowProvider({ children }: WindowProviderProperties) {
     const [windowContent, setWindowContent] = useState<ReactNode | null>();
     const [windowIsVisible, setWindowIsVisible] = useState<boolean>(false);
     const [windowData, setWindowData] = useState<WindowData>({ width: 0, height: 0, x: 0, y: 0 });
-    
+    const [windowSize, setWindowSize] = useState<{ width: number; height: number }>({ width: DEFAULT_WINDOW_WIDTH, height: DEFAULT_WINDOW_HEIGHT });
+
     function showWindow() {
+        // Reset to the default size first; callers that need more room (e.g. the
+        // Analyser window) call setSize(...) right after showWindow() to override it.
+        setWindowSize({ width: DEFAULT_WINDOW_WIDTH, height: DEFAULT_WINDOW_HEIGHT });
         setWindowIsVisible(true);
     }
 
@@ -53,9 +43,13 @@ export default function WindowProvider({ children }: WindowProviderProperties) {
         setWindowContent(content);
     }
 
-    function setInternalWindowData(data: WindowData) {
-        setWindowData(data);
+    function setSize(width: number, height: number) {
+        setWindowSize({ width, height });
     }
+
+    const setInternalWindowData = useCallback(function (data: WindowData) {
+        setWindowData(data);
+    }, []);
 
     const value: WindowContextValue = {
         showWindow,
@@ -63,6 +57,7 @@ export default function WindowProvider({ children }: WindowProviderProperties) {
         setTitle,
         setIcon,
         setContent,
+        setSize,
         windowData
     };
 
@@ -75,6 +70,8 @@ export default function WindowProvider({ children }: WindowProviderProperties) {
                     <Window
                         title={windowTitle}
                         icon={windowIcon}
+                        width={windowSize.width}
+                        height={windowSize.height}
                         onCloseButtonClick={() => closeWindow()}
                         setInternalWindowData={setInternalWindowData}>
                         {windowContent}

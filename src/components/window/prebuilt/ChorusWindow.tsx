@@ -17,12 +17,12 @@ export default function ChorusWindow({ chorus }: ChorusWindowProperties) {
 
     useEffect(function() {
 
-        chorus.SetBaseDelayMs(baseDelayMs);
-        chorus.SetDepthMs(depthMs);
-        chorus.SetRateHz(rateHz);
-        chorus.SetMix(mix);
-        chorus.SetFeedback(feedback);
-    }, [baseDelayMs, depthMs, rateHz, mix, feedback]);
+        chorus.setBaseDelayMs(baseDelayMs);
+        chorus.setDepthMs(depthMs);
+        chorus.setRateHz(rateHz);
+        chorus.setMix(mix);
+        chorus.setFeedback(feedback);
+    }, [baseDelayMs, depthMs, rateHz, mix, feedback, chorus]);
 
     return (
         <div className="grid grid-cols-4 gap-4">

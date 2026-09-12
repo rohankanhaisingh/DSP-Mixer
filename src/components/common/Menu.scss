@@ -127,6 +127,15 @@ $menuBaseWidth: 320px;
 				color: var(--color-accent);
 			}
 
+			&__swatch {
+				width: 14px;
+				height: 14px;
+				border-radius: 50%;
+				display: inline-block;
+				flex-shrink: 0;
+				box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15);
+			}
+
 			;
 		}
 	}

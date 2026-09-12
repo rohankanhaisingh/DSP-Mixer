@@ -1,12 +1,12 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Settings } from "lucide-react";
 import { v4 } from "uuid";
-import { Analyser, Channel as DspChannel, Effector } from "@fluex/fluexgl-dsp";
+import { Analyser, Channel as DspChannel, Master, Effector } from "@fluex/fluexgl-dsp";
 
 import Fader from "./Fader";
 import Knob from "./Knob";
 
-import { getChannelById } from "../../services/mixerChannelService";
+import { getChannelById, getMasterChannel } from "../../services/mixerChannelService";
 import { addPeakMeterDataToRegistry, removePeakMeterDataFromRegistryById } from "../../services/mixerPeakMeterService";
 
 import "./Channel.scss";
@@ -16,10 +16,10 @@ export interface ChannelProperties {
     channelCount?: string;
     isMaster?: boolean;
     internalChannelId: string;
-    onSettingsButtonClick?: (channel: DspChannel) => void;
+    onSettingsButtonClick?: (channel: DspChannel | Master) => void;
 }
 
-export default function Channel({ label, channelCount, internalChannelId, onSettingsButtonClick }: ChannelProperties) {
+export default function Channel({ label, channelCount, isMaster, internalChannelId, onSettingsButtonClick }: ChannelProperties) {
 
     const [channelVolume, setChannelVolume] = useState<number>(100);
     const [channelLabel, setChannelLabel] = useState<string>(label ?? "Channel");
@@ -45,10 +45,10 @@ export default function Channel({ label, channelCount, internalChannelId, onSett
 
     const settingsButtonClickCallback = useCallback(function () {
 
-        const associatedChannel = getChannelById(internalChannelId);
+        const associatedChannel = isMaster ? getMasterChannel() : getChannelById(internalChannelId);
 
         if (associatedChannel) onSettingsButtonClick?.(associatedChannel);
-    }, []);
+    }, [internalChannelId, isMaster, onSettingsButtonClick]);
 
     useEffect(function () {
 
@@ -56,26 +56,33 @@ export default function Channel({ label, channelCount, internalChannelId, onSett
 
         if (!associatedChannel) return;
         associatedChannel.label = channelLabel;
-        associatedChannel.Volume(1 / 100 * channelVolume);
-        associatedChannel.Pan(channelPanning);
+        associatedChannel.volume(1 / 100 * channelVolume);
+        associatedChannel.pan(channelPanning);
 
         if(!associatedChannel.audioClipPlayer) return;
-        associatedChannel.audioClipPlayer.SetVolume(channelClipMix);
+        associatedChannel.audioClipPlayer.setVolume(channelClipMix);
 
-    }, [channelLabel, channelVolume, channelPanning, channelClipMix]);
+    }, [internalChannelId, channelLabel, channelVolume, channelPanning, channelClipMix]);
 
     useEffect(function () {
 
         const canvas: HTMLCanvasElement | null = canvasRef.current,
-            context: CanvasRenderingContext2D | null | undefined = canvas?.getContext("2d"),
-            channel = getChannelById(internalChannelId);
+            context: CanvasRenderingContext2D | null | undefined = canvas?.getContext("2d");
 
-        if (!canvas || !context || !channel) return;
+        if (!canvas || !context) return;
 
-        const analyser: Effector | null = channel.GetFirstEffectByLabel("ChannelPostAnalyser");    
-    
-        if(!analyser) 
-            throw new Error("Could not add channel to peak meter registry, because the channel has no ChannelPostAnalyser effector.");
+        // The master bus is not part of the regular channel list, and it uses its own
+        // analyser label since it isn't a DspChannel but a Master instance.
+        const channel = isMaster ? getMasterChannel() : getChannelById(internalChannelId);
+
+        if (!channel) return;
+
+        const analyser: Effector | null = isMaster
+            ? (channel.effects.find(effect => effect.label === "MasterPostAnalyser") ?? null)
+            : (channel as DspChannel).getFirstEffectByLabel("ChannelPostAnalyser");
+
+        if(!analyser)
+            throw new Error("Could not add channel to peak meter registry, because the channel has no post analyser effector.");
 
         const dataId: string = v4();
 
@@ -88,7 +95,7 @@ export default function Channel({ label, channelCount, internalChannelId, onSett
         return function() {
             removePeakMeterDataFromRegistryById(dataId);
         }
-    }, [internalChannelId]);
+    }, [internalChannelId, isMaster]);
 
     return (
         <div className="mixer-channel">

@@ -21,9 +21,9 @@ export default function SoftClipWindow({ softClip }: SoftClipWindowProperties) {
     }, [softClip]);
 
     useEffect(function () {
-        softClip.SetDrive(drive);
-        softClip.SetGain(gain);
-    }, [drive, gain]);
+        softClip.setDrive(drive);
+        softClip.setGain(gain);
+    }, [drive, gain, softClip]);
 
     return (
         <div className="grid grid-cols-4 gap-4">

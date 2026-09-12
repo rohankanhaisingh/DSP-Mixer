@@ -1,18 +1,30 @@
 import "./NavigationBar.scss";
 
-import { Grip, SlidersVertical, Folder, CircleQuestionMark, Play, Square, Pause } from "lucide-react";
+import { Grip, SlidersVertical, Folder, CircleQuestionMark, Play, Square, Pause, Activity, AudioWaveform, BarChart3 } from "lucide-react";
 import { useState } from "react";
 
 import Menu from "./Menu";
 import fluexLogo from "../../../public/images/fluex-logo.png";
+import useTranslation from "../../hooks/useTranslations";
+import { getMixerMeterViewMode, setMixerMeterViewMode } from "../../services/mixerPeakMeterService";
+import type { MixerMeterViewMode } from "../../services/mixerPeakMeterService";
 
 export interface NavigationBarProperties {
     title?: string;
 }
 
-export default function NavigationBar({ }: NavigationBarProperties) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- title is part of the public API but not rendered yet
+export default function NavigationBar(props: NavigationBarProperties) {
+
+    const t = useTranslation();
 
     const [isShowingMenu, setIsShowingMenu] = useState<boolean>(false);
+    const [meterViewMode, setMeterViewMode] = useState<MixerMeterViewMode>(getMixerMeterViewMode());
+
+    const meterViewModeOnClick = function (mode: MixerMeterViewMode) {
+        setMixerMeterViewMode(mode);
+        setMeterViewMode(mode);
+    };
 
     return (
         <>
@@ -33,6 +45,28 @@ export default function NavigationBar({ }: NavigationBarProperties) {
                         </div>
                         <div className="app-navbar__controls__button">
                             <CircleQuestionMark size={20} />
+                        </div>
+                        <div className="app-navbar__controls__vl"></div>
+                        <div
+                            className={`app-navbar__controls__button${meterViewMode === "peak" ? " app-navbar__controls__button--active" : ""}`}
+                            title={t("mixer.meter_view_peak")}
+                            onClick={() => meterViewModeOnClick("peak")}
+                        >
+                            <Activity size={20} />
+                        </div>
+                        <div
+                            className={`app-navbar__controls__button${meterViewMode === "waveform" ? " app-navbar__controls__button--active" : ""}`}
+                            title={t("mixer.meter_view_waveform")}
+                            onClick={() => meterViewModeOnClick("waveform")}
+                        >
+                            <AudioWaveform size={20} />
+                        </div>
+                        <div
+                            className={`app-navbar__controls__button${meterViewMode === "spectrum" ? " app-navbar__controls__button--active" : ""}`}
+                            title={t("mixer.meter_view_spectrum")}
+                            onClick={() => meterViewModeOnClick("spectrum")}
+                        >
+                            <BarChart3 size={20} />
                         </div>
                         <div className="app-navbar__controls__vl"></div>
                         <div className="app-navbar__controls__button">

@@ -53,6 +53,14 @@
             &:hover {
                 background: var(--color-panel-hover);
             }
+
+            &--active {
+                background: var(--color-surface-light);
+
+                &:hover {
+                    background: var(--color-surface-light);
+                }
+            }
         }
 
         &__vl {

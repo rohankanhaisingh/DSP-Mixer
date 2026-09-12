@@ -31,7 +31,7 @@ function FileComponent({ name, path }: FileComponentProperties) {
         useWindowHookValues.setTitle(name);
         useWindowHookValues.setIcon(<FileMusic size={14} />);
         useWindowHookValues.showWindow();
-    }, []);
+    }, [name, useWindowHookValues]);
 
     return (
         <div className="file-explorer__file" title={path} onClick={onClickCallback}>
