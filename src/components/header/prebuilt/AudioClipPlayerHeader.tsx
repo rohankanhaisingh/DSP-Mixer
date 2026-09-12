@@ -24,7 +24,7 @@ export default function AudioClipPlayerHeader({ audioClip }: AudioClipPlayerProp
     const loopButtonCallback = useCallback(function () {
         const nextLoop = !isLooping;
         setIsLooping(nextLoop);
-        audioClip.loop = nextLoop;
+        audioClip.setLoop(nextLoop);
     }, [isLooping, audioClip]);
 
     const progressBarOnChangeCallback = useCallback(function (event: ProgressBarOnChangeEvent) {

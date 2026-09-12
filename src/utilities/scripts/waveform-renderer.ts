@@ -38,25 +38,25 @@ export function drawWaveformBarsOnCanvas(canvas: HTMLCanvasElement, bars: Float3
     const totalWidth = count * totalBarSpace - barGap,
         startX = Math.floor((width - totalWidth) / 2);
 
-    for (var i = 0; i < count; i++) {
-        var v = bars[i];
+    for (let i = 0; i < count; i++) {
+        let v = bars[i];
         if (v < 0) v = -v;
         if (v > 1) v = 1;
 
-        var barHeight = v * height;
+        const barHeight = v * height;
 
-        var x = startX + i * totalBarSpace;
+        const x = startX + i * totalBarSpace;
 
         if (mirrored) {
 
-            var midY = height * 0.5;
-            var half = barHeight * 0.5;
-            var y = midY - half;
+            const midY = height * 0.5;
+            const half = barHeight * 0.5;
+            const y = midY - half;
 
             ctx.fillRect(x, y, barWidth, barHeight);
         } else {
 
-            var yBottom = height - barHeight;
+            const yBottom = height - barHeight;
             ctx.fillRect(x, yBottom, barWidth, barHeight);
         }
     }

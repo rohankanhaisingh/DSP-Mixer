@@ -1,9 +1,9 @@
 declare module "*.yaml" {
-  var content: any;
+  const content: unknown;
   export default content;
 }
 
 declare module "*.yml" {
-  var content: any;
+  const content: unknown;
   export default content;
 }

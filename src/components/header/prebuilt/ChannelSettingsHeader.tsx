@@ -1,4 +1,4 @@
-import { Bolt, AudioLines, Sparkles, CircleMinus } from "lucide-react";
+import { Bolt, AudioLines, Sparkles, CircleMinus, Share2, Unlink } from "lucide-react";
 import { useState, useRef, useCallback } from "react";
 
 import HeaderContent from "../HeaderContent";
@@ -10,6 +10,7 @@ import FloatingSelectionBox from "../../common/FloatingSelectionBox";
 import Button from "../../common/Button";
 
 import { listAvailableEffects, attachEffectOnChannel, detachEffectOnChannel } from "../../../services/effectorService";
+import { getChannels, sendChannelToChannel, unsendChannelFromChannel } from "../../../services/mixerChannelService";
 
 import { Channel, AudioClip, Effector } from "@fluex/fluexgl-dsp";
 import { showEffectWindow } from "../../../services/effectWindowService";
@@ -27,8 +28,22 @@ export default function ChannelSettingsHeader({ channel, onAudioClipSelect }: Ch
     const [isShowingEffectSelection, setIsShowingEffectSelection] = useState<boolean>(false);
     const [isShowingEffectDetachList, setIsShowingEffectDetachList] = useState<boolean>(false);
 
+    const [effectSelectionAnchor, setEffectSelectionAnchor] = useState<HTMLElement | undefined>(undefined);
+    const [effectDetachAnchor, setEffectDetachAnchor] = useState<HTMLElement | undefined>(undefined);
+
     const selectEffectButtonRef = useRef<HTMLDivElement>(null);
     const removeEffectButtonRef = useRef<HTMLDivElement>(null);
+
+    const [isShowingSendSelection, setIsShowingSendSelection] = useState<boolean>(false);
+    const [isShowingSendRemoval, setIsShowingSendRemoval] = useState<boolean>(false);
+
+    const [sendSelectionAnchor, setSendSelectionAnchor] = useState<HTMLElement | undefined>(undefined);
+    const [sendRemovalAnchor, setSendRemovalAnchor] = useState<HTMLElement | undefined>(undefined);
+
+    const [, forceSendsUpdate] = useState<number>(0);
+
+    const selectSendButtonRef = useRef<HTMLDivElement>(null);
+    const removeSendButtonRef = useRef<HTMLDivElement>(null);
 
     const useWindowHookValues = useWindow();
 
@@ -45,6 +60,18 @@ export default function ChannelSettingsHeader({ channel, onAudioClipSelect }: Ch
     const onShowEffectWindowCallback = useCallback(function (effect: Effector) {
         showEffectWindow(effect, useWindowHookValues);
     }, [useWindowHookValues]);
+
+    const onSendSelectCallback = useCallback(function (targetChannel: Channel) {
+        setIsShowingSendSelection(false);
+        sendChannelToChannel(channel, targetChannel);
+        forceSendsUpdate(value => value + 1);
+    }, [channel]);
+
+    const onSendRemoveCallback = useCallback(function (targetChannel: Channel) {
+        setIsShowingSendRemoval(false);
+        unsendChannelFromChannel(channel, targetChannel);
+        forceSendsUpdate(value => value + 1);
+    }, [channel]);
 
     if (!channel.audioClipPlayer) {
         return (
@@ -115,6 +142,54 @@ export default function ChannelSettingsHeader({ channel, onAudioClipSelect }: Ch
                     )}
                 </HeaderCategory>
 
+                <HeaderCategory label={translate("channel_settings.channel_sends_category_title")}>
+                    {channel.sends.length !== 0 ? (
+                        channel.sends.map(function (sendTarget: Channel, index: number) {
+                            const sendLabel = sendTarget.label ?? translate("channel_settings.channel_fallback");
+
+                            return (
+                                <Button
+                                    icon={<Share2 size={16} />}
+                                    title={sendLabel}
+                                    text={sendLabel}
+                                    key={index}
+                                />
+                            );
+                        })
+                    ) : (
+                        <p>{translate("channel_settings.no_sends")}</p>
+                    )}
+                </HeaderCategory>
+
+                <HeaderDivider />
+
+                <HeaderCategory label={translate("channel_settings.send_controls_category_title")}>
+                    <Button
+                        icon={<Share2 size={16} />}
+                        title={translate("channel_settings.add_send")}
+                        text={translate("channel_settings.add_send")}
+                        onClick={function () {
+                            setSendSelectionAnchor(selectSendButtonRef.current ?? undefined);
+                            setIsShowingSendSelection(true);
+                        }}
+                        ref={selectSendButtonRef}
+                    />
+                    {channel.sends.length !== 0 && (
+                        <Button
+                            icon={<Unlink size={16} />}
+                            title={translate("channel_settings.remove_send")}
+                            text={translate("channel_settings.remove_send")}
+                            style="red"
+                            disabled={channel.sends.length === 0}
+                            onClick={function () {
+                                setSendRemovalAnchor(removeSendButtonRef.current ?? undefined);
+                                setIsShowingSendRemoval(true);
+                            }}
+                            ref={removeSendButtonRef}
+                        />
+                    )}
+                </HeaderCategory>
+
                 <HeaderDivider />
 
                 <HeaderCategory label={translate("channel_settings.effect_controls_category_title")}>
@@ -123,6 +198,7 @@ export default function ChannelSettingsHeader({ channel, onAudioClipSelect }: Ch
                         title={translate("channel_settings.add_effect")}
                         text={translate("channel_settings.add_effect")}
                         onClick={function () {
+                            setEffectSelectionAnchor(selectEffectButtonRef.current ?? undefined);
                             setIsShowingEffectSelection(true);
                         }}
                         ref={selectEffectButtonRef}
@@ -133,6 +209,7 @@ export default function ChannelSettingsHeader({ channel, onAudioClipSelect }: Ch
                         text={translate("channel_settings.remove_effect")}
                         style="red"
                         onClick={function () {
+                            setEffectDetachAnchor(removeEffectButtonRef.current ?? undefined);
                             setIsShowingEffectDetachList(true);
                         }}
                         ref={removeEffectButtonRef}
@@ -155,7 +232,7 @@ export default function ChannelSettingsHeader({ channel, onAudioClipSelect }: Ch
                     onCancel={function () {
                         setIsShowingEffectSelection(false);
                     }}
-                    anchor={selectEffectButtonRef.current ?? undefined}
+                    anchor={effectSelectionAnchor}
                 />
             )}
 
@@ -174,7 +251,49 @@ export default function ChannelSettingsHeader({ channel, onAudioClipSelect }: Ch
                     onCancel={function () {
                         setIsShowingEffectDetachList(false);
                     }}
-                    anchor={removeEffectButtonRef.current ?? undefined}
+                    anchor={effectDetachAnchor}
+                />
+            )}
+
+            {isShowingSendSelection && (
+                <FloatingSelectionBox<Channel>
+                    title={translate("channel_settings.select_send_target_title")}
+                    items={getChannels()
+                        .filter(function (candidate: Channel) {
+                            return candidate.id !== channel.id && !channel.sends.includes(candidate);
+                        })
+                        .map(function (candidate: Channel) {
+                            return {
+                                item: candidate,
+                                label: candidate.label ?? translate("channel_settings.channel_fallback"),
+                                icon: <Share2 size={16} />,
+                                data: candidate,
+                            };
+                        })}
+                    onSelect={onSendSelectCallback}
+                    onCancel={function () {
+                        setIsShowingSendSelection(false);
+                    }}
+                    anchor={sendSelectionAnchor}
+                />
+            )}
+
+            {isShowingSendRemoval && (
+                <FloatingSelectionBox<Channel>
+                    title={translate("channel_settings.select_send_removal_title")}
+                    items={channel.sends.map(function (sendTarget: Channel) {
+                        return {
+                            item: sendTarget,
+                            label: sendTarget.label ?? translate("channel_settings.channel_fallback"),
+                            icon: <Unlink size={16} />,
+                            data: sendTarget,
+                        };
+                    })}
+                    onSelect={onSendRemoveCallback}
+                    onCancel={function () {
+                        setIsShowingSendRemoval(false);
+                    }}
+                    anchor={sendRemovalAnchor}
                 />
             )}
         </>

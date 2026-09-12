@@ -87,19 +87,29 @@ export default function ProgressBar(props: ProgressBarProperties) {
 
     useEffect(function () {
 
-        function updateWidth() {
+        const body = progressBarBodyRef.current;
 
-            if (!progressBarBodyRef.current) return;
+        if (!body) return;
 
-            const rect = progressBarBodyRef.current.getBoundingClientRect();
-            setProgressBarFullWidth(rect.width);
+        function updateWidth(width: number) {
+            setProgressBarFullWidth(width);
         }
 
-        updateWidth();
-        window.addEventListener("resize", updateWidth);
+        updateWidth(body.getBoundingClientRect().width);
+
+        // The parent window's width can keep animating (opening, maximizing/restoring)
+        // well after this component mounts, so a one-off measurement (or one that only
+        // reacts to the browser's own resize event) quickly goes stale. A ResizeObserver
+        // tracks the actual rendered width regardless of what caused it to change.
+        const observer = new ResizeObserver(function (entries) {
+            for (const entry of entries)
+                updateWidth(entry.contentRect.width);
+        });
+
+        observer.observe(body);
 
         return () => {
-            window.removeEventListener("resize", updateWidth);
+            observer.disconnect();
         };
 
     }, []);
@@ -138,21 +148,35 @@ export default function ProgressBar(props: ProgressBarProperties) {
         draggedOffsetRef.current = offset;
 
         const trackerWidthInPercentages: number = (100 / progressBarFullWidth) * offset;
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- syncs the thumb position to external playback time, but must be skipped while the user is dragging (a ref, not a render-time value)
         setProgressBarWidth(trackerWidthInPercentages);
 
     }, [currentTime, audioClipDuration, progressBarFullWidth]);
 
     useEffect(function() {
 
-        if(!waveFormCanvasRef.current || !audioBuffer) return;
-
         const canvas = waveFormCanvasRef.current;
+
+        if (!canvas || !audioBuffer || progressBarFullWidth === 0) return;
+
+        // A <canvas> keeps its drawing buffer at the HTML default (300x150) until it is
+        // set explicitly, so without this the waveform was always drawn at that fixed
+        // resolution and then stretched by CSS to fill the actual, differently-sized
+        // container - producing a blurry, squashed waveform that never matched the
+        // progress bar's own width.
+        const dpr = window.devicePixelRatio || 1;
+        const rect = canvas.getBoundingClientRect();
+
+        canvas.width = Math.max(1, Math.round(rect.width * dpr));
+        canvas.height = Math.max(1, Math.round(rect.height * dpr));
 
         const peaks = computeWaveformBars(audioBuffer, 256);
         drawWaveformBarsOnCanvas(canvas, peaks, {
+            barWidth: 2 * dpr,
+            barGap: 1 * dpr,
             color: "rgba(255, 255, 255, 0.10)"
         });
-    }, [waveFormCanvasRef]);
+    }, [audioBuffer, progressBarFullWidth]);
 
     return (
         <div className="progress-bar">

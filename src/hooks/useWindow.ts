@@ -1,6 +1,6 @@
 import { useContext } from "react";
 
-import { WindowContext, type WindowContextValue } from "../providers/WindowProvider";
+import { WindowContext, type WindowContextValue } from "../providers/WindowContext";
 
 export default function useWindow(): WindowContextValue {
 

@@ -21,7 +21,7 @@ export default function WindowTitlebar({ title, icon, draggable, onMouseDown, on
         onChangeWindowSizeButtonClick?.(!isExpanded);
         setIsExpanded(!isExpanded);
 
-    }, [isExpanded]);
+    }, [isExpanded, onChangeWindowSizeButtonClick]);
 
     return (
         <div

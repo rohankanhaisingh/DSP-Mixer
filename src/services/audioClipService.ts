@@ -8,7 +8,7 @@ type Listener = () => void;
 const listeners: Listener[] = [];
 
 function notify() {
-    for (let listener of listeners)
+    for (const listener of listeners)
         listener();
 }
 
@@ -60,9 +60,9 @@ export function getAudioClipById(id: string): null | AudioClip {
 
 export function playAllAudioClips() {
     audioClips.forEach(function(clip: AudioClip) {
-        clip.Play();
+        clip.play();
     });
 }
 
-// @ts-ignore
+// @ts-expect-error - exposed for manual testing from the browser console
 window["playAllAudioClips"] = playAllAudioClips;

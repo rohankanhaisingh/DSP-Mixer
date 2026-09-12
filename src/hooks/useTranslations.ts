@@ -1,22 +1,22 @@
 import { useContext } from "react";
 
-import { I18nContext } from "../providers/I18nProvider";
+import { I18nContext } from "../providers/I18nContext";
 
 interface TranslateFunction {
     (key: string, params?: Array<string | number>): string;
     raw: (key: string) => unknown;
 }
 
-function getByPath(obj: any, path: string): any {
+function getByPath(obj: unknown, path: string): unknown {
 
-    let parts: string[] = path.split("."),
-        current = obj;
+    const parts: string[] = path.split(".");
+    let current: unknown = obj;
 
     for (let i = 0; i < parts.length; i++) {
         if (current === null)
             return undefined;
 
-        current = current[parts[i]];
+        current = (current as Record<string, unknown>)[parts[i]];
     }
 
     return current;
@@ -57,16 +57,19 @@ export default function useTranslation(): TranslateFunction {
 
     const dict = context.dictionaries[context.locale] || {};
 
-    function t(key: string, params?: Array<string | number>): string {
+    const t = Object.assign(
+        function t(key: string, params?: Array<string | number>): string {
 
-        const value = getByPath(dict, key);
+            const value = getByPath(dict, key);
 
-        return (typeof value === "string") ? format(value, params) : key;
-    }
-
-    t.raw = function raw(key: string): unknown {
-        return getByPath(dict, key);
-    };
+            return (typeof value === "string") ? format(value, params) : key;
+        },
+        {
+            raw(key: string): unknown {
+                return getByPath(dict, key);
+            }
+        }
+    );
 
     return t;
 }

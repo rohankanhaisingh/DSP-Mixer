@@ -1,4 +1,4 @@
-import { AudioDevice, Channel } from "@fluex/fluexgl-dsp";
+import { AudioDevice, Channel, Master } from "@fluex/fluexgl-dsp";
 
 import { useCallback, useEffect, useState, useRef } from "react";
 import { Ease } from "@babahgee/easings";
@@ -9,6 +9,7 @@ import CreateChannelButton from "./CreateChannelButton";
 import "./Mixer.scss";
 import { createNewChannel } from "../../services/mixerChannelService";
 import ChannelSettingsHeader from "../header/prebuilt/ChannelSettingsHeader";
+import MasterSettingsHeader from "../header/prebuilt/MasterSettingsHeader";
 import Header from "../header/Header";
 
 export interface MixerProperties {
@@ -17,13 +18,13 @@ export interface MixerProperties {
 
 export default function Mixer({ audioDevice }: MixerProperties) {
 
-    const masterChannel = audioDevice.GetMasterChannel();
+    const masterChannel = audioDevice.getMasterChannel();
 
     const [channels, setChannels] = useState<Channel[]>(function () {
         return masterChannel.channels.slice();
     });
 
-    const [selectedChannel, setSelectedChannel] = useState<Channel | null>(null);
+    const [selectedChannel, setSelectedChannel] = useState<Channel | Master | null>(null);
 
     const mixerScrollerRef = useRef<HTMLDivElement | null>(null);
     const previousChannelCountRef = useRef<number>(channels.length);
@@ -43,8 +44,8 @@ export default function Mixer({ audioDevice }: MixerProperties) {
 
             if (mixerScroller) {
 
-                let start = mixerScroller.scrollLeft,
-                    end = mixerScroller.scrollWidth - mixerScroller.clientWidth;
+                const start = mixerScroller.scrollLeft;
+                let end = mixerScroller.scrollWidth - mixerScroller.clientWidth;
 
                 if (end < 0) end = 0;
 
@@ -87,7 +88,7 @@ export default function Mixer({ audioDevice }: MixerProperties) {
         setChannels(masterChannel.channels.slice());
     }, [masterChannel]);
 
-    const settingsButtonClickCallback = useCallback(function (channel: Channel) {
+    const settingsButtonClickCallback = useCallback(function (channel: Channel | Master) {
         setSelectedChannel(channel);
     }, []);
 
@@ -99,6 +100,7 @@ export default function Mixer({ audioDevice }: MixerProperties) {
                         channelCount="M"
                         label="Master channel"
                         internalChannelId={masterChannel.id}
+                        onSettingsButtonClick={settingsButtonClickCallback}
                         isMaster
                     />
 
@@ -117,7 +119,11 @@ export default function Mixer({ audioDevice }: MixerProperties) {
                     <CreateChannelButton onClick={createChannelButtonOnClick} />
                 </div>
                 <Header>
-                    {selectedChannel && <ChannelSettingsHeader channel={selectedChannel} onAudioClipSelect={() => null} />}
+                    {selectedChannel && (
+                        selectedChannel instanceof Master
+                            ? <MasterSettingsHeader master={selectedChannel} />
+                            : <ChannelSettingsHeader channel={selectedChannel} onAudioClipSelect={() => null} />
+                    )}
                 </Header>
             </div>
         </div>

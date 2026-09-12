@@ -15,7 +15,7 @@ export interface FloatingSelectionBoxProperties<T> {
     items: FloatingSelectionBoxItem<T>[];
     title: string;
     anchor?: HTMLElement;
-    onSelect?: (data: any) => void;
+    onSelect?: (data: T) => void;
     onCancel?: () => void;
 }
 
@@ -54,8 +54,9 @@ export default function FloatingSelectionBox<T>({ title, items, anchor, onCancel
             desiredLeft = padding;
 
         if (desiredLeft > maxLeft)
-            desiredLeft = padding;
+            desiredLeft = maxLeft;
 
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- position is derived from DOM measurements (anchor/selectionBoxRef) only available after render
         setSelectionBoxVerticalPostition(desiredTop);
         setSelectionBoxHorizontalPosition(desiredLeft);
 

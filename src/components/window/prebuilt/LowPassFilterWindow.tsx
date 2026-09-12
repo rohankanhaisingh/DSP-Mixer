@@ -13,9 +13,9 @@ export default function LowPassFilterWindow({ lowPassFilter }: LowPassFilterWind
     const [q, setQ] = useState<number>(lowPassFilter.q ?? 0.7);
 
     useEffect(function () {
-        lowPassFilter.SetCutoff(cutoff);
-        lowPassFilter.SetQ(q);
-    }, [cutoff, q]);
+        lowPassFilter.setCutoff(cutoff);
+        lowPassFilter.setQ(q);
+    }, [cutoff, q, lowPassFilter]);
 
     return (
         <div className="grid grid-cols-4 gap-4">

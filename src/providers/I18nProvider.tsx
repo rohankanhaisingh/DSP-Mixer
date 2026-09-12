@@ -1,14 +1,6 @@
-import { createContext, useMemo, useState, type ReactNode } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 
-export type Translations = Record<string, any>;
-
-export interface I18nContextValue {
-    locale: string;
-    dictionaries: Record<string, Translations>;
-    setLocale: (locale: string) => void;
-}
-
-export const I18nContext = createContext<I18nContextValue | null>(null);
+import { I18nContext, type Translations } from "./I18nContext";
 
 export interface I18nProviderProperties {
     initialLocale: string;

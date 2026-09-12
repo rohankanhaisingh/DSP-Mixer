@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Folder } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+import { Folder, FileMusic } from "lucide-react";
 import { AudioDevice, DspPipeline } from "@fluex/fluexgl-dsp";
 
 import Loader from "./components/common/Loader";
@@ -11,12 +11,15 @@ import HeaderTitlebar from "./components/header/HeaderTitlebar";
 import HeaderDivider from "./components/header/HeaderDivider";
 
 import AudioSourceLibraryHeader from "./components/header/prebuilt/AudioSourceLibraryHeader";
+import AudioClipWindow from "./components/window/prebuilt/AudioClipWindow";
 
 import Mixer from "./components/mixer/Mixer";
 
-import { loadLocalAudioFiles } from "./services/audioLibraryService";
+import { loadLocalAudioFiles, type AudioLibraryFile } from "./services/audioLibraryService";
 import { startMixerPeakMeterService } from "./services/mixerPeakMeterService";
 import { initializeMixerChannelService } from "./services/mixerChannelService";
+
+import useWindow from "./hooks/useWindow";
 
 import "./styles/App.scss";
 
@@ -24,11 +27,20 @@ const baseUrl = import.meta.env.BASE_URL;
 
 export default function App() {
 
+    const { setContent, setTitle, setIcon, showWindow } = useWindow();
+
     const [audioDevice, setAudioDevice] = useState<AudioDevice | null>(null);
     const [isLoaderVisible, setIsLoaderVisible] = useState<boolean>(true);
     const [isLoaderFadingOut, setIsLoaderFadingOut] = useState<boolean>(false);
     const [hasInitializedPipeline, setHasInitializedPipeline] = useState<boolean>(false);
     const [loadingText, setLoadingText] = useState<string>("");
+
+    const audioLibraryFileOnClickCallback = useCallback(function (file: AudioLibraryFile) {
+        setContent(<AudioClipWindow audioLibraryFile={file} />);
+        setTitle(file.fileName);
+        setIcon(<FileMusic size={14} />);
+        showWindow();
+    }, [setContent, setTitle, setIcon, showWindow]);
 
     useEffect(function () {
 
@@ -37,15 +49,15 @@ export default function App() {
         (async function () {
             try {
                 const pipeline = new DspPipeline({
-                    pathToWasm: baseUrl + "fluexgl-dsp-wasm-release-0.4.7/fluexgl-dsp-wasm_bg.wasm",
-                    pathToWorklet: baseUrl + "fluexgl-dsp-wasm-release-0.4.7/fluexgl-dsp-processor.worklet"
+                    pathToWasm: baseUrl + "data/fluexgl-dsp-wasm/fluexgl-dsp-wasm_bg.wasm",
+                    pathToWorklet: baseUrl + "data/fluexgl-dsp-wasm/fluexgl-dsp-processor.worklet"
                 });
 
                 setLoadingText("Initializing DSP pipeline...");
-                await pipeline.InitializeDpsPipeline();
+                await pipeline.initializeDpsPipeline();
 
                 setLoadingText("Resolving default audio output device...");
-                const resolvedAudioDevice = await pipeline.ResolveDefaultAudioOutputDevice();
+                const resolvedAudioDevice = await pipeline.resolveDefaultAudioOutputDevice();
 
                 if (!resolvedAudioDevice || cancelled) return setLoadingText("Failed to load: no default audio output device found.");
 
@@ -89,15 +101,6 @@ export default function App() {
 
 
 
-    // const onAudioClipSelectFromChannelSettingsCallback = useCallback(function (clip: AudioClip) {
-
-    //     const associatedLibraryFile: AudioLibraryFile | null = getAudioLibraryFileById(clip.id);
-
-    //     if (!associatedLibraryFile) return;
-
-    //     // handleOnAudioLibraryFileClick(associatedLibraryFile);
-    // }, []);
-
     if (!audioDevice) return <Loader isFadingOut={isLoaderFadingOut} loadingText={loadingText} />;
 
     return (
@@ -113,7 +116,7 @@ export default function App() {
                         <HeaderContent>
                             <HeaderTitlebar icon={<Folder size={20} />} title="Explorer" />
                             <HeaderDivider />
-                            <AudioSourceLibraryHeader onFileClick={() => null} />
+                            <AudioSourceLibraryHeader onFileClick={audioLibraryFileOnClickCallback} />
                         </HeaderContent>
                     </Header>
 

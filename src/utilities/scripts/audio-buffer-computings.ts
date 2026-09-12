@@ -3,31 +3,31 @@ export function computeWaveformBars(
     barCount: number
 ): Float32Array {
 
-    var left = audioBuffer.getChannelData(0);
-    var right = audioBuffer.numberOfChannels > 1
+    const left = audioBuffer.getChannelData(0);
+    const right = audioBuffer.numberOfChannels > 1
         ? audioBuffer.getChannelData(1)
         : null;
 
-    var samplesPerBar = Math.floor(left.length / barCount);
+    let samplesPerBar = Math.floor(left.length / barCount);
     if (samplesPerBar < 1) samplesPerBar = 1;
 
-    var bars = new Float32Array(barCount);
-    var globalMax = 0;
+    const bars = new Float32Array(barCount);
+    let globalMax = 0;
 
-    for (var i = 0; i < barCount; i++) {
-        var start = i * samplesPerBar;
-        var end = Math.min(start + samplesPerBar, left.length);
+    for (let i = 0; i < barCount; i++) {
+        const start = i * samplesPerBar;
+        const end = Math.min(start + samplesPerBar, left.length);
 
-        var peak = 0;
+        let peak = 0;
 
-        for (var j = start; j < end; j++) {
-            var sample = left[j];
+        for (let j = start; j < end; j++) {
+            let sample = left[j];
 
             if (right) {
                 sample = (sample + right[j]) * 0.5;
             }
 
-            var abs = Math.abs(sample);
+            const abs = Math.abs(sample);
             if (abs > peak) peak = abs;
         }
 
@@ -36,7 +36,7 @@ export function computeWaveformBars(
     }
 
     if (globalMax > 0) {
-        for (var k = 0; k < bars.length; k++) {
+        for (let k = 0; k < bars.length; k++) {
             bars[k] = bars[k] / globalMax;
         }
     }
