@@ -49,10 +49,10 @@ export default function AudioClipSettingsHeader({ audioFile }: AudioFileDataProp
         if (!associatedAudioClip || !selectedAudioClipPlayer || associatedAudioClip.audioClipPlayer === selectedAudioClipPlayer) return;
 
         if (associatedAudioClip.context) {
-            associatedAudioClip.audioClipPlayer?.DetachAudioClip(associatedAudioClip);
+            associatedAudioClip.audioClipPlayer?.detachAudioClip(associatedAudioClip);
         }
 
-        selectedAudioClipPlayer?.AttachAudioClip(associatedAudioClip);
+        selectedAudioClipPlayer?.attachAudioClip(associatedAudioClip);
     }, [selectedAudioClipPlayer, associatedAudioClip, selectedChannel]);
 
     const createAudioClipCallback = useCallback(function () {

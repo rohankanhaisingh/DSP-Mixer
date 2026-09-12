@@ -28,16 +28,16 @@ export default function AudioClipPlayerHeader({ audioClip }: AudioClipPlayerProp
     }, [isLooping, audioClip]);
 
     const progressBarOnChangeCallback = useCallback(function (event: ProgressBarOnChangeEvent) {
-        audioClip.Seek(event.time);
+        audioClip.seek(event.time);
     }, [audioClip]);
 
     const stopButtonCallback = useCallback(function () {
-        audioClip.Stop();
+        audioClip.stop();
     }, [audioClip]);
 
     const playButtonCallback = useCallback(function () {
         if (!audioClip.context) return;
-        audioClip.Play();
+        audioClip.play();
     }, [audioClip]);
 
     useEffect(function () {
@@ -46,10 +46,10 @@ export default function AudioClipPlayerHeader({ audioClip }: AudioClipPlayerProp
             setFormattedCurrentTime(progress.formatted);
         }
 
-        audioClip.AddEventListener("progress", onProgress);
+        audioClip.addEventListener("progress", onProgress);
 
         return function () {
-            audioClip.RemoveEventListener("progress", onProgress);
+            audioClip.removeEventListener("progress", onProgress);
         };
     }, [audioClip]);
 

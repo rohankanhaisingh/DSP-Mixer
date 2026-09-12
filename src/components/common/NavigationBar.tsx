@@ -14,7 +14,7 @@ export interface NavigationBarProperties {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars -- title is part of the public API but not rendered yet
-export default function NavigationBar(props: NavigationBarProperties) {
+export default function NavigationBar(_props: NavigationBarProperties) {
 
     const t = useTranslation();
 
