@@ -1,8 +1,6 @@
 declare namespace wasm_bindgen {
 	/* tslint:disable */
 	/* eslint-disable */
-<<<<<<< HEAD
-=======
 	/**
 	 * A stereo delay engine used by the MonoDelay, StereoDelay, PingPongDelay and
 	 * AdvancedDelay processors. The behaviour depends on the mode:
@@ -62,7 +60,6 @@ declare namespace wasm_bindgen {
 	  set_q(q: number): void;
 	  process(buffer: Float32Array): void;
 	}
->>>>>>> development
 	export class Chorus {
 	  free(): void;
 	  [Symbol.dispose](): void;
@@ -80,8 +77,6 @@ declare namespace wasm_bindgen {
 	  process(buffer: Float32Array): void;
 	  set_mix(mix: number): void;
 	}
-<<<<<<< HEAD
-=======
 	export class Delay {
 	  free(): void;
 	  [Symbol.dispose](): void;
@@ -136,7 +131,6 @@ declare namespace wasm_bindgen {
 	  process(buffer: Float32Array): void;
 	  set_mix(mix: number): void;
 	}
->>>>>>> development
 	export class HardClip {
 	  free(): void;
 	  [Symbol.dispose](): void;
@@ -180,17 +174,6 @@ declare namespace wasm_bindgen {
 	  set_q(q: number): void;
 	  process(buffer: Float32Array): void;
 	}
-<<<<<<< HEAD
-	/**
-	 * A Schroeder/Freeverb-style reverb: a bank of parallel damped comb filters
-	 * feeding a series of allpass diffusers, crossfaded against the dry signal.
-	 *
-	 * Intended to be instantiated once per audio channel (like `Chorus`); pass a
-	 * non-zero `stereo_spread_ms` on one channel's instance so its delay-line
-	 * tunings are offset from the other channel(s), which decorrelates the tail
-	 * between channels instead of producing a mono-sounding reverb.
-	 */
-=======
 	export class Phaser {
 	  free(): void;
 	  [Symbol.dispose](): void;
@@ -209,7 +192,6 @@ declare namespace wasm_bindgen {
 	  process(buffer: Float32Array): void;
 	  set_mix(mix: number): void;
 	}
->>>>>>> development
 	export class Reverb {
 	  free(): void;
 	  [Symbol.dispose](): void;
@@ -217,17 +199,6 @@ declare namespace wasm_bindgen {
 	  set_damping(damping: number): void;
 	  get_room_size(): number;
 	  set_room_size(room_size: number): void;
-<<<<<<< HEAD
-	  get_stereo_spread_ms(): number;
-	  /**
-	   * Rebuilds the comb and allpass delay lines at the new spread. This
-	   * discards their current contents (equivalent to a `reset()`), since
-	   * the buffers themselves change length and old samples wouldn't line
-	   * up with the new tuning anyway.
-	   */
-	  set_stereo_spread_ms(stereo_spread_ms: number): void;
-	  constructor(sample_rate: number, room_size: number, damping: number, mix: number, stereo_spread_ms: number);
-=======
 	  get_pre_delay_ms(): number;
 	  set_pre_delay_ms(pre_delay_ms: number): void;
 	  get_stereo_spread_ms(): number;
@@ -263,20 +234,16 @@ declare namespace wasm_bindgen {
 	  get_output_gain(): number;
 	  set_output_gain(output_gain_db: number): void;
 	  constructor(sample_rate: number, drive_db: number, mode: number, tone_hz: number, mix: number, output_gain_db: number);
->>>>>>> development
 	  reset(): void;
 	  get_mix(): number;
 	  process(buffer: Float32Array): void;
 	  set_mix(mix: number): void;
-<<<<<<< HEAD
-=======
 	  get_mode(): number;
 	  get_tone(): number;
 	  set_mode(mode: number): void;
 	  set_tone(tone_hz: number): void;
 	  get_drive(): number;
 	  set_drive(drive_db: number): void;
->>>>>>> development
 	}
 	export class SoftClip {
 	  free(): void;
@@ -295,12 +262,6 @@ declare type InitInput = RequestInfo | URL | Response | BufferSource | WebAssemb
 
 declare interface InitOutput {
   readonly memory: WebAssembly.Memory;
-<<<<<<< HEAD
-  readonly __wbg_chorus_free: (a: number, b: number) => void;
-  readonly __wbg_hardclip_free: (a: number, b: number) => void;
-  readonly __wbg_highpassfilter_free: (a: number, b: number) => void;
-  readonly __wbg_reverb_free: (a: number, b: number) => void;
-=======
   readonly __wbg_advanceddelay_free: (a: number, b: number) => void;
   readonly __wbg_bandpassfilter_free: (a: number, b: number) => void;
   readonly __wbg_chorus_free: (a: number, b: number) => void;
@@ -342,7 +303,6 @@ declare interface InitOutput {
   readonly bandpassfilter_set_min_freq: (a: number, b: number) => void;
   readonly bandpassfilter_set_q: (a: number, b: number) => void;
   readonly bandpassfilter_set_sample_rate: (a: number, b: number) => void;
->>>>>>> development
   readonly chorus_get_base_delay_ms: (a: number) => number;
   readonly chorus_get_depth_ms: (a: number) => number;
   readonly chorus_get_feedback: (a: number) => number;
@@ -356,8 +316,6 @@ declare interface InitOutput {
   readonly chorus_set_mix: (a: number, b: number) => void;
   readonly chorus_set_phase_offset: (a: number, b: number) => void;
   readonly chorus_set_rate_hz: (a: number, b: number) => void;
-<<<<<<< HEAD
-=======
   readonly delay_get_delay_ms: (a: number) => number;
   readonly delay_get_feedback: (a: number) => number;
   readonly delay_get_mix: (a: number) => number;
@@ -380,7 +338,6 @@ declare interface InitOutput {
   readonly flanger_reset: (a: number) => void;
   readonly flanger_set_base_delay_ms: (a: number, b: number) => void;
   readonly flanger_set_depth_ms: (a: number, b: number) => void;
->>>>>>> development
   readonly hardclip_get_drive: (a: number) => number;
   readonly hardclip_get_gain: (a: number) => number;
   readonly hardclip_new: (a: number, b: number) => number;
@@ -388,11 +345,6 @@ declare interface InitOutput {
   readonly hardclip_set_drive: (a: number, b: number) => void;
   readonly hardclip_set_gain: (a: number, b: number) => void;
   readonly highpassfilter_new: (a: number, b: number, c: number) => number;
-<<<<<<< HEAD
-  readonly highpassfilter_process: (a: number, b: number, c: number, d: any) => void;
-  readonly highpassfilter_reset: (a: number) => void;
-=======
->>>>>>> development
   readonly highpassfilter_set_cutoff: (a: number, b: number) => void;
   readonly highpassfilter_set_max_freq: (a: number, b: number) => void;
   readonly highpassfilter_set_q: (a: number, b: number) => void;
@@ -407,30 +359,6 @@ declare interface InitOutput {
   readonly notchfilter_set_min_freq: (a: number, b: number) => void;
   readonly notchfilter_set_q: (a: number, b: number) => void;
   readonly notchfilter_set_sample_rate: (a: number, b: number) => void;
-<<<<<<< HEAD
-  readonly reverb_get_damping: (a: number) => number;
-  readonly reverb_get_mix: (a: number) => number;
-  readonly reverb_get_room_size: (a: number) => number;
-  readonly reverb_get_stereo_spread_ms: (a: number) => number;
-  readonly reverb_new: (a: number, b: number, c: number, d: number, e: number) => number;
-  readonly reverb_process: (a: number, b: number, c: number, d: any) => void;
-  readonly reverb_reset: (a: number) => void;
-  readonly reverb_set_damping: (a: number, b: number) => void;
-  readonly reverb_set_mix: (a: number, b: number) => void;
-  readonly reverb_set_room_size: (a: number, b: number) => void;
-  readonly reverb_set_stereo_spread_ms: (a: number, b: number) => void;
-  readonly softclip_process: (a: number, b: number, c: number, d: any) => void;
-  readonly softclip_new: (a: number, b: number) => number;
-  readonly __wbg_softclip_free: (a: number, b: number) => void;
-  readonly __wbg_notchfilter_free: (a: number, b: number) => void;
-  readonly __wbg_lowpassfilter_free: (a: number, b: number) => void;
-  readonly lowpassfilter_reset: (a: number) => void;
-  readonly lowpassfilter_process: (a: number, b: number, c: number, d: any) => void;
-  readonly softclip_set_gain: (a: number, b: number) => void;
-  readonly softclip_set_drive: (a: number, b: number) => void;
-  readonly notchfilter_reset: (a: number) => void;
-  readonly notchfilter_process: (a: number, b: number, c: number, d: any) => void;
-=======
   readonly phaser_get_feedback: (a: number) => number;
   readonly phaser_get_max_freq_hz: (a: number) => number;
   readonly phaser_get_min_freq_hz: (a: number) => number;
@@ -497,7 +425,6 @@ declare interface InitOutput {
   readonly flanger_get_feedback: (a: number) => number;
   readonly flanger_get_mix: (a: number) => number;
   readonly flanger_get_rate_hz: (a: number) => number;
->>>>>>> development
   readonly softclip_get_drive: (a: number) => number;
   readonly softclip_get_gain: (a: number) => number;
   readonly __wbindgen_externrefs: WebAssembly.Table;

@@ -1,12 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
 export const memory: WebAssembly.Memory;
-<<<<<<< HEAD
-export const __wbg_chorus_free: (a: number, b: number) => void;
-export const __wbg_hardclip_free: (a: number, b: number) => void;
-export const __wbg_highpassfilter_free: (a: number, b: number) => void;
-export const __wbg_reverb_free: (a: number, b: number) => void;
-=======
 export const __wbg_advanceddelay_free: (a: number, b: number) => void;
 export const __wbg_bandpassfilter_free: (a: number, b: number) => void;
 export const __wbg_chorus_free: (a: number, b: number) => void;
@@ -48,7 +42,6 @@ export const bandpassfilter_set_cutoff: (a: number, b: number) => void;
 export const bandpassfilter_set_min_freq: (a: number, b: number) => void;
 export const bandpassfilter_set_q: (a: number, b: number) => void;
 export const bandpassfilter_set_sample_rate: (a: number, b: number) => void;
->>>>>>> development
 export const chorus_get_base_delay_ms: (a: number) => number;
 export const chorus_get_depth_ms: (a: number) => number;
 export const chorus_get_feedback: (a: number) => number;
@@ -62,8 +55,6 @@ export const chorus_set_feedback: (a: number, b: number) => void;
 export const chorus_set_mix: (a: number, b: number) => void;
 export const chorus_set_phase_offset: (a: number, b: number) => void;
 export const chorus_set_rate_hz: (a: number, b: number) => void;
-<<<<<<< HEAD
-=======
 export const delay_get_delay_ms: (a: number) => number;
 export const delay_get_feedback: (a: number) => number;
 export const delay_get_mix: (a: number) => number;
@@ -86,7 +77,6 @@ export const flanger_process: (a: number, b: number, c: number, d: any) => void;
 export const flanger_reset: (a: number) => void;
 export const flanger_set_base_delay_ms: (a: number, b: number) => void;
 export const flanger_set_depth_ms: (a: number, b: number) => void;
->>>>>>> development
 export const hardclip_get_drive: (a: number) => number;
 export const hardclip_get_gain: (a: number) => number;
 export const hardclip_new: (a: number, b: number) => number;
@@ -94,11 +84,6 @@ export const hardclip_process: (a: number, b: number, c: number, d: any) => void
 export const hardclip_set_drive: (a: number, b: number) => void;
 export const hardclip_set_gain: (a: number, b: number) => void;
 export const highpassfilter_new: (a: number, b: number, c: number) => number;
-<<<<<<< HEAD
-export const highpassfilter_process: (a: number, b: number, c: number, d: any) => void;
-export const highpassfilter_reset: (a: number) => void;
-=======
->>>>>>> development
 export const highpassfilter_set_cutoff: (a: number, b: number) => void;
 export const highpassfilter_set_max_freq: (a: number, b: number) => void;
 export const highpassfilter_set_q: (a: number, b: number) => void;
@@ -113,30 +98,6 @@ export const notchfilter_set_cutoff: (a: number, b: number) => void;
 export const notchfilter_set_min_freq: (a: number, b: number) => void;
 export const notchfilter_set_q: (a: number, b: number) => void;
 export const notchfilter_set_sample_rate: (a: number, b: number) => void;
-<<<<<<< HEAD
-export const reverb_get_damping: (a: number) => number;
-export const reverb_get_mix: (a: number) => number;
-export const reverb_get_room_size: (a: number) => number;
-export const reverb_get_stereo_spread_ms: (a: number) => number;
-export const reverb_new: (a: number, b: number, c: number, d: number, e: number) => number;
-export const reverb_process: (a: number, b: number, c: number, d: any) => void;
-export const reverb_reset: (a: number) => void;
-export const reverb_set_damping: (a: number, b: number) => void;
-export const reverb_set_mix: (a: number, b: number) => void;
-export const reverb_set_room_size: (a: number, b: number) => void;
-export const reverb_set_stereo_spread_ms: (a: number, b: number) => void;
-export const softclip_process: (a: number, b: number, c: number, d: any) => void;
-export const softclip_new: (a: number, b: number) => number;
-export const __wbg_softclip_free: (a: number, b: number) => void;
-export const __wbg_notchfilter_free: (a: number, b: number) => void;
-export const __wbg_lowpassfilter_free: (a: number, b: number) => void;
-export const lowpassfilter_reset: (a: number) => void;
-export const lowpassfilter_process: (a: number, b: number, c: number, d: any) => void;
-export const softclip_set_gain: (a: number, b: number) => void;
-export const softclip_set_drive: (a: number, b: number) => void;
-export const notchfilter_reset: (a: number) => void;
-export const notchfilter_process: (a: number, b: number, c: number, d: any) => void;
-=======
 export const phaser_get_feedback: (a: number) => number;
 export const phaser_get_max_freq_hz: (a: number) => number;
 export const phaser_get_min_freq_hz: (a: number) => number;
@@ -203,7 +164,6 @@ export const flanger_get_depth_ms: (a: number) => number;
 export const flanger_get_feedback: (a: number) => number;
 export const flanger_get_mix: (a: number) => number;
 export const flanger_get_rate_hz: (a: number) => number;
->>>>>>> development
 export const softclip_get_drive: (a: number) => number;
 export const softclip_get_gain: (a: number) => number;
 export const __wbindgen_externrefs: WebAssembly.Table;
