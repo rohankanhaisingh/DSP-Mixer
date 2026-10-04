@@ -52,6 +52,292 @@ import {TextDecoder} from "text-decoding";void 0===globalThis.crypto&&(globalThi
         return ptr;
     }
 
+<<<<<<< HEAD
+=======
+    const AdvancedDelayFinalization = (typeof FinalizationRegistry === 'undefined')
+        ? { register: () => {}, unregister: () => {} }
+        : new FinalizationRegistry(ptr => wasm.__wbg_advanceddelay_free(ptr >>> 0, 1));
+    /**
+     * A stereo delay engine used by the MonoDelay, StereoDelay, PingPongDelay and
+     * AdvancedDelay processors. The behaviour depends on the mode:
+     *
+     * - Stereo (0): left and right are delayed independently. `cross_feedback`
+     *   blends the feedback of each side into the other.
+     * - Mono (1): the input is summed to mono and fed through a single delay line.
+     *   The echoes are identical on both channels.
+     * - Ping-pong (2): the input is summed to mono and enters the left line. Every
+     *   repeat crosses over to the other side, so echoes bounce left and right.
+     *
+     * The feedback path contains an optional low cut (highpass), high cut
+     * (lowpass) and soft saturation, so repeats can get darker and warmer over time.
+     * The delay time can be modulated by a sine LFO for chorus-like or tape wow effects.
+     */
+    class AdvancedDelay {
+
+        __destroy_into_raw() {
+            const ptr = this.__wbg_ptr;
+            this.__wbg_ptr = 0;
+            AdvancedDelayFinalization.unregister(this);
+            return ptr;
+        }
+
+        free() {
+            const ptr = this.__destroy_into_raw();
+            wasm.__wbg_advanceddelay_free(ptr, 0);
+        }
+        /**
+         * @returns {number}
+         */
+        get_low_cut() {
+            const ret = wasm.advanceddelay_get_low_cut(this.__wbg_ptr);
+            return ret;
+        }
+        /**
+         * @param {number} low_cut_hz
+         */
+        set_low_cut(low_cut_hz) {
+            wasm.advanceddelay_set_low_cut(this.__wbg_ptr, low_cut_hz);
+        }
+        /**
+         * @returns {number}
+         */
+        get_feedback() {
+            const ret = wasm.advanceddelay_get_feedback(this.__wbg_ptr);
+            return ret;
+        }
+        /**
+         * @returns {number}
+         */
+        get_high_cut() {
+            const ret = wasm.advanceddelay_get_high_cut(this.__wbg_ptr);
+            return ret;
+        }
+        /**
+         * @returns {number}
+         */
+        get_mod_rate() {
+            const ret = wasm.advanceddelay_get_mod_rate(this.__wbg_ptr);
+            return ret;
+        }
+        /**
+         * @param {number} feedback
+         */
+        set_feedback(feedback) {
+            wasm.advanceddelay_set_feedback(this.__wbg_ptr, feedback);
+        }
+        /**
+         * @param {number} high_cut_hz
+         */
+        set_high_cut(high_cut_hz) {
+            wasm.advanceddelay_set_high_cut(this.__wbg_ptr, high_cut_hz);
+        }
+        /**
+         * @param {number} mod_rate_hz
+         */
+        set_mod_rate(mod_rate_hz) {
+            wasm.advanceddelay_set_mod_rate(this.__wbg_ptr, mod_rate_hz);
+        }
+        /**
+         * @returns {number}
+         */
+        get_mod_depth() {
+            const ret = wasm.advanceddelay_get_mod_depth(this.__wbg_ptr);
+            return ret;
+        }
+        /**
+         * @param {number} mod_depth_ms
+         */
+        set_mod_depth(mod_depth_ms) {
+            wasm.advanceddelay_set_mod_depth(this.__wbg_ptr, mod_depth_ms);
+        }
+        /**
+         * @returns {number}
+         */
+        get_delay_left_ms() {
+            const ret = wasm.advanceddelay_get_delay_left_ms(this.__wbg_ptr);
+            return ret;
+        }
+        /**
+         * @param {number} delay_ms
+         */
+        set_delay_left_ms(delay_ms) {
+            wasm.advanceddelay_set_delay_left_ms(this.__wbg_ptr, delay_ms);
+        }
+        /**
+         * @returns {number}
+         */
+        get_cross_feedback() {
+            const ret = wasm.advanceddelay_get_cross_feedback(this.__wbg_ptr);
+            return ret;
+        }
+        /**
+         * @returns {number}
+         */
+        get_delay_right_ms() {
+            const ret = wasm.advanceddelay_get_delay_right_ms(this.__wbg_ptr);
+            return ret;
+        }
+        /**
+         * @param {number} cross_feedback
+         */
+        set_cross_feedback(cross_feedback) {
+            wasm.advanceddelay_set_cross_feedback(this.__wbg_ptr, cross_feedback);
+        }
+        /**
+         * @param {number} delay_ms
+         */
+        set_delay_right_ms(delay_ms) {
+            wasm.advanceddelay_set_delay_right_ms(this.__wbg_ptr, delay_ms);
+        }
+        /**
+         * @param {number} sample_rate
+         * @param {number} mode
+         * @param {number} delay_left_ms
+         * @param {number} delay_right_ms
+         * @param {number} feedback
+         * @param {number} cross_feedback
+         * @param {number} mix
+         * @param {number} low_cut_hz
+         * @param {number} high_cut_hz
+         * @param {number} mod_rate_hz
+         * @param {number} mod_depth_ms
+         * @param {number} drive
+         */
+        constructor(sample_rate, mode, delay_left_ms, delay_right_ms, feedback, cross_feedback, mix, low_cut_hz, high_cut_hz, mod_rate_hz, mod_depth_ms, drive) {
+            const ret = wasm.advanceddelay_new(sample_rate, mode, delay_left_ms, delay_right_ms, feedback, cross_feedback, mix, low_cut_hz, high_cut_hz, mod_rate_hz, mod_depth_ms, drive);
+            this.__wbg_ptr = ret >>> 0;
+            AdvancedDelayFinalization.register(this, this.__wbg_ptr, this);
+            return this;
+        }
+        reset() {
+            wasm.advanceddelay_reset(this.__wbg_ptr);
+        }
+        /**
+         * @returns {number}
+         */
+        get_mix() {
+            const ret = wasm.advanceddelay_get_mix(this.__wbg_ptr);
+            return ret;
+        }
+        /**
+         * Processes a stereo block in place. Both buffers must have the same length;
+         * for a mono input, pass a copy of the same channel as `right`.
+         * @param {Float32Array} left
+         * @param {Float32Array} right
+         */
+        process(left, right) {
+            var ptr0 = passArrayF32ToWasm0(left, wasm.__wbindgen_malloc);
+            var len0 = WASM_VECTOR_LEN;
+            var ptr1 = passArrayF32ToWasm0(right, wasm.__wbindgen_malloc);
+            var len1 = WASM_VECTOR_LEN;
+            wasm.advanceddelay_process(this.__wbg_ptr, ptr0, len0, left, ptr1, len1, right);
+        }
+        /**
+         * @param {number} mix
+         */
+        set_mix(mix) {
+            wasm.advanceddelay_set_mix(this.__wbg_ptr, mix);
+        }
+        /**
+         * @returns {number}
+         */
+        get_mode() {
+            const ret = wasm.advanceddelay_get_mode(this.__wbg_ptr);
+            return ret >>> 0;
+        }
+        /**
+         * @param {number} mode
+         */
+        set_mode(mode) {
+            wasm.advanceddelay_set_mode(this.__wbg_ptr, mode);
+        }
+        /**
+         * @returns {number}
+         */
+        get_drive() {
+            const ret = wasm.advanceddelay_get_drive(this.__wbg_ptr);
+            return ret;
+        }
+        /**
+         * @param {number} drive
+         */
+        set_drive(drive) {
+            wasm.advanceddelay_set_drive(this.__wbg_ptr, drive);
+        }
+    }
+    if (Symbol.dispose) AdvancedDelay.prototype[Symbol.dispose] = AdvancedDelay.prototype.free;
+
+    __exports.AdvancedDelay = AdvancedDelay;
+
+    const BandPassFilterFinalization = (typeof FinalizationRegistry === 'undefined')
+        ? { register: () => {}, unregister: () => {} }
+        : new FinalizationRegistry(ptr => wasm.__wbg_bandpassfilter_free(ptr >>> 0, 1));
+
+    class BandPassFilter {
+
+        __destroy_into_raw() {
+            const ptr = this.__wbg_ptr;
+            this.__wbg_ptr = 0;
+            BandPassFilterFinalization.unregister(this);
+            return ptr;
+        }
+
+        free() {
+            const ptr = this.__destroy_into_raw();
+            wasm.__wbg_bandpassfilter_free(ptr, 0);
+        }
+        /**
+         * @param {number} cutoff
+         */
+        set_cutoff(cutoff) {
+            wasm.bandpassfilter_set_cutoff(this.__wbg_ptr, cutoff);
+        }
+        /**
+         * @param {number} min_freq
+         */
+        set_min_freq(min_freq) {
+            wasm.bandpassfilter_set_min_freq(this.__wbg_ptr, min_freq);
+        }
+        /**
+         * @param {number} sample_rate
+         */
+        set_sample_rate(sample_rate) {
+            wasm.bandpassfilter_set_sample_rate(this.__wbg_ptr, sample_rate);
+        }
+        /**
+         * @param {number} sample_rate
+         * @param {number} cutoff
+         * @param {number} q
+         */
+        constructor(sample_rate, cutoff, q) {
+            const ret = wasm.bandpassfilter_new(sample_rate, cutoff, q);
+            this.__wbg_ptr = ret >>> 0;
+            BandPassFilterFinalization.register(this, this.__wbg_ptr, this);
+            return this;
+        }
+        reset() {
+            wasm.bandpassfilter_reset(this.__wbg_ptr);
+        }
+        /**
+         * @param {number} q
+         */
+        set_q(q) {
+            wasm.bandpassfilter_set_q(this.__wbg_ptr, q);
+        }
+        /**
+         * @param {Float32Array} buffer
+         */
+        process(buffer) {
+            var ptr0 = passArrayF32ToWasm0(buffer, wasm.__wbindgen_malloc);
+            var len0 = WASM_VECTOR_LEN;
+            wasm.bandpassfilter_process(this.__wbg_ptr, ptr0, len0, buffer);
+        }
+    }
+    if (Symbol.dispose) BandPassFilter.prototype[Symbol.dispose] = BandPassFilter.prototype.free;
+
+    __exports.BandPassFilter = BandPassFilter;
+
+>>>>>>> development
     const ChorusFinalization = (typeof FinalizationRegistry === 'undefined')
         ? { register: () => {}, unregister: () => {} }
         : new FinalizationRegistry(ptr => wasm.__wbg_chorus_free(ptr >>> 0, 1));
@@ -167,6 +453,298 @@ import {TextDecoder} from "text-decoding";void 0===globalThis.crypto&&(globalThi
 
     __exports.Chorus = Chorus;
 
+<<<<<<< HEAD
+=======
+    const DelayFinalization = (typeof FinalizationRegistry === 'undefined')
+        ? { register: () => {}, unregister: () => {} }
+        : new FinalizationRegistry(ptr => wasm.__wbg_delay_free(ptr >>> 0, 1));
+
+    class Delay {
+
+        __destroy_into_raw() {
+            const ptr = this.__wbg_ptr;
+            this.__wbg_ptr = 0;
+            DelayFinalization.unregister(this);
+            return ptr;
+        }
+
+        free() {
+            const ptr = this.__destroy_into_raw();
+            wasm.__wbg_delay_free(ptr, 0);
+        }
+        /**
+         * @returns {number}
+         */
+        get_delay_ms() {
+            const ret = wasm.delay_get_delay_ms(this.__wbg_ptr);
+            return ret;
+        }
+        /**
+         * @returns {number}
+         */
+        get_feedback() {
+            const ret = wasm.delay_get_feedback(this.__wbg_ptr);
+            return ret;
+        }
+        /**
+         * @param {number} delay_ms
+         */
+        set_delay_ms(delay_ms) {
+            wasm.delay_set_delay_ms(this.__wbg_ptr, delay_ms);
+        }
+        /**
+         * @param {number} feedback
+         */
+        set_feedback(feedback) {
+            wasm.delay_set_feedback(this.__wbg_ptr, feedback);
+        }
+        /**
+         * @param {number} sample_rate
+         */
+        set_sample_rate(sample_rate) {
+            wasm.delay_set_sample_rate(this.__wbg_ptr, sample_rate);
+        }
+        /**
+         * @param {number} sample_rate
+         * @param {number} delay_ms
+         * @param {number} feedback
+         * @param {number} mix
+         */
+        constructor(sample_rate, delay_ms, feedback, mix) {
+            const ret = wasm.delay_new(sample_rate, delay_ms, feedback, mix);
+            this.__wbg_ptr = ret >>> 0;
+            DelayFinalization.register(this, this.__wbg_ptr, this);
+            return this;
+        }
+        reset() {
+            wasm.delay_reset(this.__wbg_ptr);
+        }
+        /**
+         * @returns {number}
+         */
+        get_mix() {
+            const ret = wasm.delay_get_mix(this.__wbg_ptr);
+            return ret;
+        }
+        /**
+         * @param {Float32Array} buffer
+         */
+        process(buffer) {
+            var ptr0 = passArrayF32ToWasm0(buffer, wasm.__wbindgen_malloc);
+            var len0 = WASM_VECTOR_LEN;
+            wasm.delay_process(this.__wbg_ptr, ptr0, len0, buffer);
+        }
+        /**
+         * @param {number} mix
+         */
+        set_mix(mix) {
+            wasm.delay_set_mix(this.__wbg_ptr, mix);
+        }
+    }
+    if (Symbol.dispose) Delay.prototype[Symbol.dispose] = Delay.prototype.free;
+
+    __exports.Delay = Delay;
+
+    const EqualizerFinalization = (typeof FinalizationRegistry === 'undefined')
+        ? { register: () => {}, unregister: () => {} }
+        : new FinalizationRegistry(ptr => wasm.__wbg_equalizer_free(ptr >>> 0, 1));
+    /**
+     * A parametric equalizer with up to eight bands, processed in series.
+     *
+     * Band types: 0 = peaking, 1 = low shelf, 2 = high shelf, 3 = lowpass,
+     * 4 = highpass, 5 = notch, 6 = bandpass. The gain only applies to the
+     * peaking and shelf types.
+     */
+    class Equalizer {
+
+        __destroy_into_raw() {
+            const ptr = this.__wbg_ptr;
+            this.__wbg_ptr = 0;
+            EqualizerFinalization.unregister(this);
+            return ptr;
+        }
+
+        free() {
+            const ptr = this.__destroy_into_raw();
+            wasm.__wbg_equalizer_free(ptr, 0);
+        }
+        /**
+         * @returns {number}
+         */
+        get_band_count() {
+            const ret = wasm.equalizer_get_band_count(this.__wbg_ptr);
+            return ret >>> 0;
+        }
+        /**
+         * @returns {number}
+         */
+        get_output_gain() {
+            const ret = wasm.equalizer_get_output_gain(this.__wbg_ptr);
+            return ret;
+        }
+        /**
+         * @param {number} gain_db
+         */
+        set_output_gain(gain_db) {
+            wasm.equalizer_set_output_gain(this.__wbg_ptr, gain_db);
+        }
+        /**
+         * @param {number} sample_rate
+         */
+        constructor(sample_rate) {
+            const ret = wasm.equalizer_new(sample_rate);
+            this.__wbg_ptr = ret >>> 0;
+            EqualizerFinalization.register(this, this.__wbg_ptr, this);
+            return this;
+        }
+        reset() {
+            wasm.equalizer_reset(this.__wbg_ptr);
+        }
+        /**
+         * @param {Float32Array} buffer
+         */
+        process(buffer) {
+            var ptr0 = passArrayF32ToWasm0(buffer, wasm.__wbindgen_malloc);
+            var len0 = WASM_VECTOR_LEN;
+            wasm.equalizer_process(this.__wbg_ptr, ptr0, len0, buffer);
+        }
+        /**
+         * Configures a band. Indices outside 0..8 are ignored. The filter state of the
+         * band is kept, so changing a band while audio plays does not click.
+         * @param {number} index
+         * @param {number} band_type
+         * @param {number} frequency
+         * @param {number} gain_db
+         * @param {number} q
+         * @param {boolean} enabled
+         */
+        set_band(index, band_type, frequency, gain_db, q, enabled) {
+            wasm.equalizer_set_band(this.__wbg_ptr, index, band_type, frequency, gain_db, q, enabled);
+        }
+    }
+    if (Symbol.dispose) Equalizer.prototype[Symbol.dispose] = Equalizer.prototype.free;
+
+    __exports.Equalizer = Equalizer;
+
+    const FlangerFinalization = (typeof FinalizationRegistry === 'undefined')
+        ? { register: () => {}, unregister: () => {} }
+        : new FinalizationRegistry(ptr => wasm.__wbg_flanger_free(ptr >>> 0, 1));
+
+    class Flanger {
+
+        __destroy_into_raw() {
+            const ptr = this.__wbg_ptr;
+            this.__wbg_ptr = 0;
+            FlangerFinalization.unregister(this);
+            return ptr;
+        }
+
+        free() {
+            const ptr = this.__destroy_into_raw();
+            wasm.__wbg_flanger_free(ptr, 0);
+        }
+        /**
+         * @returns {number}
+         */
+        get_rate_hz() {
+            const ret = wasm.chorus_get_rate_hz(this.__wbg_ptr);
+            return ret;
+        }
+        /**
+         * @param {number} rate_hz
+         */
+        set_rate_hz(rate_hz) {
+            wasm.chorus_set_rate_hz(this.__wbg_ptr, rate_hz);
+        }
+        /**
+         * @returns {number}
+         */
+        get_depth_ms() {
+            const ret = wasm.chorus_get_depth_ms(this.__wbg_ptr);
+            return ret;
+        }
+        /**
+         * @returns {number}
+         */
+        get_feedback() {
+            const ret = wasm.chorus_get_feedback(this.__wbg_ptr);
+            return ret;
+        }
+        /**
+         * @param {number} depth_ms
+         */
+        set_depth_ms(depth_ms) {
+            wasm.flanger_set_depth_ms(this.__wbg_ptr, depth_ms);
+        }
+        /**
+         * @param {number} feedback
+         */
+        set_feedback(feedback) {
+            wasm.chorus_set_feedback(this.__wbg_ptr, feedback);
+        }
+        /**
+         * @param {number} phase
+         */
+        set_phase_offset(phase) {
+            wasm.chorus_set_phase_offset(this.__wbg_ptr, phase);
+        }
+        /**
+         * @returns {number}
+         */
+        get_base_delay_ms() {
+            const ret = wasm.chorus_get_base_delay_ms(this.__wbg_ptr);
+            return ret;
+        }
+        /**
+         * @param {number} base_delay_ms
+         */
+        set_base_delay_ms(base_delay_ms) {
+            wasm.flanger_set_base_delay_ms(this.__wbg_ptr, base_delay_ms);
+        }
+        /**
+         * @param {number} sample_rate
+         * @param {number} base_delay_ms
+         * @param {number} depth_ms
+         * @param {number} rate_hz
+         * @param {number} mix
+         * @param {number} feedback
+         */
+        constructor(sample_rate, base_delay_ms, depth_ms, rate_hz, mix, feedback) {
+            const ret = wasm.flanger_new(sample_rate, base_delay_ms, depth_ms, rate_hz, mix, feedback);
+            this.__wbg_ptr = ret >>> 0;
+            FlangerFinalization.register(this, this.__wbg_ptr, this);
+            return this;
+        }
+        reset() {
+            wasm.flanger_reset(this.__wbg_ptr);
+        }
+        /**
+         * @returns {number}
+         */
+        get_mix() {
+            const ret = wasm.chorus_get_mix(this.__wbg_ptr);
+            return ret;
+        }
+        /**
+         * @param {Float32Array} buffer
+         */
+        process(buffer) {
+            var ptr0 = passArrayF32ToWasm0(buffer, wasm.__wbindgen_malloc);
+            var len0 = WASM_VECTOR_LEN;
+            wasm.flanger_process(this.__wbg_ptr, ptr0, len0, buffer);
+        }
+        /**
+         * @param {number} mix
+         */
+        set_mix(mix) {
+            wasm.chorus_set_mix(this.__wbg_ptr, mix);
+        }
+    }
+    if (Symbol.dispose) Flanger.prototype[Symbol.dispose] = Flanger.prototype.free;
+
+    __exports.Flanger = Flanger;
+
+>>>>>>> development
     const HardClipFinalization = (typeof FinalizationRegistry === 'undefined')
         ? { register: () => {}, unregister: () => {} }
         : new FinalizationRegistry(ptr => wasm.__wbg_hardclip_free(ptr >>> 0, 1));
@@ -280,7 +858,11 @@ import {TextDecoder} from "text-decoding";void 0===globalThis.crypto&&(globalThi
             return this;
         }
         reset() {
+<<<<<<< HEAD
             wasm.highpassfilter_reset(this.__wbg_ptr);
+=======
+            wasm.bandpassfilter_reset(this.__wbg_ptr);
+>>>>>>> development
         }
         /**
          * @param {number} q
@@ -348,7 +930,11 @@ import {TextDecoder} from "text-decoding";void 0===globalThis.crypto&&(globalThi
             return this;
         }
         reset() {
+<<<<<<< HEAD
             wasm.highpassfilter_reset(this.__wbg_ptr);
+=======
+            wasm.bandpassfilter_reset(this.__wbg_ptr);
+>>>>>>> development
         }
         /**
          * @param {number} q
@@ -416,7 +1002,11 @@ import {TextDecoder} from "text-decoding";void 0===globalThis.crypto&&(globalThi
             return this;
         }
         reset() {
+<<<<<<< HEAD
             wasm.highpassfilter_reset(this.__wbg_ptr);
+=======
+            wasm.bandpassfilter_reset(this.__wbg_ptr);
+>>>>>>> development
         }
         /**
          * @param {number} q
@@ -437,6 +1027,7 @@ import {TextDecoder} from "text-decoding";void 0===globalThis.crypto&&(globalThi
 
     __exports.NotchFilter = NotchFilter;
 
+<<<<<<< HEAD
     const ReverbFinalization = (typeof FinalizationRegistry === 'undefined')
         ? { register: () => {}, unregister: () => {} }
         : new FinalizationRegistry(ptr => wasm.__wbg_reverb_free(ptr >>> 0, 1));
@@ -449,6 +1040,130 @@ import {TextDecoder} from "text-decoding";void 0===globalThis.crypto&&(globalThi
      * tunings are offset from the other channel(s), which decorrelates the tail
      * between channels instead of producing a mono-sounding reverb.
      */
+=======
+    const PhaserFinalization = (typeof FinalizationRegistry === 'undefined')
+        ? { register: () => {}, unregister: () => {} }
+        : new FinalizationRegistry(ptr => wasm.__wbg_phaser_free(ptr >>> 0, 1));
+
+    class Phaser {
+
+        __destroy_into_raw() {
+            const ptr = this.__wbg_ptr;
+            this.__wbg_ptr = 0;
+            PhaserFinalization.unregister(this);
+            return ptr;
+        }
+
+        free() {
+            const ptr = this.__destroy_into_raw();
+            wasm.__wbg_phaser_free(ptr, 0);
+        }
+        /**
+         * @returns {number}
+         */
+        get_rate_hz() {
+            const ret = wasm.phaser_get_rate_hz(this.__wbg_ptr);
+            return ret;
+        }
+        /**
+         * @param {number} rate_hz
+         */
+        set_rate_hz(rate_hz) {
+            wasm.phaser_set_rate_hz(this.__wbg_ptr, rate_hz);
+        }
+        /**
+         * @returns {number}
+         */
+        get_feedback() {
+            const ret = wasm.phaser_get_feedback(this.__wbg_ptr);
+            return ret;
+        }
+        /**
+         * @param {number} feedback
+         */
+        set_feedback(feedback) {
+            wasm.phaser_set_feedback(this.__wbg_ptr, feedback);
+        }
+        /**
+         * @returns {number}
+         */
+        get_max_freq_hz() {
+            const ret = wasm.phaser_get_max_freq_hz(this.__wbg_ptr);
+            return ret;
+        }
+        /**
+         * @returns {number}
+         */
+        get_min_freq_hz() {
+            const ret = wasm.phaser_get_min_freq_hz(this.__wbg_ptr);
+            return ret;
+        }
+        /**
+         * @param {number} max_freq_hz
+         */
+        set_max_freq_hz(max_freq_hz) {
+            wasm.phaser_set_max_freq_hz(this.__wbg_ptr, max_freq_hz);
+        }
+        /**
+         * @param {number} min_freq_hz
+         */
+        set_min_freq_hz(min_freq_hz) {
+            wasm.phaser_set_min_freq_hz(this.__wbg_ptr, min_freq_hz);
+        }
+        /**
+         * @param {number} sample_rate
+         */
+        set_sample_rate(sample_rate) {
+            wasm.phaser_set_sample_rate(this.__wbg_ptr, sample_rate);
+        }
+        /**
+         * @param {number} sample_rate
+         * @param {number} rate_hz
+         * @param {number} min_freq_hz
+         * @param {number} max_freq_hz
+         * @param {number} feedback
+         * @param {number} mix
+         */
+        constructor(sample_rate, rate_hz, min_freq_hz, max_freq_hz, feedback, mix) {
+            const ret = wasm.phaser_new(sample_rate, rate_hz, min_freq_hz, max_freq_hz, feedback, mix);
+            this.__wbg_ptr = ret >>> 0;
+            PhaserFinalization.register(this, this.__wbg_ptr, this);
+            return this;
+        }
+        reset() {
+            wasm.phaser_reset(this.__wbg_ptr);
+        }
+        /**
+         * @returns {number}
+         */
+        get_mix() {
+            const ret = wasm.phaser_get_mix(this.__wbg_ptr);
+            return ret;
+        }
+        /**
+         * @param {Float32Array} buffer
+         */
+        process(buffer) {
+            var ptr0 = passArrayF32ToWasm0(buffer, wasm.__wbindgen_malloc);
+            var len0 = WASM_VECTOR_LEN;
+            wasm.phaser_process(this.__wbg_ptr, ptr0, len0, buffer);
+        }
+        /**
+         * @param {number} mix
+         */
+        set_mix(mix) {
+            wasm.phaser_set_mix(this.__wbg_ptr, mix);
+        }
+    }
+    if (Symbol.dispose) Phaser.prototype[Symbol.dispose] = Phaser.prototype.free;
+
+    __exports.Phaser = Phaser;
+
+    const ReverbFinalization = (typeof FinalizationRegistry === 'undefined')
+        ? { register: () => {}, unregister: () => {} }
+        : new FinalizationRegistry(ptr => wasm.__wbg_reverb_free(ptr >>> 0, 1));
+
+>>>>>>> development
     class Reverb {
 
         __destroy_into_raw() {
@@ -491,15 +1206,34 @@ import {TextDecoder} from "text-decoding";void 0===globalThis.crypto&&(globalThi
         /**
          * @returns {number}
          */
+<<<<<<< HEAD
+=======
+        get_pre_delay_ms() {
+            const ret = wasm.reverb_get_pre_delay_ms(this.__wbg_ptr);
+            return ret;
+        }
+        /**
+         * @param {number} pre_delay_ms
+         */
+        set_pre_delay_ms(pre_delay_ms) {
+            wasm.reverb_set_pre_delay_ms(this.__wbg_ptr, pre_delay_ms);
+        }
+        /**
+         * @returns {number}
+         */
+>>>>>>> development
         get_stereo_spread_ms() {
             const ret = wasm.reverb_get_stereo_spread_ms(this.__wbg_ptr);
             return ret;
         }
         /**
+<<<<<<< HEAD
          * Rebuilds the comb and allpass delay lines at the new spread. This
          * discards their current contents (equivalent to a `reset()`), since
          * the buffers themselves change length and old samples wouldn't line
          * up with the new tuning anyway.
+=======
+>>>>>>> development
          * @param {number} stereo_spread_ms
          */
         set_stereo_spread_ms(stereo_spread_ms) {
@@ -509,11 +1243,21 @@ import {TextDecoder} from "text-decoding";void 0===globalThis.crypto&&(globalThi
          * @param {number} sample_rate
          * @param {number} room_size
          * @param {number} damping
+<<<<<<< HEAD
          * @param {number} mix
          * @param {number} stereo_spread_ms
          */
         constructor(sample_rate, room_size, damping, mix, stereo_spread_ms) {
             const ret = wasm.reverb_new(sample_rate, room_size, damping, mix, stereo_spread_ms);
+=======
+         * @param {number} dry_level
+         * @param {number} wet_level
+         * @param {number} pre_delay_ms
+         * @param {number} stereo_spread_ms
+         */
+        constructor(sample_rate, room_size, damping, dry_level, wet_level, pre_delay_ms, stereo_spread_ms) {
+            const ret = wasm.reverb_new(sample_rate, room_size, damping, dry_level, wet_level, pre_delay_ms, stereo_spread_ms);
+>>>>>>> development
             this.__wbg_ptr = ret >>> 0;
             ReverbFinalization.register(this, this.__wbg_ptr, this);
             return this;
@@ -524,8 +1268,20 @@ import {TextDecoder} from "text-decoding";void 0===globalThis.crypto&&(globalThi
         /**
          * @returns {number}
          */
+<<<<<<< HEAD
         get_mix() {
             const ret = wasm.reverb_get_mix(this.__wbg_ptr);
+=======
+        get_dry() {
+            const ret = wasm.reverb_get_dry(this.__wbg_ptr);
+            return ret;
+        }
+        /**
+         * @returns {number}
+         */
+        get_wet() {
+            const ret = wasm.reverb_get_wet(this.__wbg_ptr);
+>>>>>>> development
             return ret;
         }
         /**
@@ -537,16 +1293,160 @@ import {TextDecoder} from "text-decoding";void 0===globalThis.crypto&&(globalThi
             wasm.reverb_process(this.__wbg_ptr, ptr0, len0, buffer);
         }
         /**
+<<<<<<< HEAD
          * @param {number} mix
          */
         set_mix(mix) {
             wasm.reverb_set_mix(this.__wbg_ptr, mix);
+=======
+         * @param {number} dry_level
+         */
+        set_dry(dry_level) {
+            wasm.reverb_set_dry(this.__wbg_ptr, dry_level);
+        }
+        /**
+         * @param {number} wet_level
+         */
+        set_wet(wet_level) {
+            wasm.reverb_set_wet(this.__wbg_ptr, wet_level);
+>>>>>>> development
         }
     }
     if (Symbol.dispose) Reverb.prototype[Symbol.dispose] = Reverb.prototype.free;
 
     __exports.Reverb = Reverb;
 
+<<<<<<< HEAD
+=======
+    const SaturationFinalization = (typeof FinalizationRegistry === 'undefined')
+        ? { register: () => {}, unregister: () => {} }
+        : new FinalizationRegistry(ptr => wasm.__wbg_saturation_free(ptr >>> 0, 1));
+    /**
+     * Saturation with first-order antiderivative anti-aliasing (ADAA).
+     *
+     * Instead of evaluating the waveshaping curve f(x) directly, ADAA outputs
+     * (F(x[n]) - F(x[n-1])) / (x[n] - x[n-1]), where F is the antiderivative of f.
+     * This strongly reduces aliasing at a fraction of the cost of oversampling.
+     *
+     * Curves (`mode`):
+     * - 0 = soft: tanh. Smooth, symmetric, odd harmonics.
+     * - 1 = tube: biased tanh. Asymmetric, adds even harmonics. A DC blocker removes the offset.
+     * - 2 = tape: x / (1 + |x|). Gentler knee, compresses more gradually.
+     *
+     * `drive` (dB) pushes the signal into the curve. `tone` is a lowpass after the curve
+     * (Hz, 0 = off). `mix` blends the dry and saturated signal. `output_gain` (dB) is
+     * applied to the saturated signal. The saturated signal is also scaled by
+     * 1 / sqrt(drive), which keeps the perceived loudness roughly constant.
+     */
+    class Saturation {
+
+        __destroy_into_raw() {
+            const ptr = this.__wbg_ptr;
+            this.__wbg_ptr = 0;
+            SaturationFinalization.unregister(this);
+            return ptr;
+        }
+
+        free() {
+            const ptr = this.__destroy_into_raw();
+            wasm.__wbg_saturation_free(ptr, 0);
+        }
+        /**
+         * @returns {number}
+         */
+        get_output_gain() {
+            const ret = wasm.saturation_get_output_gain(this.__wbg_ptr);
+            return ret;
+        }
+        /**
+         * @param {number} output_gain_db
+         */
+        set_output_gain(output_gain_db) {
+            wasm.saturation_set_output_gain(this.__wbg_ptr, output_gain_db);
+        }
+        /**
+         * @param {number} sample_rate
+         * @param {number} drive_db
+         * @param {number} mode
+         * @param {number} tone_hz
+         * @param {number} mix
+         * @param {number} output_gain_db
+         */
+        constructor(sample_rate, drive_db, mode, tone_hz, mix, output_gain_db) {
+            const ret = wasm.saturation_new(sample_rate, drive_db, mode, tone_hz, mix, output_gain_db);
+            this.__wbg_ptr = ret >>> 0;
+            SaturationFinalization.register(this, this.__wbg_ptr, this);
+            return this;
+        }
+        reset() {
+            wasm.saturation_reset(this.__wbg_ptr);
+        }
+        /**
+         * @returns {number}
+         */
+        get_mix() {
+            const ret = wasm.saturation_get_mix(this.__wbg_ptr);
+            return ret;
+        }
+        /**
+         * @param {Float32Array} buffer
+         */
+        process(buffer) {
+            var ptr0 = passArrayF32ToWasm0(buffer, wasm.__wbindgen_malloc);
+            var len0 = WASM_VECTOR_LEN;
+            wasm.saturation_process(this.__wbg_ptr, ptr0, len0, buffer);
+        }
+        /**
+         * @param {number} mix
+         */
+        set_mix(mix) {
+            wasm.saturation_set_mix(this.__wbg_ptr, mix);
+        }
+        /**
+         * @returns {number}
+         */
+        get_mode() {
+            const ret = wasm.saturation_get_mode(this.__wbg_ptr);
+            return ret >>> 0;
+        }
+        /**
+         * @returns {number}
+         */
+        get_tone() {
+            const ret = wasm.saturation_get_tone(this.__wbg_ptr);
+            return ret;
+        }
+        /**
+         * @param {number} mode
+         */
+        set_mode(mode) {
+            wasm.saturation_set_mode(this.__wbg_ptr, mode);
+        }
+        /**
+         * @param {number} tone_hz
+         */
+        set_tone(tone_hz) {
+            wasm.saturation_set_tone(this.__wbg_ptr, tone_hz);
+        }
+        /**
+         * @returns {number}
+         */
+        get_drive() {
+            const ret = wasm.saturation_get_drive(this.__wbg_ptr);
+            return ret;
+        }
+        /**
+         * @param {number} drive_db
+         */
+        set_drive(drive_db) {
+            wasm.saturation_set_drive(this.__wbg_ptr, drive_db);
+        }
+    }
+    if (Symbol.dispose) Saturation.prototype[Symbol.dispose] = Saturation.prototype.free;
+
+    __exports.Saturation = Saturation;
+
+>>>>>>> development
     const SoftClipFinalization = (typeof FinalizationRegistry === 'undefined')
         ? { register: () => {}, unregister: () => {} }
         : new FinalizationRegistry(ptr => wasm.__wbg_softclip_free(ptr >>> 0, 1));

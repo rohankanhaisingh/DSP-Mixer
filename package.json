@@ -10,13 +10,14 @@
   },
   "dependencies": {
     "@babahgee/easings": "^1.0.0",
-    "@fluex/fluexgl-dsp": "^0.4.8",
+    "@fluex/fluexgl-dsp": "^0.4.9",
     "@modyfi/vite-plugin-yaml": "^1.1.1",
     "@types/bytes": "^3.1.5",
     "bytes": "^3.1.2",
     "lucide-react": "^0.562.0",
     "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "react-dom": "^19.2.0",
+    "three": "^0.186.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
@@ -26,6 +27,7 @@
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
+    "@types/three": "^0.186.0",
     "@vitejs/plugin-react": "^5.1.1",
     "autoprefixer": "^10.4.23",
     "eslint": "^9.39.1",

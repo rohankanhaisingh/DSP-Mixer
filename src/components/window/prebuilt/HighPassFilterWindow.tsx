@@ -1,25 +1,24 @@
-import { LowPassFilter } from "@fluex/fluexgl-dsp";
+import type { HighPassFilter } from "@fluex/fluexgl-dsp";
 import { useState, useEffect } from "react";
 
 import { EffectKnob, FrequencyKnob } from "./EffectControls";
 import FilterGraph, { type FilterGraphChanges } from "./FilterGraph";
 
-export interface LowPassFilterWindowProperties {
-    lowPassFilter: LowPassFilter;
+export interface HighPassFilterWindowProperties {
+    highPassFilter: HighPassFilter;
 }
 
-export default function LowPassFilterWindow({ lowPassFilter }: LowPassFilterWindowProperties) {
+export default function HighPassFilterWindow({ highPassFilter }: HighPassFilterWindowProperties) {
 
-    const [cutoff, setCutoff] = useState<number>(lowPassFilter.cutoff);
-    const [q, setQ] = useState<number>(lowPassFilter.q ?? 0.7);
+    const [cutoff, setCutoff] = useState<number>(highPassFilter.cutoff);
+    const [q, setQ] = useState<number>(highPassFilter.q ?? 0.7);
 
     useEffect(function () {
-        lowPassFilter.setCutoff(cutoff);
-        lowPassFilter.setQ(q);
-    }, [cutoff, q, lowPassFilter]);
+        highPassFilter.setCutoff(cutoff);
+        highPassFilter.setQ(q);
+    }, [cutoff, q, highPassFilter]);
 
-    const minCutoff: number = Math.max(10, lowPassFilter.minFrequency),
-        maxCutoff: number = (lowPassFilter.context?.sampleRate ?? 48000) / 2;
+    const maxCutoff: number = Math.min(highPassFilter.maxFrequency, (highPassFilter.context?.sampleRate ?? 48000) / 2);
 
     function onGraphChange(changes: FilterGraphChanges) {
         if (changes.cutoff !== undefined) setCutoff(changes.cutoff);
@@ -29,11 +28,11 @@ export default function LowPassFilterWindow({ lowPassFilter }: LowPassFilterWind
     return (
         <div className="filter-window-content">
             <FilterGraph
-                effect={lowPassFilter}
-                type="lowpass"
+                effect={highPassFilter}
+                type="highpass"
                 cutoff={cutoff}
                 q={q}
-                minCutoff={minCutoff}
+                minCutoff={10}
                 maxCutoff={maxCutoff}
                 minQ={0.1}
                 maxQ={4}
@@ -42,7 +41,7 @@ export default function LowPassFilterWindow({ lowPassFilter }: LowPassFilterWind
                 onChange={onGraphChange}
             />
             <div className="grid grid-cols-4 gap-4">
-                <FrequencyKnob label="Cutoff" value={cutoff} min={minCutoff} max={maxCutoff} defaultValue={1000} onChange={setCutoff} />
+                <FrequencyKnob label="Cutoff" value={cutoff} min={10} max={maxCutoff} defaultValue={1000} onChange={setCutoff} />
                 <EffectKnob label="Q" value={q} min={0.1} max={4} step={0.01} defaultValue={0.7} format={v => v.toFixed(2)} onChange={setQ} />
             </div>
         </div>

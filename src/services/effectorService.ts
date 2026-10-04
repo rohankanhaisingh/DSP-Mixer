@@ -1,12 +1,45 @@
-import { Chorus, SoftClip, Effector, Channel, Master, LowPassFilter, HardClip, Reverb } from "@fluex/fluexgl-dsp";
+import {
+    Chorus,
+    SoftClip,
+    Effector,
+    Channel,
+    Master,
+    LowPassFilter,
+    HighPassFilter,
+    NotchFilter,
+    HardClip,
+    Reverb,
+    Compressor,
+    MultibandCompressor,
+    Limiter,
+    Equalizer,
+    Saturation,
+    StereoPanner,
+    MonoDelay,
+    StereoDelay,
+    PingPongDelay,
+    AdvancedDelay
+} from "@fluex/fluexgl-dsp";
 
 export function listAvailableEffects(): string[] {
     return [
-        "Chorus",
+        "Equalizer",
+        "Compressor",
+        "MultibandCompressor",
+        "Limiter",
+        "Saturation",
         "SoftClip",
-        "LowPassFilter",
         "HardClip",
-        "Reverb"
+        "LowPassFilter",
+        "HighPassFilter",
+        "NotchFilter",
+        "Chorus",
+        "Reverb",
+        "MonoDelay",
+        "StereoDelay",
+        "PingPongDelay",
+        "AdvancedDelay",
+        "StereoPanner"
     ];
 }
 
@@ -23,6 +56,30 @@ function createEffectByName(effectName: string): Effector | null {
             return new HardClip();
         case "Reverb":
             return new Reverb();
+        case "HighPassFilter":
+            return new HighPassFilter();
+        case "NotchFilter":
+            return new NotchFilter();
+        case "Compressor":
+            return new Compressor();
+        case "MultibandCompressor":
+            return new MultibandCompressor();
+        case "Limiter":
+            return new Limiter();
+        case "Equalizer":
+            return new Equalizer();
+        case "Saturation":
+            return new Saturation();
+        case "StereoPanner":
+            return new StereoPanner();
+        case "MonoDelay":
+            return new MonoDelay();
+        case "StereoDelay":
+            return new StereoDelay();
+        case "PingPongDelay":
+            return new PingPongDelay();
+        case "AdvancedDelay":
+            return new AdvancedDelay();
         default:
             return null;
     }
