@@ -52,8 +52,6 @@ import {TextDecoder} from "text-decoding";void 0===globalThis.crypto&&(globalThi
         return ptr;
     }
 
-<<<<<<< HEAD
-=======
     const AdvancedDelayFinalization = (typeof FinalizationRegistry === 'undefined')
         ? { register: () => {}, unregister: () => {} }
         : new FinalizationRegistry(ptr => wasm.__wbg_advanceddelay_free(ptr >>> 0, 1));
@@ -337,7 +335,6 @@ import {TextDecoder} from "text-decoding";void 0===globalThis.crypto&&(globalThi
 
     __exports.BandPassFilter = BandPassFilter;
 
->>>>>>> development
     const ChorusFinalization = (typeof FinalizationRegistry === 'undefined')
         ? { register: () => {}, unregister: () => {} }
         : new FinalizationRegistry(ptr => wasm.__wbg_chorus_free(ptr >>> 0, 1));
@@ -453,8 +450,6 @@ import {TextDecoder} from "text-decoding";void 0===globalThis.crypto&&(globalThi
 
     __exports.Chorus = Chorus;
 
-<<<<<<< HEAD
-=======
     const DelayFinalization = (typeof FinalizationRegistry === 'undefined')
         ? { register: () => {}, unregister: () => {} }
         : new FinalizationRegistry(ptr => wasm.__wbg_delay_free(ptr >>> 0, 1));
@@ -744,7 +739,6 @@ import {TextDecoder} from "text-decoding";void 0===globalThis.crypto&&(globalThi
 
     __exports.Flanger = Flanger;
 
->>>>>>> development
     const HardClipFinalization = (typeof FinalizationRegistry === 'undefined')
         ? { register: () => {}, unregister: () => {} }
         : new FinalizationRegistry(ptr => wasm.__wbg_hardclip_free(ptr >>> 0, 1));
@@ -858,11 +852,7 @@ import {TextDecoder} from "text-decoding";void 0===globalThis.crypto&&(globalThi
             return this;
         }
         reset() {
-<<<<<<< HEAD
-            wasm.highpassfilter_reset(this.__wbg_ptr);
-=======
             wasm.bandpassfilter_reset(this.__wbg_ptr);
->>>>>>> development
         }
         /**
          * @param {number} q
@@ -930,11 +920,7 @@ import {TextDecoder} from "text-decoding";void 0===globalThis.crypto&&(globalThi
             return this;
         }
         reset() {
-<<<<<<< HEAD
-            wasm.highpassfilter_reset(this.__wbg_ptr);
-=======
             wasm.bandpassfilter_reset(this.__wbg_ptr);
->>>>>>> development
         }
         /**
          * @param {number} q
@@ -1002,11 +988,7 @@ import {TextDecoder} from "text-decoding";void 0===globalThis.crypto&&(globalThi
             return this;
         }
         reset() {
-<<<<<<< HEAD
-            wasm.highpassfilter_reset(this.__wbg_ptr);
-=======
             wasm.bandpassfilter_reset(this.__wbg_ptr);
->>>>>>> development
         }
         /**
          * @param {number} q
@@ -1027,20 +1009,6 @@ import {TextDecoder} from "text-decoding";void 0===globalThis.crypto&&(globalThi
 
     __exports.NotchFilter = NotchFilter;
 
-<<<<<<< HEAD
-    const ReverbFinalization = (typeof FinalizationRegistry === 'undefined')
-        ? { register: () => {}, unregister: () => {} }
-        : new FinalizationRegistry(ptr => wasm.__wbg_reverb_free(ptr >>> 0, 1));
-    /**
-     * A Schroeder/Freeverb-style reverb: a bank of parallel damped comb filters
-     * feeding a series of allpass diffusers, crossfaded against the dry signal.
-     *
-     * Intended to be instantiated once per audio channel (like `Chorus`); pass a
-     * non-zero `stereo_spread_ms` on one channel's instance so its delay-line
-     * tunings are offset from the other channel(s), which decorrelates the tail
-     * between channels instead of producing a mono-sounding reverb.
-     */
-=======
     const PhaserFinalization = (typeof FinalizationRegistry === 'undefined')
         ? { register: () => {}, unregister: () => {} }
         : new FinalizationRegistry(ptr => wasm.__wbg_phaser_free(ptr >>> 0, 1));
@@ -1163,7 +1131,6 @@ import {TextDecoder} from "text-decoding";void 0===globalThis.crypto&&(globalThi
         ? { register: () => {}, unregister: () => {} }
         : new FinalizationRegistry(ptr => wasm.__wbg_reverb_free(ptr >>> 0, 1));
 
->>>>>>> development
     class Reverb {
 
         __destroy_into_raw() {
@@ -1206,8 +1173,6 @@ import {TextDecoder} from "text-decoding";void 0===globalThis.crypto&&(globalThi
         /**
          * @returns {number}
          */
-<<<<<<< HEAD
-=======
         get_pre_delay_ms() {
             const ret = wasm.reverb_get_pre_delay_ms(this.__wbg_ptr);
             return ret;
@@ -1221,19 +1186,11 @@ import {TextDecoder} from "text-decoding";void 0===globalThis.crypto&&(globalThi
         /**
          * @returns {number}
          */
->>>>>>> development
         get_stereo_spread_ms() {
             const ret = wasm.reverb_get_stereo_spread_ms(this.__wbg_ptr);
             return ret;
         }
         /**
-<<<<<<< HEAD
-         * Rebuilds the comb and allpass delay lines at the new spread. This
-         * discards their current contents (equivalent to a `reset()`), since
-         * the buffers themselves change length and old samples wouldn't line
-         * up with the new tuning anyway.
-=======
->>>>>>> development
          * @param {number} stereo_spread_ms
          */
         set_stereo_spread_ms(stereo_spread_ms) {
@@ -1243,13 +1200,6 @@ import {TextDecoder} from "text-decoding";void 0===globalThis.crypto&&(globalThi
          * @param {number} sample_rate
          * @param {number} room_size
          * @param {number} damping
-<<<<<<< HEAD
-         * @param {number} mix
-         * @param {number} stereo_spread_ms
-         */
-        constructor(sample_rate, room_size, damping, mix, stereo_spread_ms) {
-            const ret = wasm.reverb_new(sample_rate, room_size, damping, mix, stereo_spread_ms);
-=======
          * @param {number} dry_level
          * @param {number} wet_level
          * @param {number} pre_delay_ms
@@ -1257,7 +1207,6 @@ import {TextDecoder} from "text-decoding";void 0===globalThis.crypto&&(globalThi
          */
         constructor(sample_rate, room_size, damping, dry_level, wet_level, pre_delay_ms, stereo_spread_ms) {
             const ret = wasm.reverb_new(sample_rate, room_size, damping, dry_level, wet_level, pre_delay_ms, stereo_spread_ms);
->>>>>>> development
             this.__wbg_ptr = ret >>> 0;
             ReverbFinalization.register(this, this.__wbg_ptr, this);
             return this;
@@ -1268,10 +1217,6 @@ import {TextDecoder} from "text-decoding";void 0===globalThis.crypto&&(globalThi
         /**
          * @returns {number}
          */
-<<<<<<< HEAD
-        get_mix() {
-            const ret = wasm.reverb_get_mix(this.__wbg_ptr);
-=======
         get_dry() {
             const ret = wasm.reverb_get_dry(this.__wbg_ptr);
             return ret;
@@ -1281,7 +1226,6 @@ import {TextDecoder} from "text-decoding";void 0===globalThis.crypto&&(globalThi
          */
         get_wet() {
             const ret = wasm.reverb_get_wet(this.__wbg_ptr);
->>>>>>> development
             return ret;
         }
         /**
@@ -1293,12 +1237,6 @@ import {TextDecoder} from "text-decoding";void 0===globalThis.crypto&&(globalThi
             wasm.reverb_process(this.__wbg_ptr, ptr0, len0, buffer);
         }
         /**
-<<<<<<< HEAD
-         * @param {number} mix
-         */
-        set_mix(mix) {
-            wasm.reverb_set_mix(this.__wbg_ptr, mix);
-=======
          * @param {number} dry_level
          */
         set_dry(dry_level) {
@@ -1309,15 +1247,12 @@ import {TextDecoder} from "text-decoding";void 0===globalThis.crypto&&(globalThi
          */
         set_wet(wet_level) {
             wasm.reverb_set_wet(this.__wbg_ptr, wet_level);
->>>>>>> development
         }
     }
     if (Symbol.dispose) Reverb.prototype[Symbol.dispose] = Reverb.prototype.free;
 
     __exports.Reverb = Reverb;
 
-<<<<<<< HEAD
-=======
     const SaturationFinalization = (typeof FinalizationRegistry === 'undefined')
         ? { register: () => {}, unregister: () => {} }
         : new FinalizationRegistry(ptr => wasm.__wbg_saturation_free(ptr >>> 0, 1));
@@ -1446,7 +1381,6 @@ import {TextDecoder} from "text-decoding";void 0===globalThis.crypto&&(globalThi
 
     __exports.Saturation = Saturation;
 
->>>>>>> development
     const SoftClipFinalization = (typeof FinalizationRegistry === 'undefined')
         ? { register: () => {}, unregister: () => {} }
         : new FinalizationRegistry(ptr => wasm.__wbg_softclip_free(ptr >>> 0, 1));

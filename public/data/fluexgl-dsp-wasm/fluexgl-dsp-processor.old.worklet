@@ -3252,8 +3252,6 @@ void 0===globalThis.crypto&&(globalThis.crypto={}),"function"!=typeof globalThis
         return ptr;
     }
 
-<<<<<<< HEAD
-=======
     const AdvancedDelayFinalization = (typeof FinalizationRegistry === 'undefined')
         ? { register: () => {}, unregister: () => {} }
         : new FinalizationRegistry(ptr => wasm.__wbg_advanceddelay_free(ptr >>> 0, 1));
@@ -3537,7 +3535,6 @@ void 0===globalThis.crypto&&(globalThis.crypto={}),"function"!=typeof globalThis
 
     __exports.BandPassFilter = BandPassFilter;
 
->>>>>>> development
     const ChorusFinalization = (typeof FinalizationRegistry === 'undefined')
         ? { register: () => {}, unregister: () => {} }
         : new FinalizationRegistry(ptr => wasm.__wbg_chorus_free(ptr >>> 0, 1));
@@ -3653,8 +3650,6 @@ void 0===globalThis.crypto&&(globalThis.crypto={}),"function"!=typeof globalThis
 
     __exports.Chorus = Chorus;
 
-<<<<<<< HEAD
-=======
     const DelayFinalization = (typeof FinalizationRegistry === 'undefined')
         ? { register: () => {}, unregister: () => {} }
         : new FinalizationRegistry(ptr => wasm.__wbg_delay_free(ptr >>> 0, 1));
@@ -3944,7 +3939,6 @@ void 0===globalThis.crypto&&(globalThis.crypto={}),"function"!=typeof globalThis
 
     __exports.Flanger = Flanger;
 
->>>>>>> development
     const HardClipFinalization = (typeof FinalizationRegistry === 'undefined')
         ? { register: () => {}, unregister: () => {} }
         : new FinalizationRegistry(ptr => wasm.__wbg_hardclip_free(ptr >>> 0, 1));
@@ -4058,11 +4052,7 @@ void 0===globalThis.crypto&&(globalThis.crypto={}),"function"!=typeof globalThis
             return this;
         }
         reset() {
-<<<<<<< HEAD
-            wasm.highpassfilter_reset(this.__wbg_ptr);
-=======
             wasm.bandpassfilter_reset(this.__wbg_ptr);
->>>>>>> development
         }
         /**
          * @param {number} q
@@ -4130,11 +4120,7 @@ void 0===globalThis.crypto&&(globalThis.crypto={}),"function"!=typeof globalThis
             return this;
         }
         reset() {
-<<<<<<< HEAD
-            wasm.highpassfilter_reset(this.__wbg_ptr);
-=======
             wasm.bandpassfilter_reset(this.__wbg_ptr);
->>>>>>> development
         }
         /**
          * @param {number} q
@@ -4202,11 +4188,7 @@ void 0===globalThis.crypto&&(globalThis.crypto={}),"function"!=typeof globalThis
             return this;
         }
         reset() {
-<<<<<<< HEAD
-            wasm.highpassfilter_reset(this.__wbg_ptr);
-=======
             wasm.bandpassfilter_reset(this.__wbg_ptr);
->>>>>>> development
         }
         /**
          * @param {number} q
@@ -4227,20 +4209,6 @@ void 0===globalThis.crypto&&(globalThis.crypto={}),"function"!=typeof globalThis
 
     __exports.NotchFilter = NotchFilter;
 
-<<<<<<< HEAD
-    const ReverbFinalization = (typeof FinalizationRegistry === 'undefined')
-        ? { register: () => {}, unregister: () => {} }
-        : new FinalizationRegistry(ptr => wasm.__wbg_reverb_free(ptr >>> 0, 1));
-    /**
-     * A Schroeder/Freeverb-style reverb: a bank of parallel damped comb filters
-     * feeding a series of allpass diffusers, crossfaded against the dry signal.
-     *
-     * Intended to be instantiated once per audio channel (like `Chorus`); pass a
-     * non-zero `stereo_spread_ms` on one channel's instance so its delay-line
-     * tunings are offset from the other channel(s), which decorrelates the tail
-     * between channels instead of producing a mono-sounding reverb.
-     */
-=======
     const PhaserFinalization = (typeof FinalizationRegistry === 'undefined')
         ? { register: () => {}, unregister: () => {} }
         : new FinalizationRegistry(ptr => wasm.__wbg_phaser_free(ptr >>> 0, 1));
@@ -4363,7 +4331,6 @@ void 0===globalThis.crypto&&(globalThis.crypto={}),"function"!=typeof globalThis
         ? { register: () => {}, unregister: () => {} }
         : new FinalizationRegistry(ptr => wasm.__wbg_reverb_free(ptr >>> 0, 1));
 
->>>>>>> development
     class Reverb {
 
         __destroy_into_raw() {
@@ -4406,8 +4373,6 @@ void 0===globalThis.crypto&&(globalThis.crypto={}),"function"!=typeof globalThis
         /**
          * @returns {number}
          */
-<<<<<<< HEAD
-=======
         get_pre_delay_ms() {
             const ret = wasm.reverb_get_pre_delay_ms(this.__wbg_ptr);
             return ret;
@@ -4421,19 +4386,11 @@ void 0===globalThis.crypto&&(globalThis.crypto={}),"function"!=typeof globalThis
         /**
          * @returns {number}
          */
->>>>>>> development
         get_stereo_spread_ms() {
             const ret = wasm.reverb_get_stereo_spread_ms(this.__wbg_ptr);
             return ret;
         }
         /**
-<<<<<<< HEAD
-         * Rebuilds the comb and allpass delay lines at the new spread. This
-         * discards their current contents (equivalent to a `reset()`), since
-         * the buffers themselves change length and old samples wouldn't line
-         * up with the new tuning anyway.
-=======
->>>>>>> development
          * @param {number} stereo_spread_ms
          */
         set_stereo_spread_ms(stereo_spread_ms) {
@@ -4443,13 +4400,6 @@ void 0===globalThis.crypto&&(globalThis.crypto={}),"function"!=typeof globalThis
          * @param {number} sample_rate
          * @param {number} room_size
          * @param {number} damping
-<<<<<<< HEAD
-         * @param {number} mix
-         * @param {number} stereo_spread_ms
-         */
-        constructor(sample_rate, room_size, damping, mix, stereo_spread_ms) {
-            const ret = wasm.reverb_new(sample_rate, room_size, damping, mix, stereo_spread_ms);
-=======
          * @param {number} dry_level
          * @param {number} wet_level
          * @param {number} pre_delay_ms
@@ -4457,7 +4407,6 @@ void 0===globalThis.crypto&&(globalThis.crypto={}),"function"!=typeof globalThis
          */
         constructor(sample_rate, room_size, damping, dry_level, wet_level, pre_delay_ms, stereo_spread_ms) {
             const ret = wasm.reverb_new(sample_rate, room_size, damping, dry_level, wet_level, pre_delay_ms, stereo_spread_ms);
->>>>>>> development
             this.__wbg_ptr = ret >>> 0;
             ReverbFinalization.register(this, this.__wbg_ptr, this);
             return this;
@@ -4468,10 +4417,6 @@ void 0===globalThis.crypto&&(globalThis.crypto={}),"function"!=typeof globalThis
         /**
          * @returns {number}
          */
-<<<<<<< HEAD
-        get_mix() {
-            const ret = wasm.reverb_get_mix(this.__wbg_ptr);
-=======
         get_dry() {
             const ret = wasm.reverb_get_dry(this.__wbg_ptr);
             return ret;
@@ -4481,7 +4426,6 @@ void 0===globalThis.crypto&&(globalThis.crypto={}),"function"!=typeof globalThis
          */
         get_wet() {
             const ret = wasm.reverb_get_wet(this.__wbg_ptr);
->>>>>>> development
             return ret;
         }
         /**
@@ -4493,12 +4437,6 @@ void 0===globalThis.crypto&&(globalThis.crypto={}),"function"!=typeof globalThis
             wasm.reverb_process(this.__wbg_ptr, ptr0, len0, buffer);
         }
         /**
-<<<<<<< HEAD
-         * @param {number} mix
-         */
-        set_mix(mix) {
-            wasm.reverb_set_mix(this.__wbg_ptr, mix);
-=======
          * @param {number} dry_level
          */
         set_dry(dry_level) {
@@ -4509,15 +4447,12 @@ void 0===globalThis.crypto&&(globalThis.crypto={}),"function"!=typeof globalThis
          */
         set_wet(wet_level) {
             wasm.reverb_set_wet(this.__wbg_ptr, wet_level);
->>>>>>> development
         }
     }
     if (Symbol.dispose) Reverb.prototype[Symbol.dispose] = Reverb.prototype.free;
 
     __exports.Reverb = Reverb;
 
-<<<<<<< HEAD
-=======
     const SaturationFinalization = (typeof FinalizationRegistry === 'undefined')
         ? { register: () => {}, unregister: () => {} }
         : new FinalizationRegistry(ptr => wasm.__wbg_saturation_free(ptr >>> 0, 1));
@@ -4646,7 +4581,6 @@ void 0===globalThis.crypto&&(globalThis.crypto={}),"function"!=typeof globalThis
 
     __exports.Saturation = Saturation;
 
->>>>>>> development
     const SoftClipFinalization = (typeof FinalizationRegistry === 'undefined')
         ? { register: () => {}, unregister: () => {} }
         : new FinalizationRegistry(ptr => wasm.__wbg_softclip_free(ptr >>> 0, 1));
@@ -5150,15 +5084,10 @@ var ReverbMessageCommandId;
 (function (ReverbMessageCommandId) {
     ReverbMessageCommandId[ReverbMessageCommandId["SetRoomSize"] = 0] = "SetRoomSize";
     ReverbMessageCommandId[ReverbMessageCommandId["SetDamping"] = 1] = "SetDamping";
-<<<<<<< HEAD
-    ReverbMessageCommandId[ReverbMessageCommandId["SetMix"] = 2] = "SetMix";
-    ReverbMessageCommandId[ReverbMessageCommandId["SetStereoSpreadMs"] = 3] = "SetStereoSpreadMs";
-=======
     ReverbMessageCommandId[ReverbMessageCommandId["SetDry"] = 2] = "SetDry";
     ReverbMessageCommandId[ReverbMessageCommandId["SetWet"] = 3] = "SetWet";
     ReverbMessageCommandId[ReverbMessageCommandId["SetPreDelayMs"] = 4] = "SetPreDelayMs";
     ReverbMessageCommandId[ReverbMessageCommandId["SetStereoSpreadMs"] = 5] = "SetStereoSpreadMs";
->>>>>>> development
 })(ReverbMessageCommandId || (ReverbMessageCommandId = {}));
 // Offsets each channel's comb/allpass delay-line tunings by this many
 // milliseconds times its channel index, so channels decorrelate instead of
@@ -5171,13 +5100,9 @@ class ReverbProcessor extends AudioWorkletProcessor {
     reverb = [];
     roomSize = 0.5;
     damping = 0.5;
-<<<<<<< HEAD
-    mix = 0.3;
-=======
     dry = 0.7;
     wet = 0.3;
     preDelayMs = 0;
->>>>>>> development
     stereoSpreadMs = DEFAULT_STEREO_SPREAD_MS;
     isReady = false;
     failed = false;
@@ -5187,13 +5112,9 @@ class ReverbProcessor extends AudioWorkletProcessor {
         this.strictMode = options.parameterData?.strictMode ?? this.strictMode;
         this.roomSize = options.parameterData?.roomSize ?? this.roomSize;
         this.damping = options.parameterData?.damping ?? this.damping;
-<<<<<<< HEAD
-        this.mix = options.parameterData?.mix ?? this.mix;
-=======
         this.dry = options.parameterData?.dry ?? this.dry;
         this.wet = options.parameterData?.wet ?? this.wet;
         this.preDelayMs = options.parameterData?.preDelayMs ?? this.preDelayMs;
->>>>>>> development
         this.stereoSpreadMs = options.parameterData?.stereoSpreadMs ?? this.stereoSpreadMs;
         this.port.onmessage = (event) => {
             const data = event.data;
@@ -5202,17 +5123,12 @@ class ReverbProcessor extends AudioWorkletProcessor {
                     return this.setRoomSize(data.data);
                 case ReverbMessageCommandId.SetDamping:
                     return this.setDamping(data.data);
-<<<<<<< HEAD
-                case ReverbMessageCommandId.SetMix:
-                    return this.setMix(data.data);
-=======
                 case ReverbMessageCommandId.SetDry:
                     return this.setDry(data.data);
                 case ReverbMessageCommandId.SetWet:
                     return this.setWet(data.data);
                 case ReverbMessageCommandId.SetPreDelayMs:
                     return this.setPreDelayMs(data.data);
->>>>>>> development
                 case ReverbMessageCommandId.SetStereoSpreadMs:
                     return this.setStereoSpreadMs(data.data);
             }
@@ -5226,11 +5142,7 @@ class ReverbProcessor extends AudioWorkletProcessor {
             // Only channels beyond the first get a spread offset, so a mono
             // signal (channel 0) always uses the reference tuning.
             const spreadMs = this.stereoSpreadMs * channelIndex;
-<<<<<<< HEAD
-            const inst = new AudioWorkletProcessor.wasm.Reverb(sampleRate, this.roomSize, this.damping, this.mix, spreadMs);
-=======
             const inst = new AudioWorkletProcessor.wasm.Reverb(sampleRate, this.roomSize, this.damping, this.dry, this.wet, this.preDelayMs, spreadMs);
->>>>>>> development
             this.reverb[channelIndex] = inst;
         }
     }
@@ -5251,12 +5163,6 @@ class ReverbProcessor extends AudioWorkletProcessor {
         this.forEachInstance(r => r.set_damping(this.damping));
         sendMessageToAudioWorkletNode(this, "message", `Set damping of Reverb to ${this.damping}.`);
     }
-<<<<<<< HEAD
-    setMix(v) {
-        this.mix = v ?? this.mix;
-        this.forEachInstance(r => r.set_mix(this.mix));
-        sendMessageToAudioWorkletNode(this, "message", `Set mix of Reverb to ${this.mix}.`);
-=======
     setDry(v) {
         this.dry = v ?? this.dry;
         this.forEachInstance(r => r.set_dry(this.dry));
@@ -5271,7 +5177,6 @@ class ReverbProcessor extends AudioWorkletProcessor {
         this.preDelayMs = v ?? this.preDelayMs;
         this.forEachInstance(r => r.set_pre_delay_ms(this.preDelayMs));
         sendMessageToAudioWorkletNode(this, "message", `Set preDelayMs of Reverb to ${this.preDelayMs}.`);
->>>>>>> development
     }
     setStereoSpreadMs(v) {
         this.stereoSpreadMs = v ?? this.stereoSpreadMs;
@@ -5302,25 +5207,17 @@ class ReverbProcessor extends AudioWorkletProcessor {
             }
             return true;
         }
-<<<<<<< HEAD
-=======
         // Wet and dry are independent gains rather than a single crossfade,
         // so only skip processing entirely when it would be a true no-op
         // (no reverb contribution and the dry signal left at unity gain).
         const isBypassed = (this.wet ?? 0) === 0 && (this.dry ?? 1) === 1;
->>>>>>> development
         for (let ch = 0; ch < input.length; ch++) {
             const inChan = input[ch];
             const outChan = output[ch];
             if (!inChan || !outChan)
                 continue;
             this.ensureInstance(ch);
-<<<<<<< HEAD
-            // If bypassed, just copy input to output but still ensure instances exist.
-            if ((this.mix ?? 0) === 0 || !this.reverb[ch]) {
-=======
             if (isBypassed || !this.reverb[ch]) {
->>>>>>> development
                 outChan.set(inChan);
                 continue;
             }
@@ -5337,8 +5234,6 @@ class ReverbProcessor extends AudioWorkletProcessor {
     }
 }
 
-<<<<<<< HEAD
-=======
 ;// ./worklets/src/worklets/DelayProcessor.worklet.ts
 
 
@@ -5724,7 +5619,6 @@ class PhaserProcessor extends AudioWorkletProcessor {
     }
 }
 
->>>>>>> development
 ;// ./worklets/src/worklets/clips/HardClipProcessor.worklet.ts
 
 
@@ -6233,8 +6127,6 @@ class NotchFilterProcessor extends AudioWorkletProcessor {
     }
 }
 
-<<<<<<< HEAD
-=======
 ;// ./worklets/src/worklets/filters/BandPassFilter.worklet.ts
 
 
@@ -6778,7 +6670,6 @@ class AdvancedDelayProcessor extends DelayEngineProcessor {
     mode = DelayEngineMode.Stereo;
 }
 
->>>>>>> development
 ;// ./worklets/src/exports.ts
 
 
@@ -6789,8 +6680,6 @@ class AdvancedDelayProcessor extends DelayEngineProcessor {
 
 
 
-<<<<<<< HEAD
-=======
 
 
 
@@ -6798,17 +6687,11 @@ class AdvancedDelayProcessor extends DelayEngineProcessor {
 
 
 
->>>>>>> development
 registerProcessor("HardClipProcessor", HardClipProcessor);
 registerProcessor("SoftClipProcessor", SoftClipProcessor);
 registerProcessor("WhiteNoiseProcessor", WhiteNoiseProcessor);
 registerProcessor("ChorusProcessor", ChorusProcessor);
 registerProcessor("ReverbProcessor", ReverbProcessor);
-<<<<<<< HEAD
-registerProcessor("LowPassFilterProcessor", LowPassFilterProcessor);
-registerProcessor("HighPassFilterProcessor", HighPassFilterProcessor);
-registerProcessor("NotchFilterProcessor", NotchFilterProcessor);
-=======
 registerProcessor("DelayProcessor", DelayProcessor);
 registerProcessor("FlangerProcessor", FlangerProcessor);
 registerProcessor("PhaserProcessor", PhaserProcessor);
@@ -6822,7 +6705,6 @@ registerProcessor("MonoDelayProcessor", MonoDelayProcessor);
 registerProcessor("StereoDelayProcessor", StereoDelayProcessor);
 registerProcessor("PingPongDelayProcessor", PingPongDelayProcessor);
 registerProcessor("AdvancedDelayProcessor", AdvancedDelayProcessor);
->>>>>>> development
 
 /******/ })()
 ;
