@@ -16,6 +16,7 @@ import type {
     Saturation,
     SoftClip,
     StereoDelay,
+    StereoMono,
     StereoPanner
 } from "@fluex/fluexgl-dsp";
 
@@ -37,6 +38,7 @@ import LimiterWindow from "../components/window/prebuilt/LimiterWindow";
 import EqualizerWindow from "../components/window/prebuilt/EqualizerWindow";
 import SaturationWindow from "../components/window/prebuilt/SaturationWindow";
 import StereoPannerWindow from "../components/window/prebuilt/StereoPannerWindow";
+import StereoMonoWindow from "../components/window/prebuilt/StereoMonoWindow";
 import DelayWindow from "../components/window/prebuilt/DelayWindow";
 import StereoDelayWindow from "../components/window/prebuilt/StereoDelayWindow";
 import AdvancedDelayWindow from "../components/window/prebuilt/AdvancedDelayWindow";
@@ -103,6 +105,10 @@ export function showEffectWindow(effect: Effector, deps: WindowContextValue) {
             break;
         case "StereoPanner":
             deps.setContent(<StereoPannerWindow key={effect.id} stereoPanner={effect as StereoPanner} />);
+            break;
+        case "StereoMono":
+            deps.setSize(700, 620);
+            deps.setContent(<StereoMonoWindow key={effect.id} stereoMono={effect as StereoMono} />);
             break;
         case "MonoDelay":
         case "PingPongDelay":

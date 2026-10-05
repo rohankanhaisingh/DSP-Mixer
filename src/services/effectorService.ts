@@ -15,6 +15,7 @@ import {
     Equalizer,
     Saturation,
     StereoPanner,
+    StereoMono,
     MonoDelay,
     StereoDelay,
     PingPongDelay,
@@ -39,7 +40,8 @@ export function listAvailableEffects(): string[] {
         "StereoDelay",
         "PingPongDelay",
         "AdvancedDelay",
-        "StereoPanner"
+        "StereoPanner",
+        "StereoMono"
     ];
 }
 
@@ -72,6 +74,8 @@ function createEffectByName(effectName: string): Effector | null {
             return new Saturation();
         case "StereoPanner":
             return new StereoPanner();
+        case "StereoMono":
+            return new StereoMono();
         case "MonoDelay":
             return new MonoDelay();
         case "StereoDelay":

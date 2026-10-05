@@ -69,6 +69,12 @@ channel_settings:
     remove_send: "Remove send"
     select_send_target_title: "Send to channel"
     select_send_removal_title: "Remove send"
+    master_category_title: "Master"
+    attached_to_master: "This channel is sent to the master channel."
+    detached_from_master: "This channel is not sent to the master channel, so it is not heard directly."
+    attach_to_master: "Attach to master"
+    detach_from_master: "Detach from master"
+    input_device: "Input device: {}"
 
 application_info:
     title: "DSP Mixer"
@@ -93,3 +99,9 @@ mixer:
     meter_view_peak: "Peak"
     meter_view_waveform: "Waveform"
     meter_view_spectrum: "Spectrum"
+    create_channel: "Create channel"
+    create_input_channel: "Create input channel"
+    select_input_device_title: "Select input device"
+    default_input_device: "Default input device"
+    input_device_fallback: "Input device {}"
+    input_device_unavailable: "Could not open the input device. Check whether microphone access is allowed."

@@ -7,10 +7,12 @@ export interface EffectOutputTapOptions {
     smoothingTimeConstant?: number;
     minDecibels?: number;
     maxDecibels?: number;
+    /** Which side of the effect is analysed. Defaults to "output". */
+    tap?: "input" | "output";
 }
 
 /**
- * Listens to the output of an effect with one AnalyserNode per channel, without changing the effect chain.
+ * Listens to the output (or input) of an effect with one AnalyserNode per channel, without changing the effect chain.
  *
  * Rebuilding the effect chain of a channel disconnects every effect output, which also removes this tap.
  * Connecting an existing connection again is ignored, so the tap simply reconnects twice per second.
@@ -20,6 +22,7 @@ export class EffectOutputTap {
     readonly analysers: AnalyserNode[] = [];
 
     private effect: Effector;
+    private side: "input" | "output";
     private input: AudioNode;
     private tappedNode: AudioNode | null = null;
     private interval: number;
@@ -33,6 +36,7 @@ export class EffectOutputTap {
     private constructor(effect: Effector, context: AudioContext, options: EffectOutputTapOptions) {
 
         this.effect = effect;
+        this.side = options.tap ?? "output";
 
         const channels: number = options.channels ?? 1;
 
@@ -97,7 +101,7 @@ export class EffectOutputTap {
 
     private connect() {
 
-        const output: AudioNode | null = this.effect.outputNode;
+        const output: AudioNode | null = this.side === "input" ? this.effect.inputNode : this.effect.outputNode;
 
         if (!output) return;
 

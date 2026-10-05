@@ -32,6 +32,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        gap: 4px;
         background: var(--color-surface-light);
         border-radius: 5px;
 
@@ -114,6 +115,10 @@
                 color: var(-color-panel-text-active);
             }
 
+            &.active {
+                color: var(--color-accent);
+            }
+
             ;
         }
     }
@@ -121,4 +126,9 @@
     &:hover {
         background: var(--color-surface);
     }
+}
+
+// A channel that is not sent to the master channel is not heard directly, so it is dimmed.
+.mixer-channel.detached .mixer-channel__peak-meter {
+    opacity: 0.4;
 }

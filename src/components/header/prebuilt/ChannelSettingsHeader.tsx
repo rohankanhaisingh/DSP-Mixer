@@ -1,4 +1,4 @@
-import { Bolt, AudioLines, Sparkles, CircleMinus, Share2, Unlink } from "lucide-react";
+import { Bolt, AudioLines, Sparkles, CircleMinus, Share2, Unlink, Link } from "lucide-react";
 import { useState, useRef, useCallback } from "react";
 
 import HeaderContent from "../HeaderContent";
@@ -10,9 +10,16 @@ import FloatingSelectionBox from "../../common/FloatingSelectionBox";
 import Button from "../../common/Button";
 
 import { listAvailableEffects, attachEffectOnChannel, detachEffectOnChannel } from "../../../services/effectorService";
-import { getChannels, sendChannelToChannel, unsendChannelFromChannel } from "../../../services/mixerChannelService";
+import {
+    attachChannelToMaster,
+    detachChannelFromMaster,
+    getChannels,
+    isChannelAttachedToMaster,
+    sendChannelToChannel,
+    unsendChannelFromChannel
+} from "../../../services/mixerChannelService";
 
-import { Channel, AudioClip, Effector } from "@fluex/fluexgl-dsp";
+import { Channel, InputChannel, AudioClip, Effector } from "@fluex/fluexgl-dsp";
 import { showEffectWindow } from "../../../services/effectWindowService";
 import useWindow from "../../../hooks/useWindow";
 import useTranslation from "../../../hooks/useTranslations";
@@ -84,6 +91,7 @@ export default function ChannelSettingsHeader({ channel, onAudioClipSelect }: Ch
     }
 
     const channelTitle = channel.label ?? translate("audio_clip_settings.channel_fallback");
+    const isAttachedToMaster: boolean = isChannelAttachedToMaster(channel);
 
     return (
         <>
@@ -96,6 +104,29 @@ export default function ChannelSettingsHeader({ channel, onAudioClipSelect }: Ch
                     <p>
                         {translate("channel_settings.id", [""])} <code>{channel.id}</code>
                     </p>
+                    {channel instanceof InputChannel && (
+                        <p>{translate("channel_settings.input_device", [channel.deviceInfo?.label || translate("mixer.default_input_device")])}</p>
+                    )}
+                </HeaderCategory>
+
+                <HeaderCategory label={translate("channel_settings.master_category_title")}>
+                    <p>{translate(isAttachedToMaster ? "channel_settings.attached_to_master" : "channel_settings.detached_from_master")}</p>
+                    {isAttachedToMaster ? (
+                        <Button
+                            icon={<Unlink size={16} />}
+                            title={translate("channel_settings.detach_from_master")}
+                            text={translate("channel_settings.detach_from_master")}
+                            style="red"
+                            onClick={() => detachChannelFromMaster(channel)}
+                        />
+                    ) : (
+                        <Button
+                            icon={<Link size={16} />}
+                            title={translate("channel_settings.attach_to_master")}
+                            text={translate("channel_settings.attach_to_master")}
+                            onClick={() => attachChannelToMaster(channel)}
+                        />
+                    )}
                 </HeaderCategory>
 
                 <HeaderCategory label={translate("channel_settings.audio_clips_category_title")}>

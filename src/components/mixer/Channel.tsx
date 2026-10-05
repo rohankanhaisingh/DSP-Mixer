@@ -1,12 +1,13 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { Settings } from "lucide-react";
+import { Settings, Link, Unlink, Mic } from "lucide-react";
 import { v4 } from "uuid";
 import { Analyser, Channel as DspChannel, Master, Effector } from "@fluex/fluexgl-dsp";
 
 import Fader from "./Fader";
 import Knob from "./Knob";
 
-import { getChannelById, getMasterChannel } from "../../services/mixerChannelService";
+import { attachChannelToMaster, detachChannelFromMaster, getChannelById, getMasterChannel } from "../../services/mixerChannelService";
+import useTranslation from "../../hooks/useTranslations";
 import { addPeakMeterDataToRegistry, removePeakMeterDataFromRegistryById } from "../../services/mixerPeakMeterService";
 
 import "./Channel.scss";
@@ -16,10 +17,16 @@ export interface ChannelProperties {
     channelCount?: string;
     isMaster?: boolean;
     internalChannelId: string;
+    /** Whether the channel receives its signal from an audio input device. */
+    isInput?: boolean;
+    /** Whether the channel is sent to the master channel. Not used for the master channel itself. */
+    isAttachedToMaster?: boolean;
     onSettingsButtonClick?: (channel: DspChannel | Master) => void;
 }
 
-export default function Channel({ label, channelCount, isMaster, internalChannelId, onSettingsButtonClick }: ChannelProperties) {
+export default function Channel({ label, channelCount, isMaster, internalChannelId, isInput, isAttachedToMaster, onSettingsButtonClick }: ChannelProperties) {
+
+    const translate = useTranslation();
 
     const [channelVolume, setChannelVolume] = useState<number>(100);
     const [channelLabel, setChannelLabel] = useState<string>(label ?? "Channel");
@@ -49,6 +56,18 @@ export default function Channel({ label, channelCount, isMaster, internalChannel
 
         if (associatedChannel) onSettingsButtonClick?.(associatedChannel);
     }, [internalChannelId, isMaster, onSettingsButtonClick]);
+
+    const masterRoutingButtonClickCallback = useCallback(function () {
+
+        const associatedChannel = getChannelById(internalChannelId);
+
+        if (!associatedChannel) return;
+
+        if (isAttachedToMaster)
+            detachChannelFromMaster(associatedChannel);
+        else
+            attachChannelToMaster(associatedChannel);
+    }, [internalChannelId, isAttachedToMaster]);
 
     useEffect(function () {
 
@@ -98,11 +117,12 @@ export default function Channel({ label, channelCount, isMaster, internalChannel
     }, [internalChannelId, isMaster]);
 
     return (
-        <div className="mixer-channel">
+        <div className={`mixer-channel ${!isMaster && !isAttachedToMaster ? "detached" : ""}`}>
             <div className="mixer-channel__container">
                 <div className="mixer-channel__channel-count" style={{
                     background: channelCountColor
                 }} onClick={channelCountColorOnClick}>
+                    {isInput && <Mic size={12} />}
                     <span>{channelCount ?? "?"}</span>
                 </div>
 
@@ -120,6 +140,15 @@ export default function Channel({ label, channelCount, isMaster, internalChannel
                     <div className="mixer-channel__buttons__button" onClick={settingsButtonClickCallback}>
                         <Settings size={20} />
                     </div>
+                    {!isMaster && (
+                        <div
+                            className={`mixer-channel__buttons__button ${isAttachedToMaster ? "" : "active"}`}
+                            title={translate(isAttachedToMaster ? "channel_settings.detach_from_master" : "channel_settings.attach_to_master")}
+                            onClick={masterRoutingButtonClickCallback}
+                        >
+                            {isAttachedToMaster ? <Link size={20} /> : <Unlink size={20} />}
+                        </div>
+                    )}
                 </div>
 
                 <div className="mixer-channel__knobs">
